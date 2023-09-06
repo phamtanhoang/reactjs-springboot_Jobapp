@@ -82,7 +82,7 @@ CREATE TABLE `application` (
   PRIMARY KEY (`ApplicationID`),
   KEY `JobID` (`JobID`),
   KEY `CandidateID` (`CandidateID`),
-  CONSTRAINT `application_ibfk_1` FOREIGN KEY (`JobID`) REFERENCES `job` (`ID`),
+  CONSTRAINT `application_ibfk_1` FOREIGN KEY (`JobID`) REFERENCES `job` (`id`),
   CONSTRAINT `application_ibfk_2` FOREIGN KEY (`CandidateID`) REFERENCES `candidate` (`CandidateID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -123,38 +123,6 @@ CREATE TABLE `blog` (
 LOCK TABLES `blog` WRITE;
 /*!40000 ALTER TABLE `blog` DISABLE KEYS */;
 /*!40000 ALTER TABLE `blog` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `business`
---
-
-DROP TABLE IF EXISTS `business`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `business` (
-  `ID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Active` tinyint NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Email_UNIQUE` (`Email`),
-  UNIQUE KEY `ID_UNIQUE` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `business`
---
-
-LOCK TABLES `business` WRITE;
-/*!40000 ALTER TABLE `business` DISABLE KEYS */;
-INSERT INTO `business` VALUES ('1','Công ty công nghệ đa quốc gia Google','268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam','Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên về các dịch vụ và sản phẩm liên quan đến Internet, bao gồm các công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán đám mây, phần mềm và phần cứng.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/google_yjj8ci.png','google@gmail.com','123123',1),('2','Tập đoàn đa quốc gia Microsoft','390 Hoàng Văn Thụ, Phường 4, Tân Bình, Thành phố Hồ Chí Minh, Việt Nam','Microsoft là một tập đoàn đa quốc gia của Hoa Kỳ đặt trụ sở chính tại Redmond, Washington; chuyên phát triển, sản xuất, kinh doanh bản quyền phần mềm và hỗ trợ trên diện rộng các sản phẩm và dịch vụ liên quan đến máy tính','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/microsoft_rvx2uf.png','microsoft@gmail.com','123123',1),('3','Công ty Airbnb','47 Nguyễn Huy Lượng, Phường 7, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Airbnb, là một thị trường cộng đồng cho việc đặt và cho thuê phòng, căn hộ, có trụ sở tại Silicon Valley, California được thành lập trong năm 2008, tương tự như một hệ thống đặt hàng trực tuyến.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/airbnb_xtejjd.png','airbnb@gmail.com','123123',1),('4','Công ty phần mềm Slack','475A Đ. Điện Biên Phủ, Phường 25, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Slack Technologies, LLC là một công ty phần mềm của Mỹ được thành lập vào năm 2009 tại Vancouver, British Columbia, được biết đến với nền tảng giao tiếp độc quyền Slack.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/slack_jfd1tf.png','slack@gmail.com','123123',1),('5','Công ty công nghệ Cloudinary','720A Đ. Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Cloudinary là một công ty công nghệ SaaS có trụ sở chính tại Santa Clara, California, với các văn phòng tại Israel, Anh, Ba Lan và Singapore. Công ty cung cấp dịch vụ quản lý hình ảnh và video dựa trên đám mây.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603722/samples/cloudinary-logo-vector.svg','cloudinary@gmail.com','123123',1);
-/*!40000 ALTER TABLE `business` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -220,12 +188,12 @@ DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category` (
-  `ID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Name_UNIQUE` (`Name`),
-  UNIQUE KEY `ID_UNIQUE` (`ID`)
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Name_UNIQUE` (`name`),
+  UNIQUE KEY `ID_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -271,6 +239,38 @@ LOCK TABLES `comment` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `employer`
+--
+
+DROP TABLE IF EXISTS `employer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `employer` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Active` tinyint NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Email_UNIQUE` (`email`),
+  UNIQUE KEY `ID_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `employer`
+--
+
+LOCK TABLES `employer` WRITE;
+/*!40000 ALTER TABLE `employer` DISABLE KEYS */;
+INSERT INTO `employer` VALUES ('1','Công ty công nghệ đa quốc gia Google','268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam','Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên về các dịch vụ và sản phẩm liên quan đến Internet, bao gồm các công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán đám mây, phần mềm và phần cứng.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/google_yjj8ci.png','google@gmail.com','123123',1),('2','Tập đoàn đa quốc gia Microsoft','390 Hoàng Văn Thụ, Phường 4, Tân Bình, Thành phố Hồ Chí Minh, Việt Nam','Microsoft là một tập đoàn đa quốc gia của Hoa Kỳ đặt trụ sở chính tại Redmond, Washington; chuyên phát triển, sản xuất, kinh doanh bản quyền phần mềm và hỗ trợ trên diện rộng các sản phẩm và dịch vụ liên quan đến máy tính','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/microsoft_rvx2uf.png','microsoft@gmail.com','123123',1),('3','Công ty Airbnb','47 Nguyễn Huy Lượng, Phường 7, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Airbnb, là một thị trường cộng đồng cho việc đặt và cho thuê phòng, căn hộ, có trụ sở tại Silicon Valley, California được thành lập trong năm 2008, tương tự như một hệ thống đặt hàng trực tuyến.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/airbnb_xtejjd.png','airbnb@gmail.com','123123',1),('4','Công ty phần mềm Slack','475A Đ. Điện Biên Phủ, Phường 25, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Slack Technologies, LLC là một công ty phần mềm của Mỹ được thành lập vào năm 2009 tại Vancouver, British Columbia, được biết đến với nền tảng giao tiếp độc quyền Slack.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/slack_jfd1tf.png','slack@gmail.com','123123',1),('5','Công ty công nghệ Cloudinary','720A Đ. Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Cloudinary là một công ty công nghệ SaaS có trụ sở chính tại Santa Clara, California, với các văn phòng tại Israel, Anh, Ba Lan và Singapore. Công ty cung cấp dịch vụ quản lý hình ảnh và video dựa trên đám mây.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603722/samples/cloudinary-logo-vector.svg','cloudinary@gmail.com','123123',1);
+/*!40000 ALTER TABLE `employer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `job`
 --
 
@@ -278,19 +278,18 @@ DROP TABLE IF EXISTS `job`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `job` (
-  `ID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Salary` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `FromDate` date NOT NULL,
-  `ToDate` date NOT NULL,
-  `Address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `CategoryID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `BussinessID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Active` tinyint NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `BussinessID` (`BussinessID`),
-  KEY `job_ibfk_1` (`CategoryID`)
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `salary` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_date` date NOT NULL,
+  `to_date` date NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `categoryID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `employerID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `active` tinyint NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ID_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -316,7 +315,7 @@ CREATE TABLE `job_skill` (
   `SkillID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`JobID`,`SkillID`),
   KEY `SkillID` (`SkillID`),
-  CONSTRAINT `job_skill_ibfk_1` FOREIGN KEY (`JobID`) REFERENCES `job` (`ID`),
+  CONSTRAINT `job_skill_ibfk_1` FOREIGN KEY (`JobID`) REFERENCES `job` (`id`),
   CONSTRAINT `job_skill_ibfk_2` FOREIGN KEY (`SkillID`) REFERENCES `skill` (`SkillID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -363,4 +362,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-05 23:15:32
+-- Dump completed on 2023-09-06 17:22:04
