@@ -1,6 +1,6 @@
 import { ListFeatureJobs } from "./components/ListFeatureJobs";
 import { Hero } from "./components/Hero";
-import { TopCompanys } from "./components/TopCompanys";
+import { TopEmployers } from "./components/TopEmployers";
 import { Profile } from "./components/Profile";
 import { Intruction } from "./components/Instruction";
 
@@ -11,7 +11,7 @@ export const HomePage = () => {
       <ListFeatureJobs />
       <Profile />
       <Intruction />
-      <TopCompanys />
+      <TopEmployers />
     </>
   );
 };

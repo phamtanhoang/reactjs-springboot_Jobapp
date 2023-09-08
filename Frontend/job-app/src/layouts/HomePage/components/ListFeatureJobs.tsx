@@ -35,15 +35,14 @@ export const ListFeatureJobs: React.FC = () => {
                   />
                 </div>
                 <div className="w-3/4 ml-2 grow">
-                  <a
-                    className="mb-1 font-semibold text-sm overflow-hidden whitespace-nowrap overflow-ellipsis group-hover:text-orangetext"
-                    data-tooltip-id="my-tooltip-1"
-                    href="#"
-                  >
-                    Support 24/7
-                  </a>
                   <p
-                    className="text-neutral-500 text-xs overflow-hidden whitespace-nowrap overflow-ellipsis cursor-default"
+                    className="mb-1 font-semibold text-sm truncate overflow-ellipsis group-hover:text-orangetext"
+                    data-tooltip-id="my-tooltip-1"
+                  >
+                    Support 24/7 alsihdfiashdfpahsdfpo
+                  </p>
+                  <p
+                    className="text-neutral-500 text-xs truncate overflow-ellipsis cursor-default"
                     data-tooltip-id="my-tooltip-2"
                   >
                     Pellentesque mollis, metus nec fringilla aliquam

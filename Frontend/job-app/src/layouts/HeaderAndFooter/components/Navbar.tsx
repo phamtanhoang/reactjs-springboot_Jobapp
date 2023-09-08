@@ -13,8 +13,8 @@ export const NavBar = () => {
   }, []);
   return (
     <nav
-      className={`fixed w-full left-0 top-0 z-[999] ${
-        sticky ? "bg-white text-gray-800 shadow-lg shadow-gray-300/30" : ""
+      className={`w-full ${
+        sticky ? "bg-white text-gray-800 shadow-lg shadow-gray-300/30 fixed left-0 top-0 z-[999]" : ""
       }`}
     >
       <div className="flex item-center justify-between">

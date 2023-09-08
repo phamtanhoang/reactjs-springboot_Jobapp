@@ -1,43 +1,43 @@
-import { ReturnCompany } from "./ReturnCompany";
+import { ReturnEmployer } from "./ReturnEmployer";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useRef } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
-import CompanyModel from "../../../models/CompanyModel";
+import EmployerModel from "../../../models/CategoryModel";
 
-export const TopCompanys: React.FC = () => {
-  const companyList: CompanyModel[] = [
-    new CompanyModel(
-      1,
-      "Company 1",
-      "Description 1",
-      "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/google_yjj8ci.png"
-    ),
-    new CompanyModel(
-      2,
-      "Company 2",
-      "Description 2",
-      "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/microsoft_rvx2uf.png"
-    ),
-    new CompanyModel(
-      3,
-      "Company 3",
-      "Description 3",
-      "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/slack_jfd1tf.png"
-    ),
-    new CompanyModel(
-      4,
-      "Company 1",
-      "Description 1",
-      "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/airbnb_xtejjd.png"
-    ),
-    new CompanyModel(
-      5,
-      "Company 2",
-      "Description 2",
-      "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/logo_afswhb.png"
-    ),
+export const TopEmployers: React.FC = () => {
+  const employerList: EmployerModel[] = [
+    // new EmployerModel(
+    //   1,
+    //   "Company 1",
+    //   "Description 1",
+    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/google_yjj8ci.png"
+    // ),
+    // new EmployerModel(
+    //   2,
+    //   "Company 2",
+    //   "Description 2",
+    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/microsoft_rvx2uf.png"
+    // ),
+    // new EmployerModel(
+    //   3,
+    //   "Company 3",
+    //   "Description 3",
+    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/slack_jfd1tf.png"
+    // ),
+    // new EmployerModel(
+    //   4,
+    //   "Company 1",
+    //   "Description 1",
+    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/airbnb_xtejjd.png"
+    // ),
+    // new EmployerModel(
+    //   5,
+    //   "Company 2",
+    //   "Description 2",
+    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/logo_afswhb.png"
+    // ),
   ];
   const settings = {
     dots: false,
@@ -97,9 +97,9 @@ export const TopCompanys: React.FC = () => {
 
       <div className="w-10/12 mx-auto">
         <Slider ref={sliderRef} {...settings}>
-          {companyList.map((company) => (
-            <div className="px-2 pb-8" key={company.id}>
-              <ReturnCompany company={company} />
+          {employerList.map((employer) => (
+            <div className="px-2 pb-8" key={employer.id}>
+              <ReturnEmployer employer={employer} />
             </div>
           ))}
         </Slider>
