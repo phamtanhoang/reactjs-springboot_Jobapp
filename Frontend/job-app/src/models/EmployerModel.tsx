@@ -1,4 +1,4 @@
-class JobModel {
+class CategoryModel {
   id: string;
   name: string;
   address: string;
@@ -28,4 +28,4 @@ class JobModel {
   }
 }
 
-export default JobModel;
+export default CategoryModel;
