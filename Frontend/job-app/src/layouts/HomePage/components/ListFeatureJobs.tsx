@@ -1,14 +1,13 @@
 import { AiFillHeart } from "react-icons/ai";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import { Pagination } from "../../../Utils/Pagination";
 
 export const ListFeatureJobs: React.FC = () => {
   const tooltipStyle = {
     fontSize: "12px",
-    opacity: 0.5,
+    // opacity: 0.5,
   };
   return (
-    <section className="py-12 bg-white">
+    <section className="py-12">
       <div className="w-10/12 m-auto">
         <div className="flex justify-center">
           <div className="max-w-[800px] text-center">
@@ -23,7 +22,7 @@ export const ListFeatureJobs: React.FC = () => {
         <div className="grid gap-x-5 gap-y-5 md:grid-cols-2 lg:grid-cols-4">
           {[...Array(12)].map((_, index) => (
             <div
-              className="group  border-gray-200 border-2 rounded-lg p-5 hover:border-orangetext hover:bg-[#f4f5f5]"
+              className="group bg-white border-gray-200 border-2 rounded-lg p-5 hover:border-orangetext hover:bg-[#f4f5f5]"
               key={index}
             >
               <div className="flex">
@@ -97,9 +96,6 @@ export const ListFeatureJobs: React.FC = () => {
               </div>
             </div>
           ))}
-        </div>
-        <div className="mt-8">
-          <Pagination type={true} />
         </div>
       </div>
     </section>

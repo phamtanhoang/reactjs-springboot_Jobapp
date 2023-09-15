@@ -21,18 +21,18 @@ export const ReturnJobInJobsPage: React.FC<{
   };
 
   return (
-    <div className="max-w-4xl px-10 py-4 bg-white rounded-lg shadow-md flex my-2">
-      <div className="w-1/4 flex items-center">
+    <div className="max-full px-4 py-2 sm:px-10 sm:py-4 bg-white rounded-lg shadow-md flex my-4">
+      <div className="w-1/4 sm:w-1/5 flex items-center">
         <img
           src={props.employer?.image}
           alt="avatar"
-          className="w-5/6 object-cover"
+          className="w-[90%] object-cover p-1 md:p-4"
         />
       </div>
 
-      <div className="w-3/4">
+      <div className="w-3/4 sm:w-4/5">
         <div className="flex justify-between items-center">
-          <span className="font-light text-sm text-neutral-500">
+          <span className="font-light text-xs md:text-sm text-neutral-500">
             Còn {calculateDaysRemaining(props.job.toDate)} ngày
           </span>
           <div className="cursor-pointer text-neutral-500 hover:text-red-600">
@@ -45,7 +45,7 @@ export const ReturnJobInJobsPage: React.FC<{
               {props.job.title}
             </p>
           </div>
-          <div className="mt-2">
+          <div className="mt-1">
             <p className="text-gray-600 text-sm md:text-base truncate cursor-pointer">
               {props.employer?.name}
             </p>

@@ -13,28 +13,28 @@ import {
 export const Footer = () => {
   return (
     <footer className="bg-white text-center  lg:text-left">
-      <div className="flex items-center justify-center border-b-2 border-orangetext p-6 lg:justify-between">
+      <div className="flex items-center justify-center border-b-2 border-gray-200 p-4 lg:justify-between">
         <div className="mr-12 hidden lg:block">
           <span>Hãy kết nối với chúng tôi trên các mạng xã hội:</span>
         </div>
 
         <div className="flex justify-center">
-          <a href="#!" className="mr-6 text-gray-800 hover:text-orangetext">
+          <a href="#!" className="mr-6  hover:text-orangetext">
             <AiFillFacebook className="text-xl" />
           </a>
-          <a href="#!" className="mr-6 text-gray-800 hover:text-orangetext">
+          <a href="#!" className="mr-6  hover:text-orangetext">
             <AiOutlineTwitter className="text-xl" />
           </a>
-          <a href="#!" className="mr-6 text-gray-800 hover:text-orangetext">
+          <a href="#!" className="mr-6  hover:text-orangetext">
             <AiOutlineGooglePlus className="text-xl" />
           </a>
-          <a href="#!" className="mr-6 text-gray-800 hover:text-orangetext">
+          <a href="#!" className="mr-6  hover:text-orangetext">
             <AiOutlineInstagram className="text-xl" />
           </a>
-          <a href="#!" className="mr-6 text-gray-800 hover:text-orangetext">
+          <a href="#!" className="mr-6  hover:text-orangetext">
             <AiFillLinkedin className="text-xl" />
           </a>
-          <a href="#!" className="mr-6 text-gray-800 hover:text-orangetext">
+          <a href="#!" className="mr-6  hover:text-orangetext">
             <AiFillGithub className="text-xl" />
           </a>
         </div>
@@ -65,17 +65,17 @@ export const Footer = () => {
               Danh mục
             </h6>
             <p className="mb-4">
-              <a href="#!" className="text-gray-800 hover:text-orangetext">
+              <a href="#!" className=" hover:text-orangetext">
                 Trang chủ
               </a>
             </p>
             <p className="mb-4">
-              <a href="#!" className="text-gray-800 hover:text-orangetext">
+              <a href="#!" className=" hover:text-orangetext">
                 Tìm việc làm
               </a>
             </p>
             <p className="mb-4">
-              <a href="#!" className="text-gray-800 hover:text-orangetext">
+              <a href="#!" className=" hover:text-orangetext">
                 Danh sách công ty
               </a>
             </p>
@@ -85,36 +85,26 @@ export const Footer = () => {
             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
               Liên hệ
             </h6>
-            <p className="mb-4 flex items-center justify-center md:justify-start">
-              <AiFillHome className="text-xl mr-3 text-gray-800" />
-              <a href="#!" className="text-gray-800 hover:text-orangetext">
+            <p className="group mb-4 flex items-center justify-center md:justify-start">
+              <AiFillHome className="text-xl mr-3 group-hover:text-orangetext" />
+              <a href="#!" className=" group-hover:text-orangetext">
                 Thành phố Hồ Chí minh
               </a>
             </p>
-            <p className="mb-4 flex items-center justify-center md:justify-start">
-              <AiFillMail className="text-xl mr-3 text-gray-800" />
-              <a href="#!" className="text-gray-800 hover:text-orangetext">
+            <p className="group mb-4 flex items-center justify-center md:justify-start">
+              <AiFillMail className="text-xl mr-3 group-hover:text-orangetext" />
+              <a href="#!" className=" group-hover:text-orangetext">
                 jobs@gmail.com
               </a>
             </p>
-            <p className="mb-4 flex items-center justify-center md:justify-start">
-              <AiFillPhone className="text-xl mr-3 text-gray-800" />
-              <a href="#!" className="text-gray-800 hover:text-orangetext">
+            <p className="group mb-4 flex items-center justify-center md:justify-start">
+              <AiFillPhone className="text-xl mr-3 group-hover:text-orangetext" />
+              <a href="#!" className=" group-hover:text-orangetext">
                 0123456789
               </a>
             </p>
           </div>
         </div>
-      </div>
-
-      <div className="bg-orangebackground p-6 text-center">
-        <span>© 2023 Copyright: </span>
-        <a
-          className="text-gray-800 hover:text-orangetext font-medium"
-          href="#!"
-        >
-          Pham Tan Hoang
-        </a>
       </div>
     </footer>
   );

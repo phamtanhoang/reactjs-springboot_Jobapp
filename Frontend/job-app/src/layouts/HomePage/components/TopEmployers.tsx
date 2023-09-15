@@ -8,36 +8,7 @@ import EmployerModel from "../../../models/CategoryModel";
 
 export const TopEmployers: React.FC = () => {
   const employerList: EmployerModel[] = [
-    // new EmployerModel(
-    //   1,
-    //   "Company 1",
-    //   "Description 1",
-    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/google_yjj8ci.png"
-    // ),
-    // new EmployerModel(
-    //   2,
-    //   "Company 2",
-    //   "Description 2",
-    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/microsoft_rvx2uf.png"
-    // ),
-    // new EmployerModel(
-    //   3,
-    //   "Company 3",
-    //   "Description 3",
-    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/slack_jfd1tf.png"
-    // ),
-    // new EmployerModel(
-    //   4,
-    //   "Company 1",
-    //   "Description 1",
-    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/airbnb_xtejjd.png"
-    // ),
-    // new EmployerModel(
-    //   5,
-    //   "Company 2",
-    //   "Description 2",
-    //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/logo_afswhb.png"
-    // ),
+    
   ];
   const settings = {
     dots: false,
@@ -87,7 +58,7 @@ export const TopEmployers: React.FC = () => {
   };
 
   return (
-    <section className="bg-white px-4 py-12 relative">
+    <section className="px-4 py-12 relative">
       <div>
         <h4 className="text-base text-center mb-10 font-medium">
           Tham gia cùng những <span className="text-orangetext">Công Ty</span>{" "}

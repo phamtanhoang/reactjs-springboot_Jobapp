@@ -26,6 +26,9 @@ public class Employer {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "coverImage")
+    private String coverImage;
+
     @Column(name = "email")
     private String email;
 
@@ -39,12 +42,13 @@ public class Employer {
 
     };
 
-    public Employer(String name, String address, String description, String image, String email, String password, boolean active) {
+    public Employer(String name, String address, String description, String image, String coverImage, String email, String password, boolean active) {
         this.id = String.valueOf(UUID.randomUUID());
         this.name = name;
         this.address = address;
         this.description = description;
         this.image = image;
+        this.coverImage = coverImage;
         this.email = email;
         this.password = password;
         this.active = active;
@@ -88,6 +92,14 @@ public class Employer {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getCoverImage() {
+        return image;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
     }
 
     public String getEmail() {

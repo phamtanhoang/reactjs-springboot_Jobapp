@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { NavLink } from "react-router-dom";
 
 export const NavBar = () => {
   const [sticky, setSticky] = useState(false);
@@ -13,8 +14,8 @@ export const NavBar = () => {
   }, []);
   return (
     <nav
-      className={`w-full ${
-        sticky ? "bg-white text-gray-800 shadow-lg shadow-gray-300/30 fixed left-0 top-0 z-[999]" : ""
+      className={`w-full  bg-white ${
+        sticky ? " shadow-lg shadow-gray-300/30 z-[999] fixed left-0 top-0" : ""
       }`}
     >
       <div className="flex item-center justify-between">
@@ -34,10 +35,14 @@ export const NavBar = () => {
         >
           <ul className="flex item-center gap-1 py-2 text-lg font-medium">
             <li className="px-6 hover:text-orangetext">
-              <a href="#home">Trang chủ</a>
+              <NavLink className="nav-link" to="/home">
+                Trang chủ
+              </NavLink>
             </li>
             <li className="px-6 hover:text-orangetext">
-              <a href="#jobs">Việc làm</a>
+              <NavLink className="nav-link" to="/jobs">
+                Việc làm
+              </NavLink>
             </li>
             <li className="px-6 hover:text-orangetext">
               <a href="#jobs">Công ty</a>
@@ -48,27 +53,27 @@ export const NavBar = () => {
           </ul>
         </div>
         <div className="flex">
-          <div className="flex items-center relative md:mx-10 py-3.5">
-            {/* <button
+          {/* <button className="text-white px-5 py-2 rounded-lg font-semibold bg-orangetext hover:bg-[#fe825c] hover:ring-1 hover:ring-[#fe825c]">
+              Đăng nhập
+            </button> */}
+          <div className="flex items-center relative md:mx-10 py-3.5 ">
+            <button
               type="button"
-              className="flex mr-3 rounded-full md:mr-0"
+              className="flex mr-3 rounded-full md:mr-0 group"
               onClick={() => setOpenInfo(!openInfo)}
             >
               <img
-                className="w-8 h-8 p-1 rounded-full ring-2 ring-orangetext "
+                className="w-8 h-8 p-1 rounded-full ring-2 ring-orangetext group-hover:ring-[#fe825c]"
                 src="https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603729/samples/people/boy-snow-hoodie.jpg"
                 alt="user photo"
               />
               <p className="hidden text-xs px-2 pt-1 sm:block">
-                Chào <span className="text-sm text-orangetext">Hoàng</span>
+                Chào <span className="text-sm text-orangetext group-hover:text-[#fe825c]">Hoàng</span>
                 !!!
               </p>
-            </button> */}
-            <button className="text-white px-5 py-2 rounded-full font-semibold bg-orangetext">
-              Đăng nhập
             </button>
             <div
-              className={`top-9 -right-8 z-50 absolute my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-2xl ${
+              className={`top-9 -right-8 z-50 absolute my-4 text-base list-none bg-[#fffefe] divide-y divide-gray-200 rounded-lg shadow-2xl ${
                 !openInfo ? "hidden" : ""
               }`}
               id="user-dropdown"

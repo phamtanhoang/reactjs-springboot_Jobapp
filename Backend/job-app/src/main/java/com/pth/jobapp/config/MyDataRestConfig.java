@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
@@ -31,9 +32,14 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(Employer.class, repositoryRestConfiguration, theUnsupportedActions);
         disableHttpMethods(Category.class, repositoryRestConfiguration, theUnsupportedActions);
 
+//        // Thiết lập cấu hình JSON response
+//        repositoryRestConfiguration.setDefaultMediaType(MediaType.APPLICATION_JSON);
+//        repositoryRestConfiguration.useHalAsDefaultJsonMediaType(false);
+
         /* Configure CORS Mapping */
         corsRegistry.addMapping(repositoryRestConfiguration.getBasePath() + "/**")
                 .allowedOrigins(theAllowedOrigins);
+
     }
 
     private void disableHttpMethods(Class theClass,

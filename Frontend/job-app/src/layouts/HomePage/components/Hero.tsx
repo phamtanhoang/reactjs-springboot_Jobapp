@@ -9,7 +9,7 @@ export const Hero = () => {
   };
 
   return (
-    <section className="flex py-10 lg:flex-row flex-col-reverse items-center">
+    <section className="flex py-6 lg:flex-row flex-col-reverse items-center bg-orangebackground">
       <div className="flex-auto lg:w-2/3 ">
         <div className="w-4/5 mx-auto md:w-full md:mx-0 lg:w-9/12 m-0 lg:mx-40">
           <h1 className="font-bold text-3xl lg:text-4xl">
@@ -98,7 +98,7 @@ export const Hero = () => {
         <img
           src="https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/image-hero_cly9ur.png"
           alt=""
-          className="w-5/6 ml-auto lg:w-full h-full object-cover"
+          className="w-5/6  ml-auto lg:w-full h-full object-cover"
         />
       </div>
     </section>
