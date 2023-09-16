@@ -14,20 +14,4 @@ public class JobService {
     @Autowired
     private JobRepository jobRepository;
 
-    public Page<Job> findByTitleAndAddress(String title, String address, Pageable pageable) {
-        if (title != null && !title.isEmpty())
-            if (!address.equalsIgnoreCase("all"))
-                return jobRepository.findByTitleContainingAndAddress(title, address, pageable);
-            else
-                return jobRepository.findByTitleContaining(title, pageable);
-        else
-            if (!address.equalsIgnoreCase("all"))
-                return jobRepository.findByAddress(address, pageable);
-            else
-                return jobRepository.findAll(pageable);
-    }
-
-    public Page<Job> findByCategoryId(String categoryId, Pageable pageable){
-        return jobRepository.findByCategoryId(categoryId, pageable);
-    }
 }

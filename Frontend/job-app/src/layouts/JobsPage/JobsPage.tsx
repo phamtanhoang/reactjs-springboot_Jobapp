@@ -33,11 +33,12 @@ export const JobsPage = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   const [searchTitle, setSearchTitle] = useState("");
-  const [searchAddress, setSearchAddress] = useState("all");
+  const [searchAddress, setSearchAddress] = useState("");
   const [searchUrl, setSearchUrl] = useState("");
 
   const handleChange = (selectedOption: any) => {
     setSelectedOption(selectedOption);
+    setSearchAddress(selectedOption.value);
   };
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export const JobsPage = () => {
       const response = await fetch(baseUrl);
 
       const responseJson = await response.json();
-      const responseData = responseJson.content;
+      const responseData = responseJson._embedded.jobs;
 
       const loadedJobs: JobModel[] = [];
 
@@ -86,15 +87,15 @@ export const JobsPage = () => {
       } else {
         url = baseUrl + searchUrl;
       }
-      console.log(url);
+
       const response = await fetch(url);
 
       const responseJson = await response.json();
 
-      const responseData = responseJson.content;
+      const responseData = responseJson._embedded.jobs;
 
-      setTotalAmountOfJobs(responseJson.totalElements);
-      setTotalPages(responseJson.totalPages);
+      setTotalAmountOfJobs(responseJson.page.totalElements);
+      setTotalPages(responseJson.page.totalPages);
 
       const loadedJobs: JobModel[] = [];
 
@@ -131,14 +132,13 @@ export const JobsPage = () => {
       const response = await fetch(baseUrl);
 
       const responseJson = await response.json();
-      const responseData = responseJson.content;
+      const responseData = responseJson._embedded.categories;
       const loadedCategories: CategoryModel[] = [];
 
       for (const key in responseData) {
         loadedCategories.push({
           id: responseData[key].id,
           name: responseData[key].name,
-          image: responseData[key].image,
         });
       }
 
@@ -158,7 +158,7 @@ export const JobsPage = () => {
       const response = await fetch(baseUrl);
 
       const responseJson = await response.json();
-      const responseData = responseJson.content;
+      const responseData = responseJson._embedded.employers;
       const loadedEmployers: EmployerModel[] = [];
 
       for (const key in responseData) {
@@ -208,7 +208,7 @@ export const JobsPage = () => {
   }
 
   const options = [
-    { value: "Tất cả tỉnh/thành phố", label: "Tất cả tỉnh/thành phố" },
+    { value: "", label: "Tất cả tỉnh/thành phố" },
     ...uniqueAddresses.map((address) => ({ value: address, label: address })),
   ];
 
@@ -225,7 +225,7 @@ export const JobsPage = () => {
       setSearchUrl("");
     } else {
       setSearchUrl(
-        `/findByTitleAndAddress?title=${searchTitle}&&address=${searchAddress} &page=0&size=${jobsPerPage}`
+        `/search/findByTitleContainingAndAddress?title=${searchTitle}&address=${searchAddress}&page=0&size=${jobsPerPage}`
       );
     }
   };
@@ -233,7 +233,7 @@ export const JobsPage = () => {
   const categoryField = (value: string) => {
     setSearchUrl(
       value != "All"
-        ? `/findByCategoryId?categoryId=${value}&page=0&size=${jobsPerPage}`
+        ? `/search/findByCategoryId?categoryId=${value}&page=0&size=${jobsPerPage}`
         : `?page=0&size=${jobsPerPage}`
     );
   };

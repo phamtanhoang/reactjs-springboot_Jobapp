@@ -1,8 +1,8 @@
 package com.pth.jobapp.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -17,16 +17,12 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "image")
-    private String image;
-
     public Category(){
     };
 
-    public Category(String name, String image) {
+    public Category(String name) {
         this.id = String.valueOf(UUID.randomUUID());
         this.name = name;
-        this.image = image;
     }
 
     public String getId() {
@@ -45,11 +41,4 @@ public class Category {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 }

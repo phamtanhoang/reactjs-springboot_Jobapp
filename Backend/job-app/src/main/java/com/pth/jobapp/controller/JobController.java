@@ -14,16 +14,4 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    @GetMapping("/findByTitleAndAddress")
-    public Page<Job> findByTitleAndAddress(
-            @RequestParam("title") String title,
-            @RequestParam("address") String address,
-            Pageable pageable) {
-       return jobService.findByTitleAndAddress(title, address, pageable);
-    }
-
-    @GetMapping("/findByCategoryId")
-    public Page<Job> findByCategory(@RequestParam("categoryId") String categoryId, Pageable pageable){
-        return jobService.findByCategoryId(categoryId, pageable);
-    }
 }
