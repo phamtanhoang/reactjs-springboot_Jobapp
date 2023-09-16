@@ -23,19 +23,19 @@ public class Job {
     @Column(name = "salary")
     private String salary;
 
-    @Column(name = "fromDate")
+    @Column(name = "from_date")
     private String fromDate;
 
-    @Column(name = "toDate")
+    @Column(name = "to_date")
     private String toDate;
 
     @Column(name = "address")
     private String address;
 
-    @Column(name = "categoryID")
+    @Column(name = "category_id")
     private String categoryId;
 
-    @Column(name = "employerID")
+    @Column(name = "employer_id")
     private String employerId;
 
     @Column(name = "active")

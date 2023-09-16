@@ -26,7 +26,7 @@ public class Employer {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "coverImage")
+    @Column(name = "banner")
     private String coverImage;
 
     @Column(name = "email")
