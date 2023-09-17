@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Layout } from "./layouts/HeaderAndFooter/Layout";
 import { JobsPage } from "./layouts/JobsPage/JobsPage";
 import { JobProfilePage } from "./layouts/JobProfilePage/JobProfilePage";
+import { EmployersPage } from "./layouts/EmployersPage/EmployersPage";
+import { EmployerProfilePage } from "./layouts/EmployerProfilePage/EmployerProfilePage";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/job" element={<JobProfilePage />} />
+            <Route path="/employers" element={<EmployersPage />} />
+            <Route path="/employer" element={<EmployerProfilePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -45,10 +45,14 @@ export const NavBar = () => {
               </NavLink>
             </li>
             <li className="px-6 hover:text-orangetext">
-              <a href="#jobs">Công ty</a>
+              <NavLink className="nav-link" to="/employers">
+                Nhà tuyển dụng
+              </NavLink>
             </li>
             <li className="px-6 hover:text-orangetext">
-              <a href="#jobs">Liên hệ</a>
+              <NavLink className="nav-link" to="/blogs">
+                Liên hệ
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -68,7 +72,10 @@ export const NavBar = () => {
                 alt="user photo"
               />
               <p className="hidden text-xs px-2 pt-1 sm:block">
-                Chào <span className="text-sm text-orangetext group-hover:text-[#fe825c]">Hoàng</span>
+                Chào{" "}
+                <span className="text-sm text-orangetext group-hover:text-[#fe825c]">
+                  Hoàng
+                </span>
                 !!!
               </p>
             </button>
@@ -124,16 +131,24 @@ export const NavBar = () => {
         >
           <ul className="flex flex-col justify-center h-full gap-10 text-lg text-center font-medium">
             <li className="px-5 hover:text-orangetext">
-              <a href="#home">Trang chủ</a>
+              <NavLink className="nav-link" to="/home">
+                Trang chủ
+              </NavLink>
             </li>
             <li className="px-5 hover:text-orangetext">
-              <a href="#jobs">Việc làm</a>
+              <NavLink className="nav-link" to="/jobs">
+                Công việc
+              </NavLink>
             </li>
             <li className="px-5 hover:text-orangetext">
-              <a href="#home">Công ty</a>
+              <NavLink className="nav-link" to="/employers">
+                Nhà tuyển dụng
+              </NavLink>
             </li>
             <li className="px-5 hover:text-orangetext">
-              <a href="#home">Liên hệ</a>
+              <NavLink className="nav-link" to="/blogs">
+                Blog
+              </NavLink>
             </li>
           </ul>
         </div>

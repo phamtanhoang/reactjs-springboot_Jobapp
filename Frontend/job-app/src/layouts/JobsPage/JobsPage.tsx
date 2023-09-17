@@ -297,7 +297,7 @@ export const JobsPage = () => {
             </div>
             <div className="w-full lg:w-8/12">
               <div className="w-full ">
-                <h1 className="text-xl font-bold md:text-2xl mb-5">
+                <h1 className="text-lg sm:text-xl font-bold md:text-2xl mb-5 uppercase">
                   Danh sách việc làm
                 </h1>
               </div>

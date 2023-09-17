@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface JobRepository extends JpaRepository<Job, String> {
 
     @Query("SELECT j FROM Job j WHERE" +
@@ -23,4 +26,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
             @RequestParam(name = "category", required = false) String categoryId,
             Pageable pageable
     );
+
+    @Query("select j from Job j where j.id in :id")
+    List<Job> findById (@Param("id") String id, Pageable pageable);
 }

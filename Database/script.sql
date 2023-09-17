@@ -25,11 +25,12 @@ DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,10 +54,9 @@ DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   `admin_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
+  `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `account_id` (`account_id`),
-  CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
+  UNIQUE KEY `account_id_UNIQUE` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -78,17 +78,13 @@ DROP TABLE IF EXISTS `application`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `application` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `apply_date` date DEFAULT NULL,
-  `CV` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
+  `apply_date` date NOT NULL,
+  `CV` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   `letter` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
-  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `job_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `job_id` (`job_id`),
-  KEY `candidate_id` (`candidate_id`),
-  CONSTRAINT `application_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`),
-  CONSTRAINT `application_ibfk_2` FOREIGN KEY (`candidate_id`) REFERENCES `candidate` (`id`)
+  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `job_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -115,9 +111,7 @@ CREATE TABLE `blog` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `blog_ibfk_1` (`account_id`),
-  CONSTRAINT `blog_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,9 +139,7 @@ CREATE TABLE `candidate` (
   `date_of_birth` date DEFAULT NULL,
   `sex` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
   `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `account_id` (`account_id`),
-  CONSTRAINT `candidate_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -170,7 +162,8 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -180,7 +173,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES ('1','Công nghệ thông tin'),('2','Kinh doanh'),('3','Truyền thông'),('4','Thiết kế'),('5','Chăm sóc khách hàng'),('6','Khác');
+INSERT INTO `category` VALUES ('5','Chăm sóc khách hàng'),('1','Công nghệ thông tin'),('6','Khác'),('2','Kinh doanh'),('4','Thiết kế'),('3','Truyền thông');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,18 +186,12 @@ DROP TABLE IF EXISTS `comment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comment` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
-  `commented_at` datetime DEFAULT NULL,
-  `comment_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `blog_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `comment_id` (`comment_id`),
-  KEY `account_id` (`account_id`),
-  KEY `blog_id` (`blog_id`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`),
-  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
-  CONSTRAINT `comment_ibfk_3` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`)
+  `comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `commented_at` datetime NOT NULL,
+  `comment_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `blog_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -227,16 +214,14 @@ DROP TABLE IF EXISTS `employer`;
 CREATE TABLE `employer` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `sex` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `phone_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `banner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `banner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `account_id` (`account_id`),
-  CONSTRAINT `employer_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  UNIQUE KEY `account_id_UNIQUE` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -246,7 +231,7 @@ CREATE TABLE `employer` (
 
 LOCK TABLES `employer` WRITE;
 /*!40000 ALTER TABLE `employer` DISABLE KEYS */;
-INSERT INTO `employer` VALUES ('1','Công ty công nghệ đa quốc gia Google','268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam','Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên về các dịch vụ và sản phẩm liên quan đến Internet, bao gồm các công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán đám mây, phần mềm và phần cứng.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/google_yjj8ci.png','Nam','123123',NULL,'1'),('2','Tập đoàn đa quốc gia Microsoft','390 Hoàng Văn Thụ, Phường 4, Tân Bình, Thành phố Hồ Chí Minh, Việt Nam','Microsoft là một tập đoàn đa quốc gia của Hoa Kỳ đặt trụ sở chính tại Redmond, Washington; chuyên phát triển, sản xuất, kinh doanh bản quyền phần mềm và hỗ trợ trên diện rộng các sản phẩm và dịch vụ liên quan đến máy tính','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/microsoft_rvx2uf.png','Nam','123123',NULL,'2'),('3','Công ty Airbnb','47 Nguyễn Huy Lượng, Phường 7, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Airbnb, là một thị trường cộng đồng cho việc đặt và cho thuê phòng, căn hộ, có trụ sở tại Silicon Valley, California được thành lập trong năm 2008, tương tự như một hệ thống đặt hàng trực tuyến.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/airbnb_xtejjd.png','Nam','123123',NULL,'3'),('4','Công ty phần mềm Slack','475A Đ. Điện Biên Phủ, Phường 25, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Slack Technologies, LLC là một công ty phần mềm của Mỹ được thành lập vào năm 2009 tại Vancouver, British Columbia, được biết đến với nền tảng giao tiếp độc quyền Slack.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/slack_jfd1tf.png','Nam','123123',NULL,'4'),('5','Công ty công nghệ Cloudinary','720A Đ. Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Cloudinary là một công ty công nghệ SaaS có trụ sở chính tại Santa Clara, California, với các văn phòng tại Israel, Anh, Ba Lan và Singapore. Công ty cung cấp dịch vụ quản lý hình ảnh và video dựa trên đám mây.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603722/samples/cloudinary-logo-vector.svg','Nam','123123',NULL,'5');
+INSERT INTO `employer` VALUES ('1','Công ty công nghệ đa quốc gia Google','268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam','Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên về các dịch vụ và sản phẩm liên quan đến Internet, bao gồm các công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán đám mây, phần mềm và phần cứng.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/google_yjj8ci.png','','1'),('2','Tập đoàn đa quốc gia Microsoft','390 Hoàng Văn Thụ, Phường 4, Tân Bình, Thành phố Hồ Chí Minh, Việt Nam','Microsoft là một tập đoàn đa quốc gia của Hoa Kỳ đặt trụ sở chính tại Redmond, Washington; chuyên phát triển, sản xuất, kinh doanh bản quyền phần mềm và hỗ trợ trên diện rộng các sản phẩm và dịch vụ liên quan đến máy tính','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603983/DoAnNganh/microsoft_rvx2uf.png','','2'),('3','Công ty Airbnb','47 Nguyễn Huy Lượng, Phường 7, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Airbnb, là một thị trường cộng đồng cho việc đặt và cho thuê phòng, căn hộ, có trụ sở tại Silicon Valley, California được thành lập trong năm 2008, tương tự như một hệ thống đặt hàng trực tuyến.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/airbnb_xtejjd.png','','3'),('4','Công ty phần mềm Slack','475A Đ. Điện Biên Phủ, Phường 25, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Slack Technologies, LLC là một công ty phần mềm của Mỹ được thành lập vào năm 2009 tại Vancouver, British Columbia, được biết đến với nền tảng giao tiếp độc quyền Slack.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603984/DoAnNganh/slack_jfd1tf.png','','4'),('5','Công ty công nghệ Cloudinary','720A Đ. Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Cloudinary là một công ty công nghệ SaaS có trụ sở chính tại Santa Clara, California, với các văn phòng tại Israel, Anh, Ba Lan và Singapore. Công ty cung cấp dịch vụ quản lý hình ảnh và video dựa trên đám mây.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603722/samples/cloudinary-logo-vector.svg','','5');
 /*!40000 ALTER TABLE `employer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,14 +244,13 @@ DROP TABLE IF EXISTS `experience`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `experience` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `company_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `from_date` date DEFAULT NULL,
-  `to_date` date DEFAULT NULL,
-  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
+  `company_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `from_date` date NOT NULL,
+  `to_date` date NOT NULL,
+  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `candidate_id` (`candidate_id`),
-  CONSTRAINT `experience_ibfk_1` FOREIGN KEY (`candidate_id`) REFERENCES `candidate` (`id`)
+  UNIQUE KEY `company_name_UNIQUE` (`company_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -289,19 +273,16 @@ DROP TABLE IF EXISTS `job`;
 CREATE TABLE `job` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
-  `salary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `from_date` date DEFAULT NULL,
-  `to_date` date DEFAULT NULL,
-  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `category_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `employer_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `active` tinyint(1) DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `salary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `from_date` date NOT NULL,
+  `to_date` date NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `category_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `employer_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `category_id` (`category_id`),
-  KEY `employer_id` (`employer_id`),
-  CONSTRAINT `job_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  CONSTRAINT `job_ibfk_2` FOREIGN KEY (`employer_id`) REFERENCES `employer` (`id`)
+  UNIQUE KEY `title_UNIQUE` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -311,7 +292,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES ('1','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('10','Thiết kế thời trang','Description','10 - 12 triệ','2023-09-05','2023-10-28','Hồ Chí Minh','4','3',1),('2','Nhân Viên Kinh Doanh','Description','10 - 12 triệu','2023-09-05','2023-10-28','Hà Nội','2','2',1),('20','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('21','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('22','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('23','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('24','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('25','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('26','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('27','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('28','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('29','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('3','Lập trình viên Frontend','Description','Thỏa thuận','2023-09-06','2023-11-11','Hồ Chí Minh','1','3',1),('30','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('31','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('32','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('33','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('34','Nhân Viên Kinh Doanh','Description','Thỏa thuận','2023-09-05','2023-11-11','Hồ Chí Minh','2','1',1),('4','Lập trình viên Backend','Description','20 - 25 triệu','2023-09-05','2023-10-25','Đà Năng','1','3',1),('5','Nhân Viên Telesales','Description','7 - 10 triệu','2023-09-06','2023-11-30','Hồ Chí Minh','5','4',1),('6','Kế toán trưởng','Description','10 - 12 triệu','2023-09-05','2023-09-25','Hồ Chí Minh','2','4',1),('7','Thiết kế đồ họa','Description','Thỏa thuận','2023-09-06','2023-11-27','Hà Nội','4','1',1),('8','Chuyên viên tư vấn','Description','10 - 12 triệu','2023-09-05','2023-09-15','Hà Nội','5','1',1),('9','Maketing','Description','Thỏa thuận','2023-09-06','2023-11-11','Hồ Chí Minh','3','5',1);
+INSERT INTO `job` VALUES ('1','Lập trình viên','Viết mã cho ứng dụng di động','8000000','2023-09-20','2023-10-20','Hà Nội, Việt Nam','1','1',1),('10','Thiết kế đồ họa cho ứng dụng','Thiết kế đồ họa cho ứng dụng','10000000','2023-10-12','2023-11-12','Hà Nội, Việt Nam','4','10',1),('11','Phát triển phần mềm','Phát triển phần mềm','8500000','2023-10-15','2023-11-15','Hồ Chí Minh, VN','1','11',1),('12','Quản lý dự án phần mềm','Quản lý dự án IT','12000000','2023-10-18','2023-11-18','Đà Nẵng, Việt Nam','2','12',1),('13','Biên tập nội dung','Biên tập nội dung','9500000','2023-10-20','2023-11-20','Hà Nội, Việt Nam','3','13',1),('14','Kế toán thuế','Kế toán thuế','11000000','2023-10-22','2023-11-22','Hồ Chí Minh, VN','2','14',1),('15','Hỗ trợ khách hàng qua điện thoại','Hỗ trợ khách hàng qua điện thoại','9000000','2023-10-25','2023-11-25','Đà Nẵng, Việt Nam','5','15',1),('16','Phát triển ứng dụng di động','Phát triển ứng dụng di động','8500000','2023-10-28','2023-11-28','Hà Nội, Việt Nam','1','16',1),('17','Thiết kế đồ họa cho ứng dụng di động','Thiết kế đồ họa cho ứng dụng','10000000','2023-10-30','2023-11-30','Hà Nội, Việt Nam','4','17',1),('18','Quản lý sản phẩm phần mềm','Quản lý sản phẩm phần mềm','15000000','2023-11-02','2023-12-02','Đà Nẵng, Việt Nam','2','18',1),('19','Hỗ trợ khách hàng khác','Hỗ trợ khách hàng online','9000000','2023-11-05','2023-12-05','Hà Nội, Việt Nam','5','19',1),('2','Quản lý dự án IT','Quản lý dự án phần mềm','12000000','2023-09-22','2023-10-22','Hồ Chí Minh, VN','2','2',1),('20','Phát triển ứng dụng android','Phát triển ứng dụng di động','8500000','2023-11-05','2023-12-05','Hà Nội, Việt Nam','5','20',1),('3','Thiết kế đồ họa Website','Thiết kế đồ họa cho website','10000000','2023-09-25','2023-10-25','Đà Nẵng, Việt Nam','4','3',1),('4','Quản lý sản phẩm phần cứng','Quản lý sản phẩm phần cứng','15000000','2023-09-28','2023-10-28','Hà Nội, Việt Nam','2','4',1),('5','Hỗ trợ khách hàng online','Hỗ trợ khách hàng online','9000000','2023-09-30','2023-10-30','Hồ Chí Minh, VN','5','5',1),('6','Phát triển ứng dụng web','Phát triển ứng dụng web','8500000','2023-10-02','2023-11-02','Đà Nẵng, Việt Nam','1','6',1),('7','Kế toán','Xử lý sổ sách kế toán','11000000','2023-10-05','2023-11-05','Hà Nội, Việt Nam','2','7',1),('8','Quảng cáo và PR','Quảng cáo và PR','9500000','2023-10-08','2023-11-08','Hồ Chí Minh, VN','3','8',1),('9','Hỗ trợ khách hàng trực tuyến','Hỗ trợ khách hàng trực tuyến','9000000','2023-10-10','2023-11-10','Đà Nẵng, Việt Nam','5','9',1);
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,12 +305,10 @@ DROP TABLE IF EXISTS `skill`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `skill` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
-  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `candidate_id` (`candidate_id`),
-  CONSTRAINT `skill_ibfk_1` FOREIGN KEY (`candidate_id`) REFERENCES `candidate` (`id`)
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -351,12 +330,10 @@ DROP TABLE IF EXISTS `vip`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vip` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `from_date` date DEFAULT NULL,
-  `to_date` date DEFAULT NULL,
-  `employer_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `employer_id` (`employer_id`),
-  CONSTRAINT `vip_ibfk_1` FOREIGN KEY (`employer_id`) REFERENCES `employer` (`id`)
+  `from_date` date NOT NULL,
+  `to_date` date NOT NULL,
+  `employer_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -378,4 +355,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-16 18:47:24
+-- Dump completed on 2023-09-17 22:13:53

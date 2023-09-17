@@ -8,7 +8,7 @@ export const JobProfilePage = () => {
     <section className="text-gray-700">
       <div className="px-6 py-10">
         <div className="w-full">
-          <h1 className="text-xl font-bold md:text-2xl mb-5 text-center">
+          <h1 className="text-lg sm:text-xl font-bold md:text-2xl mb-5 text-center uppercase">
             Thông tin tuyển dụng
           </h1>
         </div>
@@ -81,8 +81,8 @@ export const JobProfilePage = () => {
             </div>
           </div>
         </div>
-        <div className="w-full sm:w-[90%] lg:w-[95%] xl:w-[80%] mx-auto my-4 bg-white rounded-lg p-5 flex gap-5">
-          <div className="w-[65%]">
+        <div className="w-full sm:w-[90%] lg:w-[95%] xl:w-[80%] mx-auto my-4 bg-white rounded-lg p-5 flex md:flex-row flex-col-reverse gap-5 text-sm md:text-base">
+          <div className="w-full md:w-[55%] lg:w-[65%]">
             <div>
               <h2 className="font-semibold">Các phúc lợi dành cho bạn</h2>
               <div>
@@ -123,56 +123,56 @@ export const JobProfilePage = () => {
               </div>
             </div>
           </div>
-          <div className="w-[35%]">
+          <div className="w-full md:w-[45%] lg:w-[35%]">
             <div className="w-full border border-orangetext bg-orangebackground rounded-lg">
               <ul className="px-5 py-2">
                 <li className="flex border-[#949697] border-b-2 py-4">
                   <div className="w-[20%]">
-                    <BsCalendarCheck className="text-[35px] mx-auto items-center" />
+                    <BsCalendarCheck className="text-[30px] sm:text-[35px] mx-auto items-center" />
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">
                       NGÀY ĐĂNG TUYỂN
                     </h5>
-                    <p className="mt-1 text-sm ">03/02/2002</p>
+                    <p className="mt-1 text-sm">03/02/2002</p>
                   </div>
                 </li>
                 <li className="flex border-[#949697] border-b-2 py-4">
                   <div className="w-[20%]">
-                    <BsCalendarX className="text-[35px] mx-auto items-center" />
+                    <BsCalendarX className="text-[30px] sm:text-[35px] mx-auto items-center" />
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">NGÀY KẾT THÚC</h5>
-                    <p className="mt-1 text-sm ">03/02/2002</p>
+                    <p className="mt-1 text-sm">03/02/2002</p>
                   </div>
                 </li>
                 <li className="flex border-[#949697] border-b-2 py-4">
                   <div className="w-[20%]">
-                    <BiCategoryAlt className="text-[35px] mx-auto items-center" />
+                    <BiCategoryAlt className="text-[30px] sm:text-[35px] mx-auto items-center" />
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">
                       LOẠI CÔNG VIỆC
                     </h5>
-                    <p className="mt-1 text-sm ">Công nghệ thông tin</p>
+                    <p className="mt-1 text-sm">Công nghệ thông tin</p>
                   </div>
                 </li>
                 <li className="flex border-[#949697] border-b-2 py-4">
                   <div className="w-[20%]">
-                    <AiOutlineDollarCircle className="text-[35px] mx-auto items-center" />
+                    <AiOutlineDollarCircle className="text-[30px] sm:text-[35px] mx-auto items-center" />
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">MỨC LƯƠNG</h5>
-                    <p className="mt-1 text-sm ">Thỏa thuận</p>
+                    <p className="mt-1 text-sm">Thỏa thuận</p>
                   </div>
                 </li>
                 <li className="flex py-3">
                   <div className="w-[20%]">
-                    <FiMapPin className="text-[35px] mx-auto items-center" />
+                    <FiMapPin className="text-[30px] sm:text-[35px] mx-auto items-center" />
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">ĐỊA ĐIỂM</h5>
-                    <p className="mt-1 text-sm ">Hồ Chí Minh</p>
+                    <p className="mt-1 text-sm">Hồ Chí Minh</p>
                   </div>
                 </li>
               </ul>
