@@ -40,18 +40,18 @@ export const NavBar = () => {
               </NavLink>
             </li>
             <li className="px-6 hover:text-orangetext">
-              <NavLink className="nav-link" to="/jobs">
+              <NavLink className="nav-link" to="/home/jobs">
                 Việc làm
               </NavLink>
             </li>
             <li className="px-6 hover:text-orangetext">
-              <NavLink className="nav-link" to="/employers">
+              <NavLink className="nav-link" to="/home/employers">
                 Nhà tuyển dụng
               </NavLink>
             </li>
             <li className="px-6 hover:text-orangetext">
-              <NavLink className="nav-link" to="/blogs">
-                Liên hệ
+              <NavLink className="nav-link" to="/home/blogs">
+                Blog
               </NavLink>
             </li>
           </ul>
@@ -136,17 +136,17 @@ export const NavBar = () => {
               </NavLink>
             </li>
             <li className="px-5 hover:text-orangetext">
-              <NavLink className="nav-link" to="/jobs">
+              <NavLink className="nav-link" to="/home/jobs">
                 Công việc
               </NavLink>
             </li>
             <li className="px-5 hover:text-orangetext">
-              <NavLink className="nav-link" to="/employers">
+              <NavLink className="nav-link" to="/home/employers">
                 Nhà tuyển dụng
               </NavLink>
             </li>
             <li className="px-5 hover:text-orangetext">
-              <NavLink className="nav-link" to="/blogs">
+              <NavLink className="nav-link" to="/home/blogs">
                 Blog
               </NavLink>
             </li>

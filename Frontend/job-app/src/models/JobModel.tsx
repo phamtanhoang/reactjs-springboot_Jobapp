@@ -8,7 +8,7 @@ class JobModel {
   address: string;
   categoryId: string;
   employerId: string;
-  active: boolean;
+  state: string;
   constructor(
     id: string,
     title: string,
@@ -19,7 +19,7 @@ class JobModel {
     address: string,
     categoryId: string,
     employerId: string,
-    active: boolean
+    state: string
   ) {
     this.id = id;
     this.title = title;
@@ -30,7 +30,7 @@ class JobModel {
     this.address = address;
     this.categoryId = categoryId;
     this.employerId = employerId;
-    this.active = active;
+    this.state = state;
   }
   
 }

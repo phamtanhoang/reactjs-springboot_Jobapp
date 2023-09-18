@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import EmployerModel from "../../../models/EmployerModel";
 import JobModel from "../../../models/JobModel";
 import { JobContext } from "../JobsPage";
+import { Link } from "react-router-dom";
 
 export const ReturnEmployerInJobPage: React.FC<{
   employer: EmployerModel;
@@ -29,15 +30,15 @@ export const ReturnEmployerInJobPage: React.FC<{
         />
       </div>
       <div className="w-4/5">
-        <a
-          href="#"
+        <Link
+          to={`/home/employer/${props.employer?.id}`}
           className="text-gray-700 font-semibold hover:text-orangetext text-sm"
         >
           {props.employer.name}
           <span className="text-gray-700 text-xs font-light inline-block pl-1 \">
             ({employerJobsCount} công việc)
           </span>
-        </a>
+        </Link>
       </div>
     </>
   );

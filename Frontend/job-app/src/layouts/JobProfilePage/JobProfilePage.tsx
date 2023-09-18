@@ -1,9 +1,81 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { BsCalendarCheck, BsCalendarX } from "react-icons/bs";
 import { FiMapPin } from "react-icons/fi";
 import { BiCategoryAlt } from "react-icons/bi";
+import JobModel from "../../models/JobModel";
+import { Spinner } from "../Utils/Spinner";
+import { ErrorBox } from "../Utils/ErrorBox";
+import { useEffect, useState } from "react";
 
 export const JobProfilePage = () => {
+  const [job, setJob] = useState<JobModel>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState(null);
+
+  const jobId = window.location.pathname.split("/")[3];
+
+  useEffect(() => {
+    const fetchJob = async () => {
+      const baseUrl: string = `http://localhost:8080/api/jobs/${jobId}`;
+
+      const response = await fetch(baseUrl);
+
+      const responseJson = await response.json();
+
+      const loadedJob: JobModel = {
+        id: responseJson.id,
+        title: responseJson.title,
+        description: responseJson.description,
+        salary: responseJson.salary,
+        fromDate: responseJson.fromDate,
+        toDate: responseJson.toDate,
+        address: responseJson.address,
+        categoryId: responseJson.categoryId,
+        employerId: responseJson.employerId,
+        state: responseJson.state,
+      };
+
+      setJob(loadedJob);
+      setIsLoading(false);
+    };
+    fetchJob().catch((error: any) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
+  }, [jobId]);
+
+  if (isLoading) {
+    return (
+      <div className="flex-grow">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (httpError) {
+    return (
+      <div className="flex-grow w-5/6 sm:w-3/4 mx-auto my-10">
+        <ErrorBox text={httpError} />
+      </div>
+    );
+  }
+
+  const calculateDaysRemaining = (toDate: string) => {
+    const currentDate = new Date() as any; // Ngày hiện tại
+    const targetDate = new Date(toDate) as any; // Chuyển đổi chuỗi toDate thành đối tượng Date
+
+    // Tính số mili giây còn lại giữa ngày đích và ngày hiện tại
+    const timeRemaining = targetDate - currentDate;
+
+    // Chuyển đổi số mili giây thành số ngày và làm tròn xuống
+    const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+
+    return daysRemaining;
+  };
+
+  const dayRemaining = calculateDaysRemaining(job?.toDate);
+
   return (
     <section className="text-gray-700">
       <div className="px-6 py-10">
@@ -24,7 +96,7 @@ export const JobProfilePage = () => {
             <div className="w-3/4 sm:w-4/5 lg:w-full">
               <div>
                 <p className=" text-gray-700 font-bold hover:text-orangetext text-base md:text-xl truncate cursor-pointer">
-                  Nhân Viên Kinh Doanh
+                  {job?.title}
                 </p>
               </div>
               <div className="md:mt-2">
@@ -32,19 +104,32 @@ export const JobProfilePage = () => {
                   Công ty công nghệ đa quốc gia Google
                 </p>
               </div>
-              <div className="md:mt-1">
-                <span className="font-light text-xs md:text-sm text-neutral-500">
-                  Hết hạn trong 10 ngày
-                </span>
-              </div>
-              <div className="flex w-full mt-3 gap-1 sm:gap-3">
-                <button className="bg-orangetext hover:bg-[#fe825c] text-white font-semibold py-2 px-2 sm:px-4 rounded w-[65%] sm:w-[70%] text-sm md:text-base">
-                  Ứng tuyển ngay
-                </button>
-                <button className="bg-transparent text-orangetext hover:text-[#fe825c] font-semibold py-2 px-2 sm:px-4 border border-orangetext hover:border-[#fe825c] rounded w-[35%] sm:w-[30%] text-sm md:text-base">
-                  Lưu tin
-                </button>
-              </div>
+
+              {dayRemaining > 0 ? (
+                <>
+                  <div className="md:mt-1">
+                    <span className="font-light text-xs md:text-sm text-neutral-500">
+                      Hết hạn trong {dayRemaining} ngày
+                    </span>
+                  </div>
+                  <div className="flex w-full mt-3 gap-1 sm:gap-3">
+                    <button className="bg-orangetext hover:bg-[#fe825c] text-white font-semibold py-2 px-2 sm:px-4 rounded w-[65%] sm:w-[70%] text-sm md:text-base">
+                      Ứng tuyển ngay
+                    </button>
+                    <button className="bg-transparent text-orangetext hover:text-[#fe825c] font-semibold py-2 px-2 sm:px-4 border border-orangetext hover:border-[#fe825c] rounded w-[35%] sm:w-[30%] text-sm md:text-base">
+                      Lưu tin
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="mt-4 ">
+                    <span className="font-semibold text-lg md:text-xl text-red-500">
+                      Đã hết hạn
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="w-[35%] items-center bg-white rounded-lg p-4 hidden lg:block">
@@ -71,11 +156,11 @@ export const JobProfilePage = () => {
                 <p>Mô tả:</p>
               </div>
               <div className="w-[75%]">
-                <p className="h-[4em] overflow-hidden ">
-                  Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên
+                <p className="h-[4em] overflow-hidden">
+                  {/* Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên
                   về các dịch vụ và sản phẩm liên quan đến Internet, bao gồm các
                   công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán
-                  đám mây, phần mềm và phần cứng.
+                  đám mây, phần mềm và phần cứng. */}
                 </p>
               </div>
             </div>
@@ -83,7 +168,7 @@ export const JobProfilePage = () => {
         </div>
         <div className="w-full sm:w-[90%] lg:w-[95%] xl:w-[80%] mx-auto my-4 bg-white rounded-lg p-5 flex md:flex-row flex-col-reverse gap-5 text-sm md:text-base">
           <div className="w-full md:w-[55%] lg:w-[65%]">
-            <div>
+            {/* <div>
               <h2 className="font-semibold">Các phúc lợi dành cho bạn</h2>
               <div>
                 <ul>
@@ -121,10 +206,11 @@ export const JobProfilePage = () => {
               <div>
                 <p>2 Nhân viên</p>
               </div>
-            </div>
+            </div> */}
+            {job?.description}
           </div>
           <div className="w-full md:w-[45%] lg:w-[35%]">
-            <div className="w-full border border-orangetext bg-orangebackground rounded-lg">
+            <div className="w-full border border-orangetext bg-[#fff4e9] rounded-lg">
               <ul className="px-5 py-2">
                 <li className="flex border-[#949697] border-b-2 py-4">
                   <div className="w-[20%]">
@@ -134,7 +220,7 @@ export const JobProfilePage = () => {
                     <h5 className="text-[#949697] font-light">
                       NGÀY ĐĂNG TUYỂN
                     </h5>
-                    <p className="mt-1 text-sm">03/02/2002</p>
+                    <p className="mt-1 text-sm">{job?.fromDate}</p>
                   </div>
                 </li>
                 <li className="flex border-[#949697] border-b-2 py-4">
@@ -143,7 +229,7 @@ export const JobProfilePage = () => {
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">NGÀY KẾT THÚC</h5>
-                    <p className="mt-1 text-sm">03/02/2002</p>
+                    <p className="mt-1 text-sm">{job?.toDate}</p>
                   </div>
                 </li>
                 <li className="flex border-[#949697] border-b-2 py-4">
@@ -163,7 +249,7 @@ export const JobProfilePage = () => {
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">MỨC LƯƠNG</h5>
-                    <p className="mt-1 text-sm">Thỏa thuận</p>
+                    <p className="mt-1 text-sm">{job?.salary}</p>
                   </div>
                 </li>
                 <li className="flex py-3">
@@ -172,7 +258,7 @@ export const JobProfilePage = () => {
                   </div>
                   <div className="w-[80%] text-xs">
                     <h5 className="text-[#949697] font-light">ĐỊA ĐIỂM</h5>
-                    <p className="mt-1 text-sm">Hồ Chí Minh</p>
+                    <p className="mt-1 text-sm">{job?.address}</p>
                   </div>
                 </li>
               </ul>

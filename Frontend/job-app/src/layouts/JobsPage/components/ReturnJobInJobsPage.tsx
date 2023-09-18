@@ -2,11 +2,37 @@
 import JobModel from "../../../models/JobModel";
 import EmployerModel from "../../../models/EmployerModel";
 import { AiFillHeart } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const ReturnJobInJobsPage: React.FC<{
   job: JobModel;
-  employer?: EmployerModel;
 }> = (props) => {
+  const [employer, setEmPloyer] = useState<EmployerModel>();
+
+  useEffect(() => {
+    const fetchEmployer = async () => {
+      const baseUrl: string = `http://localhost:8080/api/employers/${props.job.employerId}`;
+
+      const response = await fetch(baseUrl);
+
+      const responseJson = await response.json();
+
+      const loadedEmployer: EmployerModel = {
+        id: responseJson.id,
+        name: responseJson.name,
+        address: responseJson.address,
+        description: responseJson.description,
+        image: responseJson.image,
+        banner: responseJson.banner,
+        accountId: responseJson.accountId,
+      };
+
+      setEmPloyer(loadedEmployer);
+    };
+    fetchEmployer();
+  }, [props.job.employerId]);
+
   const calculateDaysRemaining = (toDate: string) => {
     const currentDate = new Date() as any; // Ngày hiện tại
     const targetDate = new Date(toDate) as any; // Chuyển đổi chuỗi toDate thành đối tượng Date
@@ -24,7 +50,7 @@ export const ReturnJobInJobsPage: React.FC<{
     <div className="max-full px-4 py-2 sm:px-10 sm:py-4 bg-white rounded-lg shadow-md flex my-4">
       <div className="w-1/4 sm:w-1/5 flex items-center">
         <img
-          src={props.employer?.image}
+          src={employer?.image}
           alt="avatar"
           className="w-[90%] object-cover p-1 md:p-4"
         />
@@ -41,13 +67,16 @@ export const ReturnJobInJobsPage: React.FC<{
         </div>
         <div className="mt-1">
           <div>
-            <p className=" text-gray-700 font-bold hover:text-orangetext text-base md:text-lg truncate cursor-pointer">
+            <Link
+              to={`/home/job/${props.job.id}`}
+              className=" text-gray-700 font-bold hover:text-orangetext text-base md:text-lg "
+            >
               {props.job.title}
-            </p>
+            </Link>
           </div>
           <div className="mt-1">
             <p className="text-gray-600 text-sm md:text-base truncate cursor-pointer">
-              {props.employer?.name}
+              {employer?.name}
             </p>
           </div>
           <div className="flex mt-4">

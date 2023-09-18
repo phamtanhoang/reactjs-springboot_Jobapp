@@ -1,6 +1,119 @@
-import { AiFillHeart, AiOutlineSearch } from "react-icons/ai";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import EmployerModel from "../../models/EmployerModel";
+import { Spinner } from "../Utils/Spinner";
+import { ErrorBox } from "../Utils/ErrorBox";
+import { ReturnEmployerInEmployersPage } from "./components/ReturnEmployerInEmployersPage";
+import { Pagination } from "../Utils/Pagination";
 
 export const EmployersPage = () => {
+  const [employers, setEmployers] = useState<EmployerModel[]>([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [employersPerPage, setEmployersPerPage] = useState(9);
+  const [totalAmountOfEmployers, setTotalAmountOfEmployers] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [searchUrl, setSearchUrl] = useState("");
+
+  useEffect(() => {
+    const fetchEmployers = async () => {
+      const baseUrl: string = "http://localhost:8080/api/employers";
+
+      let url: string = "";
+
+      if (searchUrl === "") {
+        url = `${baseUrl}?page=${currentPage - 1}&size=${employersPerPage}`;
+      } else {
+        url = baseUrl + searchUrl;
+      }
+
+      const response = await fetch(url);
+
+      const responseJson = await response.json();
+      const responseData = responseJson._embedded.employers;
+      const loadedEmployers: EmployerModel[] = [];
+
+      setTotalAmountOfEmployers(responseJson.page.totalElements);
+      setTotalPages(responseJson.page.totalPages);
+
+      for (const key in responseData) {
+        loadedEmployers.push({
+          id: responseData[key].id,
+          name: responseData[key].name,
+          address: responseData[key].address,
+          description: responseData[key].description,
+          image: responseData[key].image,
+          banner: responseData[key].banner,
+          accountId: responseData[key].accountId,
+        });
+      }
+
+      setEmployers(loadedEmployers);
+      setIsLoading(false);
+    };
+
+    fetchEmployers().catch((error: any) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
+
+    window.scrollTo(0, 0);
+  }, [currentPage, employersPerPage, searchUrl]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if((window.innerWidth < 640)){
+        setEmployersPerPage(5);
+      }
+      else if (window.innerWidth < 1024) {
+        setEmployersPerPage(6); 
+      } else {
+        setEmployersPerPage(9);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+  
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); 
+
+  
+  if (isLoading) {
+    return (
+      <div className="flex-grow">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (httpError) {
+    return (
+      <div className="flex-grow w-5/6 sm:w-3/4 mx-auto my-10">
+        <ErrorBox text={httpError} />
+      </div>
+    );
+  }
+
+  const searchChange = (value: any) => {
+    if (value === "") {
+      setSearchUrl("");
+    } else {
+      setSearchUrl(
+        `/search/findByNameContaining?name=${value}&page=0&size=${employersPerPage}`
+      );
+    }
+    setCurrentPage(1);
+  };
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <section className="text-gray-700">
       <div className="px-6 py-10">
@@ -20,42 +133,32 @@ export const EmployersPage = () => {
                   type="search"
                   className="block w-full  p-4 pl-14 text-gray-900 border-2 border-gray-200 rounded-lg bg-white focus:ring-orangetext focus:border-orangetext focus:outline-none"
                   placeholder="Nhập tên nhà tuyển dụng...."
+                  onChange={(e) => searchChange(e.target.value)}
                 />
               </div>
             </form>
           </div>
-          <div className="w-full grid gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[...Array(12)].map((_, index) => (
-              <div
-                className="group bg-white border-gray-200 border-2 rounded-lg hover:border-orangetext hover:bg-[#f4f5f5]"
-                key={index}
-              >
-                <div className="overflow-hidden rounded-tl-lg rounded-tr-lg bg-orangebackground">
-                  <img
-                    className="rounded-tl-xl rounded-tr-xl"
-                    src="https://res.cloudinary.com/dcpatkvcu/image/upload/v1694959037/DoAnNganh/image_wfa9xo.png"
-                    alt="banner"
-                  />
-                </div>
-                <div className="-mt-[13%] flex justify-center">
-                  <img
-                    className="w-1/4 rounded-lg bg-white p-2 shadow-xl"
-                    src="https://res.cloudinary.com/dcpatkvcu/image/upload/v1694701182/Google_oecx0q.png"
-                    alt="logo"
-                  />
-                </div>
-                <div className="text-sm md:text-base p-5 text-center">
-                  <p className="">
-                    <span className="font-bold">Joshua Welford</span>{" "}
-                    (Welfordian)
-                  </p>
-                  <p className="mt-2 text-xs md:text-sm">
-                    Software Engineer working on an EMR system for a non-profit.
-                  </p>
-                </div>
+          {totalAmountOfEmployers > 0 ? (
+            <>
+              <div className="w-full grid gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
+                {employers.map((employer) => (
+                  <ReturnEmployerInEmployersPage employer={employer} key={employer.id}/>
+                ))}
               </div>
-            ))}
-          </div>
+              <div className="flex justify-center mt-8">
+                {totalPages > 0 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    paginate={paginate}
+                    type={true}
+                  />
+                )}
+              </div>
+            </>
+          ) : (
+            <ErrorBox text="Không tìm thấy nhà tuyển dụng phù hợp" />
+          )}
         </div>
       </div>
     </section>

@@ -32,6 +32,11 @@ export const JobsPage = () => {
   const [totalAmountOfJobs, setTotalAmountOfJobs] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [currentEmployerPage, setCurrentEmployerPage] = useState(1);
+  const [employersPerPage] = useState(6);
+  const [totalAmountOfEmployers, setTotalAmountOfEmployers] = useState(0);
+  const [totalEmployerPages, setTotalEmployerPages] = useState(0);
+
   const [searchTitle, setSearchTitle] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
   const [searchUrl, setSearchUrl] = useState("");
@@ -63,7 +68,7 @@ export const JobsPage = () => {
           address: responseData[key].address,
           categoryId: responseData[key].categoryId,
           employerId: responseData[key].employerId,
-          active: responseData[key].active,
+          state: responseData[key].state,
         });
       }
 
@@ -110,7 +115,7 @@ export const JobsPage = () => {
           address: responseData[key].address,
           categoryId: responseData[key].categoryId,
           employerId: responseData[key].employerId,
-          active: responseData[key].active,
+          state: responseData[key].state,
         });
       }
 
@@ -154,12 +159,17 @@ export const JobsPage = () => {
 
   useEffect(() => {
     const fetchEmployers = async () => {
-      const baseUrl: string = "http://localhost:8080/api/employers";
+      const baseUrl: string = `http://localhost:8080/api/employers?page=${
+        currentEmployerPage - 1
+      }&size=${employersPerPage}`;
       const response = await fetch(baseUrl);
 
       const responseJson = await response.json();
       const responseData = responseJson._embedded.employers;
       const loadedEmployers: EmployerModel[] = [];
+
+      setTotalAmountOfEmployers(responseJson.page.totalElements);
+      setTotalEmployerPages(responseJson.page.totalPages);
 
       for (const key in responseData) {
         loadedEmployers.push({
@@ -168,10 +178,8 @@ export const JobsPage = () => {
           address: responseData[key].address,
           description: responseData[key].description,
           image: responseData[key].image,
-          coverImage: responseData[key].coverImage,
-          email: responseData[key].email,
-          password: responseData[key].password,
-          active: responseData[key].active,
+          banner: responseData[key].banner,
+          accountId: responseData[key].accountId,
         });
       }
 
@@ -183,7 +191,7 @@ export const JobsPage = () => {
       setIsLoading(false);
       setHttpError(error.message);
     });
-  }, []);
+  }, [currentEmployerPage, employersPerPage]);
 
   useEffect(() => {
     const addresses: string[] = allJob.map((job) => job.address);
@@ -212,8 +220,8 @@ export const JobsPage = () => {
     ...uniqueAddresses.map((address) => ({ value: address, label: address })),
   ];
 
-  const findEmployerById = (employerId: string) =>
-    employers.find((emp) => emp.id === employerId);
+  // const findEmployerById = (employerId: string) =>
+  //   employers.find((emp) => emp.id === employerId);
 
   const countJobsByCategory = (categoryId: string) => {
     return allJob.filter((job: JobModel) => job.categoryId === categoryId)
@@ -221,13 +229,14 @@ export const JobsPage = () => {
   };
 
   const searchHandleChange = () => {
-    if (searchTitle === "") {
+    if (searchTitle === "" && searchAddress === "") {
       setSearchUrl("");
     } else {
       setSearchUrl(
         `/search/findByTitleContainingAndAddress?title=${searchTitle}&address=${searchAddress}&page=0&size=${jobsPerPage}`
       );
     }
+    setCurrentPage(1);
   };
 
   const categoryField = (value: string) => {
@@ -236,9 +245,13 @@ export const JobsPage = () => {
         ? `/search/findByCategoryId?categoryId=${value}&page=0&size=${jobsPerPage}`
         : `?page=0&size=${jobsPerPage}`
     );
+    setCurrentPage(1);
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const paginateEmployer = (pageNumber: number) =>
+    setCurrentEmployerPage(pageNumber);
   return (
     <JobContext.Provider value={{ allJob }}>
       <section className="text-gray-700">
@@ -292,14 +305,37 @@ export const JobsPage = () => {
                       </li>
                     ))}
                   </ul>
+                  <div className="flex justify-center m-2">
+                    {totalPages > 0 && (
+                      <Pagination
+                        currentPage={currentEmployerPage}
+                        totalPages={totalEmployerPages}
+                        paginate={paginateEmployer}
+                        type={false}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="w-full lg:w-8/12">
-              <div className="w-full ">
+              <div className="w-full flex-row sm:flex text-center sm:justify-between ">
                 <h1 className="text-lg sm:text-xl font-bold md:text-2xl mb-5 uppercase">
                   Danh sách việc làm
                 </h1>
+                <div className="">
+                  <select
+                    className="lg:hidden block px-1 rounded-lg w-full py-1 border-2 mb-2"
+                    onChange={(e) => categoryField(e.target.value)}
+                  >
+                    <option value={"All"}>Tất cả</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <div className="flex-row w-full  bg-white px-4 py-2 justify-between rounded-2xl md:rounded-full md:flex">
                 <div className="flex gap-4 mx-1 my-4 md:m-0">
@@ -343,13 +379,12 @@ export const JobsPage = () => {
                       <ReturnJobInJobsPage
                         key={job.id}
                         job={job}
-                        employer={findEmployerById(job.employerId)}
                       />
                     ))}
                   </div>
                   <div className="flex justify-center sm:justify-between mt-8">
                     <div className="font-medium hidden sm:block">
-                      <p>Hiện {jobsPerPage} công việc trên 1 trang:</p>
+                      <p>Hiện tối đa {jobsPerPage} công việc trên 1 trang:</p>
                     </div>
 
                     {totalPages > 0 && (
@@ -357,6 +392,7 @@ export const JobsPage = () => {
                         currentPage={currentPage}
                         totalPages={totalPages}
                         paginate={paginate}
+                        type={true}
                       />
                     )}
                   </div>

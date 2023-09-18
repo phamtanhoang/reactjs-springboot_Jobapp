@@ -9,6 +9,7 @@ import {
   AiOutlineInstagram,
   AiOutlineTwitter,
 } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
@@ -65,19 +66,19 @@ export const Footer = () => {
               Danh mục
             </h6>
             <p className="mb-4">
-              <a href="#!" className=" hover:text-orangetext">
-                Trang chủ
-              </a>
+              <Link to="/home/jobs" className=" hover:text-orangetext">
+                Việc làm
+              </Link>
             </p>
             <p className="mb-4">
-              <a href="#!" className=" hover:text-orangetext">
-                Tìm việc làm
-              </a>
+              <Link to="/home/employers" className=" hover:text-orangetext">
+                Nhà tuyển dụng
+              </Link>
             </p>
             <p className="mb-4">
-              <a href="#!" className=" hover:text-orangetext">
-                Danh sách công ty
-              </a>
+              <Link to="/home/blogs" className=" hover:text-orangetext">
+                Blog
+              </Link>
             </p>
           </div>
 

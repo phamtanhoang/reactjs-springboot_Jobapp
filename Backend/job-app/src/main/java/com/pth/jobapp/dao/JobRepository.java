@@ -3,13 +3,10 @@ package com.pth.jobapp.dao;
 import com.pth.jobapp.entity.Job;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface JobRepository extends JpaRepository<Job, String> {
 
@@ -27,6 +24,9 @@ public interface JobRepository extends JpaRepository<Job, String> {
             Pageable pageable
     );
 
-    @Query("select j from Job j where j.id in :id")
-    List<Job> findById (@Param("id") String id, Pageable pageable);
+    Page<Job> findByEmployerId(
+            @RequestParam(name = "employer", required = false) String employerId,
+            Pageable pageable
+    );
+
 }

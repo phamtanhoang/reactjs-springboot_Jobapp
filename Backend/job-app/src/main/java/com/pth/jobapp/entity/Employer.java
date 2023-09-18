@@ -3,7 +3,6 @@ package com.pth.jobapp.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -26,32 +25,25 @@ public class Employer {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "coverImage")
-    private String coverImage;
+    @Column(name = "banner")
+    private String banner;
 
-    @Column(name = "email")
-    private String email;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "active")
-    private boolean active;
+    @Column(name = "account_id")
+    private String accountId;
 
     public Employer(){
 
     };
 
-    public Employer(String name, String address, String description, String image, String coverImage, String email, String password, boolean active) {
+    public Employer(String name, String address, String description, String image, String banner, String accountId) {
         this.id = String.valueOf(UUID.randomUUID());
         this.name = name;
         this.address = address;
         this.description = description;
         this.image = image;
-        this.coverImage = coverImage;
-        this.email = email;
-        this.password = password;
-        this.active = active;
+        this.banner = banner;
+        this.accountId = accountId;
     }
 
     public String getId() {
@@ -94,35 +86,21 @@ public class Employer {
         this.image = image;
     }
 
-    public String getCoverImage() {
-        return image;
+    public String getBanner() {
+        return banner;
     }
 
-    public void setCoverImage(String coverImage) {
-        this.coverImage = coverImage;
+    public void setBanner(String coverImage) {
+        this.banner = banner;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAccountId(String email) {
+        this.accountId = accountId;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 }

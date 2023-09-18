@@ -4,30 +4,24 @@ class EmployerModel {
   address: string;
   description: string;
   image: string;
-  coverImage: string;
-  email: string;
-  password: string;
-  active: boolean;
+  banner: string;
+  accountId: string;
   constructor(
     id: string,
     name: string,
     address: string,
     description: string,
     image: string,
-    coverImage: string,
-    email: string,
-    password: string,
-    active: boolean
+    banner: string,
+    accountId: string
   ) {
     this.id = id;
     this.name = name;
     this.address = address;
     this.description = description;
     this.image = image;
-    this.coverImage=coverImage;
-    this.email = email;
-    this.password = password;
-    this.active = active;
+    this.banner=banner;
+    this.accountId = accountId;
   }
 }
 

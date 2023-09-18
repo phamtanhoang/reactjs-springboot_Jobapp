@@ -4,7 +4,6 @@ package com.pth.jobapp.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -33,18 +32,18 @@ public class Job {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "categoryID")
+    @Column(name = "category_id")
     private String categoryId;
 
-    @Column(name = "employerID")
+    @Column(name = "employer_id")
     private String employerId;
 
-    @Column(name = "active")
-    private boolean active;
+    @Column(name = "state")
+    private String state;
 
     public Job(){
     }
-    public Job(String title, String description, String salary, String fromDate, String toDate, String address, String categoryId, String employerId, boolean active) {
+    public Job(String title, String description, String salary, String fromDate, String toDate, String address, String categoryId, String employerId, String state) {
         this.id = String.valueOf(UUID.randomUUID());
         this.title = title;
         this.description = description;
@@ -54,7 +53,7 @@ public class Job {
         this.address = address;
         this.categoryId = categoryId;
         this.employerId = employerId;
-        this.active = active;
+        this.state = state;
     }
 
     public String getId() {
@@ -129,12 +128,11 @@ public class Job {
         this.employerId = employerId;
     }
 
-    public boolean isActive() {
-        return active;
+    public String getState() {
+        return state;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setState(String state) {
+        this.state = state;
     }
 }
-

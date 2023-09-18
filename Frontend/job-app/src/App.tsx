@@ -15,10 +15,13 @@ function App() {
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="" element={<Layout />}>
             <Route path="/home" element={<HomePage />} />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="/job" element={<JobProfilePage />} />
-            <Route path="/employers" element={<EmployersPage />} />
-            <Route path="/employer" element={<EmployerProfilePage />} />
+            <Route path="/home/jobs" element={<JobsPage />} />
+            <Route path="/home/job/:id" element={<JobProfilePage />} />
+            <Route path="/home/employers" element={<EmployersPage />} />
+            <Route
+              path="/home/employer/:id"
+              element={<EmployerProfilePage />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
