@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 
@@ -76,25 +77,25 @@ export const Pagination: React.FC<{
           </li>
         </ul>
       ) : (
-        <ul className="inline-flex -space-x-px text-2xl">
+        <ul className="inline-flex -space-x-px text-2xl gap-4 pt-2">
           <li>
             <button
-              className={`font-medium flex items-center justify-center px-3 h-8 sm:h-10 ml-0 text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 ${
+              className={`flex items-center justify-center p-1 sm:p-2  ring-2 text-lg sm:text-xl text-orangetext ring-orangetext hover:bg-orangetext hover:text-white rounded-full ${
                 props.currentPage <= 1 ? "hidden" : ""
               }`}
               onClick={() => props.paginate(props.currentPage - 1)}
             >
-              <GrFormPreviousLink />
+              <AiFillCaretLeft />
             </button>
           </li>
           <li>
-            <button
-              className={`font-medium flex items-center justify-center px-3 h-8 sm:h-10 text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 ${
+          <button
+              className={`flex items-center justify-center p-1 sm:p-2  ring-2 text-lg sm:text-xl text-orangetext ring-orangetext hover:bg-orangetext hover:text-white rounded-full ${
                 props.currentPage >= props.totalPages ? "hidden" : ""
               }`}
               onClick={() => props.paginate(props.currentPage + 1)}
             >
-              <GrFormNextLink />
+              <AiFillCaretRight />
             </button>
           </li>
         </ul>

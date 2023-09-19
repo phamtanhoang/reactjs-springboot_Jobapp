@@ -10,6 +10,7 @@ import { ReturnJobInJobsPage } from "./components/ReturnJobInJobsPage";
 import { ReturnEmployerInJobPage } from "./components/ReturnEmployerInJobsPage";
 import { Pagination } from "../Utils/Pagination";
 import Select from "react-select";
+import { TopEmployers } from "../HomePage/components/TopEmployers";
 
 interface JobContextType {
   allJob: JobModel[];
@@ -159,7 +160,7 @@ export const JobsPage = () => {
 
   useEffect(() => {
     const fetchEmployers = async () => {
-      const baseUrl: string = `http://localhost:8080/api/employers?page=${
+      const baseUrl: string = `http://localhost:8080/api/employers/search/findVipEmployers?page=${
         currentEmployerPage - 1
       }&size=${employersPerPage}`;
       const response = await fetch(baseUrl);
@@ -220,9 +221,6 @@ export const JobsPage = () => {
     ...uniqueAddresses.map((address) => ({ value: address, label: address })),
   ];
 
-  // const findEmployerById = (employerId: string) =>
-  //   employers.find((emp) => emp.id === employerId);
-
   const countJobsByCategory = (categoryId: string) => {
     return allJob.filter((job: JobModel) => job.categoryId === categoryId)
       .length;
@@ -255,7 +253,7 @@ export const JobsPage = () => {
   return (
     <JobContext.Provider value={{ allJob }}>
       <section className="text-gray-700">
-        <div className="px-6 py-10">
+        <div className="px-6 pt-10 pb-0 lg:pb-10">
           <div className="flex justify-between w-full md:w-[95%] lg:w-full xl:w-[85%] mx-auto">
             <div className="-mx-8 w-4/12 hidden lg:block">
               <div className="px-8">
@@ -376,10 +374,7 @@ export const JobsPage = () => {
                 <>
                   <div className="mt-5 w-full">
                     {jobs.map((job) => (
-                      <ReturnJobInJobsPage
-                        key={job.id}
-                        job={job}
-                      />
+                      <ReturnJobInJobsPage key={job.id} job={job} />
                     ))}
                   </div>
                   <div className="flex justify-center sm:justify-between mt-8">
@@ -406,6 +401,9 @@ export const JobsPage = () => {
           </div>
         </div>
       </section>
+      <div className="lg:hidden block">
+        <TopEmployers employers={employers}/>
+      </div>
     </JobContext.Provider>
   );
 };

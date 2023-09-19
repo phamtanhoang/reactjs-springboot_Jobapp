@@ -1,5 +1,6 @@
 package com.pth.jobapp.dao;
 
+import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.entity.Job;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface JobRepository extends JpaRepository<Job, String> {
-
     @Query("SELECT j FROM Job j WHERE" +
             " (:title IS NULL OR j.title LIKE %:title%)" +
             " AND (:address IS NULL OR :address = '' OR j.address = :address)")

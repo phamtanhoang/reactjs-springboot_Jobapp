@@ -40,7 +40,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES ('1','2023-09-16 04:41:21','active','employer','email1@example.com','password1'),('2','2023-09-16 04:41:21','active','employer','email2@example.com','password2'),('3','2023-09-16 04:41:21','active','employer','email3@example.com','password3'),('4','2023-09-16 04:41:21','active','employer','email4@example.com','password4'),('5','2023-09-16 04:41:21','active','employer','email5@example.com','password5');
+INSERT INTO `account` VALUES ('1','2023-09-16 04:41:21','active','employer','google@example.com','password1'),('10','2023-09-16 04:41:21','active','employer','youtube@example.com','password5'),('11','2023-09-16 04:41:21','active','employer','vingroup@example.com','password5'),('12','2023-09-16 04:41:21','active','employer','tiktok@example.com','password5'),('2','2023-09-16 04:41:21','active','employer','microsoft@example.com','password2'),('3','2023-09-16 04:41:21','active','employer','airbnb@example.com','password3'),('4','2023-09-16 04:41:21','active','employer','slack@example.com','password4'),('5','2023-09-16 04:41:21','active','employer','cloudinary@example.com','password5'),('6','2023-09-16 04:41:21','active','employer','Instagram@example.com','password5'),('7','2023-09-16 04:41:21','active','employer','xiaomi@example.com','password5'),('8','2023-09-16 04:41:21','active','employer','meta@example.com','password5'),('9','2023-09-16 04:41:21','active','employer','twitter@example.com','password5');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -343,6 +343,7 @@ CREATE TABLE `vip` (
 
 LOCK TABLES `vip` WRITE;
 /*!40000 ALTER TABLE `vip` DISABLE KEYS */;
+INSERT INTO `vip` VALUES ('1','2023-09-10','2023-12-10','1'),('2','2023-09-12','2023-12-12','2'),('3','2023-09-15','2023-12-15','3'),('4','2023-09-18','2023-12-18','6'),('5','2023-09-20','2023-12-19','12');
 /*!40000 ALTER TABLE `vip` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -355,4 +356,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-19  1:01:15
+-- Dump completed on 2023-09-19 22:30:46

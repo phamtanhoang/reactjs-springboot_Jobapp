@@ -4,12 +4,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useRef } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
-import EmployerModel from "../../../models/CategoryModel";
+import EmployerModel from "../../../models/EmployerModel";
 
-export const TopEmployers: React.FC = () => {
-  const employerList: EmployerModel[] = [
-    
-  ];
+export const TopEmployers: React.FC<{ employers: EmployerModel[] }> = (
+  props
+) => {
   const settings = {
     dots: false,
     infinite: true,
@@ -60,15 +59,16 @@ export const TopEmployers: React.FC = () => {
   return (
     <section className="px-4 py-12 relative">
       <div>
-        <h4 className="text-base text-center mb-10 font-medium">
-          Tham gia cùng những <span className="text-orangetext">Công Ty</span>{" "}
-          nổi tiếng nhất trên toàn thế giới
+        <h4 className="text-base md:text-lg text-center mb-10 font-medium">
+          Tham gia cùng những{" "}
+          <span className="text-orangetext">Nhà tuyển dụng</span> nổi bật của
+          chúng tôi
         </h4>
       </div>
 
       <div className="w-10/12 mx-auto">
         <Slider ref={sliderRef} {...settings}>
-          {employerList.map((employer) => (
+          {props.employers.map((employer) => (
             <div className="px-2 pb-8" key={employer.id}>
               <ReturnEmployer employer={employer} />
             </div>
