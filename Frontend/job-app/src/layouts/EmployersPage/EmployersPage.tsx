@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import EmployerModel from "../../models/EmployerModel";
-import { Spinner } from "../Utils/Spinner";
-import { ErrorBox } from "../Utils/ErrorBox";
 import { ReturnEmployerInEmployersPage } from "./components/ReturnEmployerInEmployersPage";
-import { Pagination } from "../Utils/Pagination";
 import { TopEmployers } from "../HomePage/components/TopEmployers";
+import { EmployerModel } from "../../models/EmployerModel";
+import { ErrorBox, Pagination, Spinner } from "../../components";
 
 export const EmployersPage = () => {
   const [employers, setEmployers] = useState<EmployerModel[]>([]);

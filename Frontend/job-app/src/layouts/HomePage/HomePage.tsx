@@ -5,9 +5,8 @@ import { TopEmployers } from "./components/TopEmployers";
 import { Profile } from "./components/Profile";
 import { Intruction } from "./components/Instruction";
 import { useEffect, useState } from "react";
-import EmployerModel from "../../models/EmployerModel";
-import { Spinner } from "../Utils/Spinner";
-import { ErrorBox } from "../Utils/ErrorBox";
+import { ErrorBox, Spinner } from "../../components";
+import { EmployerModel } from "../../models/EmployerModel";
 
 export const HomePage = () => {
   const [employers, setEmployers] = useState<EmployerModel[]>([]);

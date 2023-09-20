@@ -1,8 +1,7 @@
 interface ErrorProps {
   text: string;
 }
-
-export const ErrorBox = (props: ErrorProps) => {
+const ErrorBox = (props: ErrorProps) => {
   return (
     <div
       className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative w-full"
@@ -12,3 +11,4 @@ export const ErrorBox = (props: ErrorProps) => {
     </div>
   );
 };
+export default ErrorBox;

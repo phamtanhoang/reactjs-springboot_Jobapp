@@ -3,12 +3,11 @@ import { AiOutlineDollarCircle } from "react-icons/ai";
 import { BsCalendarCheck, BsCalendarX } from "react-icons/bs";
 import { FiMapPin } from "react-icons/fi";
 import { BiCategoryAlt } from "react-icons/bi";
-import JobModel from "../../models/JobModel";
-import { Spinner } from "../Utils/Spinner";
-import { ErrorBox } from "../Utils/ErrorBox";
 import { useEffect, useState } from "react";
 import { TopEmployers } from "../HomePage/components/TopEmployers";
-import EmployerModel from "../../models/EmployerModel";
+import { JobModel } from "../../models/JobModel";
+import { EmployerModel } from "../../models/EmployerModel";
+import { ErrorBox, Spinner } from "../../components";
 
 export const JobProfilePage = () => {
   const [job, setJob] = useState<JobModel>();
@@ -108,7 +107,7 @@ export const JobProfilePage = () => {
     return daysRemaining;
   };
 
-  const dayRemaining = calculateDaysRemaining(job?.toDate);
+  const dayRemaining = calculateDaysRemaining(job?.toDate || "");
 
   return (
     <>

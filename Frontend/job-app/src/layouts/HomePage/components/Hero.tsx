@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { AiOutlineSearch, AiOutlineEnvironment } from "react-icons/ai";
 import JobModel from "../../../models/JobModel";
-import { Spinner } from "../../Utils/Spinner";
-import { ErrorBox } from "../../Utils/ErrorBox";
+import { Spinner } from "../../../components/Spinner";
+import { ErrorBox } from "../../../components/ErrorBox";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 

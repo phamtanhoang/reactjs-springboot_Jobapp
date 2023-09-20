@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import EmployerModel from "../../models/EmployerModel";
-import { Spinner } from "../Utils/Spinner";
-import { ErrorBox } from "../Utils/ErrorBox";
-import JobModel from "../../models/JobModel";
+
 import { ReturnJobInEmployerProfilePage } from "./components/ReturnJobInEmployerProfilePage";
-import { Pagination } from "../Utils/Pagination";
-import AccountModel from "../../models/AccountModel";
 import { TopEmployers } from "../HomePage/components/TopEmployers";
+import { EmployerModel } from "../../models/EmployerModel";
+import { AccountModel } from "../../models/AccountModel";
+import { JobModel } from "../../models/JobModel";
+import { ErrorBox, Pagination, Spinner } from "../../components";
 
 export const EmployerProfilePage = () => {
   const [employer, setEmPloyer] = useState<EmployerModel>();

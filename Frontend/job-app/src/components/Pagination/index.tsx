@@ -2,9 +2,7 @@
 import React from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 
-import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
-
-export const Pagination: React.FC<{
+const Pagination: React.FC<{
   currentPage: number;
   totalPages: number;
   paginate: any;
@@ -89,7 +87,7 @@ export const Pagination: React.FC<{
             </button>
           </li>
           <li>
-          <button
+            <button
               className={`flex items-center justify-center p-1 sm:p-2  ring-2 text-lg sm:text-xl text-orangetext ring-orangetext hover:bg-orangetext hover:text-white rounded-full ${
                 props.currentPage >= props.totalPages ? "hidden" : ""
               }`}
@@ -103,3 +101,5 @@ export const Pagination: React.FC<{
     </>
   );
 };
+
+export default Pagination;

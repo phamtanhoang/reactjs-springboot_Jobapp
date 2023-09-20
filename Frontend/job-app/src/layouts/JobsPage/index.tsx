@@ -1,21 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, createContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineEnvironment, AiOutlineSearch } from "react-icons/ai";
-import EmployerModel from "../../models/EmployerModel";
-import CategoryModel from "../../models/CategoryModel";
-import JobModel from "../../models/JobModel";
-import { Spinner } from "../Utils/Spinner";
-import { ErrorBox } from "../Utils/ErrorBox";
-import { ReturnJobInJobsPage } from "./components/ReturnJobInJobsPage";
-import { ReturnEmployerInJobPage } from "./components/ReturnEmployerInJobsPage";
-import { Pagination } from "../Utils/Pagination";
 import Select from "react-select";
 import { TopEmployers } from "../HomePage/components/TopEmployers";
-
-interface JobContextType {
-  allJob: JobModel[];
-}
-export const JobContext = createContext<JobContextType | undefined>(undefined);
+import { JobModel } from "../../models/JobModel";
+import { EmployerModel } from "../../models/EmployerModel";
+import { CategoryModel } from "../../models/CategoryModel";
+import { ErrorBox, Pagination, Spinner } from "../../components";
+// import { EmployerItem, JobItem } from "./components";
+import { categoriesAPI } from "../../services";
+import { instance } from "../../configs/Apis";
+import { urlAPI } from "../../configs/helper";
 
 export const JobsPage = () => {
   const [selectedOption, setSelectedOption] = useState("Tất cả tỉnh/thành phố");
@@ -47,40 +42,48 @@ export const JobsPage = () => {
     setSearchAddress(selectedOption.value);
   };
 
+  const mapResponseToJobs = (responseData: any) => {
+    return responseData.map((item: any) => ({
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      salary: item.salary,
+      fromDate: item.fromDate,
+      toDate: item.toDate,
+      address: item.address,
+      categoryId: item.categoryId,
+      employerId: item.employerId,
+      state: item.state,
+    }));
+  };
+
+  // const LoadAllJob = async () => {
+  //   const response = await instance.get();
+  //   const responseData = response.data._embedded.jobs;
+  //   const loadedJobs = mapResponseToJobs(responseData);
+
+  //   setAllJob(loadedJobs);
+  //   setIsLoading(false);
+  // };
+  // LoadAllJob().catch((error: any) => {
+  //   setIsLoading(false);
+  //   setHttpError(error.message);
+  // });
   useEffect(() => {
-    const fetchAllJob = async () => {
-      const baseUrl: string = "http://localhost:8080/api/jobs";
-
-      const response = await fetch(baseUrl);
-
-      const responseJson = await response.json();
-      const responseData = responseJson._embedded.jobs;
-
-      const loadedJobs: JobModel[] = [];
-
-      for (const key in responseData) {
-        loadedJobs.push({
-          id: responseData[key].id,
-          title: responseData[key].title,
-          description: responseData[key].description,
-          salary: responseData[key].salary,
-          fromDate: responseData[key].fromDate,
-          toDate: responseData[key].toDate,
-          address: responseData[key].address,
-          categoryId: responseData[key].categoryId,
-          employerId: responseData[key].employerId,
-          state: responseData[key].state,
+    const getAllCategories = () => {
+      categoriesAPI
+        .getAllCategory()
+        .then((res) => {
+          setCategories(res.data._embedded.categories);
+        })
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
-      }
-
-      setAllJob(loadedJobs);
-      setIsLoading(false);
     };
-
-    fetchAllJob().catch((error: any) => {
-      setIsLoading(false);
-      setHttpError(error.message);
-    });
+    getAllCategories();
   }, []);
 
   useEffect(() => {
@@ -103,22 +106,7 @@ export const JobsPage = () => {
       setTotalAmountOfJobs(responseJson.page.totalElements);
       setTotalPages(responseJson.page.totalPages);
 
-      const loadedJobs: JobModel[] = [];
-
-      for (const key in responseData) {
-        loadedJobs.push({
-          id: responseData[key].id,
-          title: responseData[key].title,
-          description: responseData[key].description,
-          salary: responseData[key].salary,
-          fromDate: responseData[key].fromDate,
-          toDate: responseData[key].toDate,
-          address: responseData[key].address,
-          categoryId: responseData[key].categoryId,
-          employerId: responseData[key].employerId,
-          state: responseData[key].state,
-        });
-      }
+      const loadedJobs = mapResponseToJobs(responseData);
 
       setJobs(loadedJobs);
       setIsLoading(false);
@@ -131,32 +119,6 @@ export const JobsPage = () => {
 
     window.scrollTo(0, 0);
   }, [currentPage, jobsPerPage, searchUrl]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const baseUrl: string = "http://localhost:8080/api/categories";
-      const response = await fetch(baseUrl);
-
-      const responseJson = await response.json();
-      const responseData = responseJson._embedded.categories;
-      const loadedCategories: CategoryModel[] = [];
-
-      for (const key in responseData) {
-        loadedCategories.push({
-          id: responseData[key].id,
-          name: responseData[key].name,
-        });
-      }
-
-      setCategories(loadedCategories);
-      setIsLoading(false);
-    };
-
-    fetchCategories().catch((error: any) => {
-      setIsLoading(false);
-      setHttpError(error.message);
-    });
-  }, []);
 
   useEffect(() => {
     const fetchEmployers = async () => {
@@ -216,14 +178,14 @@ export const JobsPage = () => {
     );
   }
 
-  const options = [
+  const options: any = [
     { value: "", label: "Tất cả tỉnh/thành phố" },
     ...uniqueAddresses.map((address) => ({ value: address, label: address })),
   ];
-
-  const countJobsByCategory = (categoryId: string) => {
-    return allJob.filter((job: JobModel) => job.categoryId === categoryId)
-      .length;
+  const countJobsByCategory: any = async (categoryId: string) => {
+    const response = await instance.get(urlAPI.getJobByCategoryId(categoryId));
+    console.log("res", response.data._embedded.jobs.length);
+    return response.data._embedded.jobs.length;
   };
 
   const searchHandleChange = () => {
@@ -251,7 +213,7 @@ export const JobsPage = () => {
   const paginateEmployer = (pageNumber: number) =>
     setCurrentEmployerPage(pageNumber);
   return (
-    <JobContext.Provider value={{ allJob }}>
+    <>
       <section className="text-gray-700">
         <div className="px-6 pt-10 pb-0 lg:pb-10">
           <div className="flex justify-between w-full md:w-[95%] lg:w-full xl:w-[85%] mx-auto">
@@ -274,20 +236,28 @@ export const JobsPage = () => {
                         </span>
                       </a>
                     </li>
-                    {categories.map((category) => (
-                      <li key={category.id} className="flex items-center py-2">
-                        <a
-                          href="#"
-                          className="font-semibold mx-1 hover:text-orangetext text-sm"
-                          onClick={() => categoryField(category.id)}
+                    {categories.map((category) => {
+                      countJobsByCategory(category.id).then((res: any) => {
+                        console.log("asdf", res);
+                      });
+                      return (
+                        <li
+                          key={category.id}
+                          className="flex items-center py-2"
                         >
-                          - {category.name}
-                          <span className="text-gray-700 text-xs font-light inline-block pl-1">
-                            ({countJobsByCategory(category.id)} công việc)
-                          </span>
-                        </a>
-                      </li>
-                    ))}
+                          <a
+                            href="#"
+                            className="font-semibold mx-1 hover:text-orangetext text-sm"
+                            onClick={() => categoryField(category.id)}
+                          >
+                            - {category.name}
+                            <span className="text-gray-700 text-xs font-light inline-block pl-1">
+                              jobs
+                            </span>
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
@@ -296,23 +266,32 @@ export const JobsPage = () => {
                   Một số nhà tuyển dụng nổi bật:
                 </h1>
                 <div className="flex flex-col bg-white max-w-sm px-8 py-2 mx-auto rounded-lg shadow-lg">
-                  <ul className="">
-                    {employers.map((employer) => (
-                      <li key={employer.id} className="flex items-center py-4">
-                        <ReturnEmployerInJobPage employer={employer} />
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex justify-center m-2">
-                    {totalPages > 0 && (
-                      <Pagination
-                        currentPage={currentEmployerPage}
-                        totalPages={totalEmployerPages}
-                        paginate={paginateEmployer}
-                        type={false}
-                      />
-                    )}
-                  </div>
+                  {totalAmountOfEmployers > 0 ? (
+                    <>
+                      <ul className="">
+                        {employers.map((employer) => (
+                          <li
+                            key={employer.id}
+                            className="flex items-center py-4"
+                          >
+                            {/* <EmployerItem employer={employer} /> */}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex justify-center m-2">
+                        {totalPages > 0 && (
+                          <Pagination
+                            currentPage={currentEmployerPage}
+                            totalPages={totalEmployerPages}
+                            paginate={paginateEmployer}
+                            type={false}
+                          />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <ErrorBox text="Không có nhà tuyển dụng nổi bật nào" />
+                  )}
                 </div>
               </div>
             </div>
@@ -373,9 +352,9 @@ export const JobsPage = () => {
               {totalAmountOfJobs > 0 ? (
                 <>
                   <div className="mt-5 w-full">
-                    {jobs.map((job) => (
-                      <ReturnJobInJobsPage key={job.id} job={job} />
-                    ))}
+                    {/* {jobs.map((job) => (
+                      <JobItem key={job.id} job={job} />
+                    ))} */}
                   </div>
                   <div className="flex justify-center sm:justify-between mt-8">
                     <div className="font-medium hidden sm:block">
@@ -402,8 +381,8 @@ export const JobsPage = () => {
         </div>
       </section>
       <div className="lg:hidden block">
-        <TopEmployers employers={employers}/>
+        <TopEmployers employers={employers} />
       </div>
-    </JobContext.Provider>
+    </>
   );
 };
