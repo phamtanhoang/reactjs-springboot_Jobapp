@@ -75,10 +75,10 @@ const Pagination: React.FC<{
           </li>
         </ul>
       ) : (
-        <ul className="inline-flex -space-x-px text-2xl gap-4 pt-2">
+        <ul className="inline-flex -space-x-px text-2xl pt-2">
           <li>
             <button
-              className={`flex items-center justify-center p-1 sm:p-2  ring-2 text-lg sm:text-xl text-orangetext ring-orangetext hover:bg-orangetext hover:text-white rounded-full ${
+              className={`flex items-center justify-center p-1 sm:p-2  ring-2 text-lg sm:text-xl text-orangetext ring-orangetext hover:bg-orangetext hover:text-white rounded-full mx-2 ${
                 props.currentPage <= 1 ? "hidden" : ""
               }`}
               onClick={() => props.paginate(props.currentPage - 1)}
@@ -88,7 +88,7 @@ const Pagination: React.FC<{
           </li>
           <li>
             <button
-              className={`flex items-center justify-center p-1 sm:p-2  ring-2 text-lg sm:text-xl text-orangetext ring-orangetext hover:bg-orangetext hover:text-white rounded-full ${
+              className={`flex items-center justify-center p-1 sm:p-2  ring-2 text-lg sm:text-xl text-orangetext ring-orangetext hover:bg-orangetext hover:text-white rounded-full mx-2 ${
                 props.currentPage >= props.totalPages ? "hidden" : ""
               }`}
               onClick={() => props.paginate(props.currentPage + 1)}

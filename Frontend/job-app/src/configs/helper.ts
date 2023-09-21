@@ -1,7 +1,53 @@
 export const urlAPI = {
-  getAllCategory: "/categories",
-  getJobByCategoryId: (categoryId: string)=> `/jobs/search/findByCategoryId?categoryId=${categoryId}`, 
-//   employers: "/api/employers",
-//   jobs: "/api/jobs",
-//   searchJobs: "/api/jobs/search",
+  getCategories: (currentPage?: number, itemsPerPage?: number) => {
+    if (currentPage !== undefined || itemsPerPage !== undefined) {
+      return `/categories?page=${currentPage}&size=${itemsPerPage}`;
+    } else {
+      return "/categories";
+    }
+  },
+
+  getEmployers: (currentPage?: number, itemsPerPage?: number) => {
+    if (currentPage !== undefined || itemsPerPage !== undefined) {
+      return `/employers?page=${currentPage}&size=${itemsPerPage}`;
+    } else {
+      return "/employers";
+    }
+  },
+
+  getJobs: (currentPage?: number, itemsPerPage?: number) => {
+    if (currentPage !== undefined || itemsPerPage !== undefined) {
+      return `/jobs?page=${currentPage}&size=${itemsPerPage}`;
+    } else {
+      return "/jobs";
+    }
+  },
+
+  getVipEmployers: (currentPage: number, itemsPerPage?: number) =>
+    `employers/search/findVipEmployers?page=${currentPage}&size=${itemsPerPage}`,
+
+  getJobsByCategoryId: (
+    categoryId: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) => {
+    const sizeParameter =
+      itemsPerPage !== undefined || currentPage !== undefined
+        ? `&page=${currentPage}&size=${itemsPerPage}`
+        : "";
+    return `/jobs/search/findByCategoryId?categoryId=${categoryId}${sizeParameter}`;
+  },
+
+  getJobsByEmployerId: (employerId: string, itemsPerPage?: number) => {
+    const sizeParameter = itemsPerPage !== undefined ? `&size=${itemsPerPage}` : "";
+    return `/jobs/search/findByEmployerId?employerId=${employerId}${sizeParameter}`;
+  },
+
+  getJobsByTitleContainingAndAddress: (
+    title: string,
+    address: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/jobs/search/findByTitleContainingAndAddress?title=${title}&address=${address}&page=${currentPage}&size=${itemsPerPage}`,
 };

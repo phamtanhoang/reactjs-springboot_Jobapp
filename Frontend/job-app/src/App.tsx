@@ -2,10 +2,12 @@ import { HomePage } from "./layouts/HomePage/HomePage";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import { Layout } from "./layouts/HeaderAndFooter/Layout";
-import { JobsPage } from "./layouts/JobsPage";
+
 import { JobProfilePage } from "./layouts/JobProfilePage/JobProfilePage";
 import { EmployersPage } from "./layouts/EmployersPage/EmployersPage";
 import { EmployerProfilePage } from "./layouts/EmployerProfilePage/EmployerProfilePage";
+import { JobsPage } from "./layouts/JobsPage";
+
 
 function App() {
   return (

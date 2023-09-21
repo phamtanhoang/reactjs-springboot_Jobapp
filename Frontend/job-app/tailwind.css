@@ -1696,10 +1696,6 @@ body {
   --tw-ring-color: rgb(242 153 74 / var(--tw-ring-opacity));
 }
 
-.filter {
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
 .duration-500 {
   transition-duration: 500ms;
 }

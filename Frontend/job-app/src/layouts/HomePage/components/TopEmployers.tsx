@@ -57,7 +57,7 @@ export const TopEmployers: React.FC<{ employers: EmployerModel[] }> = (
   };
 
   return (
-    <section className="px-4 py-12 relative">
+    <div className="px-4 py-12 relative">
       <div>
         <h4 className="text-base md:text-lg text-center mb-10 font-medium">
           Tham gia cùng những{" "}
@@ -87,6 +87,6 @@ export const TopEmployers: React.FC<{ employers: EmployerModel[] }> = (
       >
         <AiFillCaretRight />
       </button>
-    </section>
+    </div>
   );
 };
