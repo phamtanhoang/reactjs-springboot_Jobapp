@@ -1,6 +1,7 @@
 package com.pth.jobapp.service;
 
 import com.pth.jobapp.dao.EmployerRepository;
+import com.pth.jobapp.entity.Account;
 import com.pth.jobapp.entity.Employer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,4 +16,9 @@ public class EmployerService {
     @Autowired
     private EmployerRepository employerRepository;
 
+    public Employer save(Employer employer) {
+        return employerRepository.save(employer);
+    }
+
+    public Employer findByAccountUsername(String username){return employerRepository.findByAccountUsername(username);}
 }

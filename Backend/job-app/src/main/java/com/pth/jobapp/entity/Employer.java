@@ -90,7 +90,7 @@ public class Employer {
         return banner;
     }
 
-    public void setBanner(String coverImage) {
+    public void setBanner(String banner) {
         this.banner = banner;
     }
 
@@ -98,7 +98,7 @@ public class Employer {
         return accountId;
     }
 
-    public void setAccountId(String email) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 

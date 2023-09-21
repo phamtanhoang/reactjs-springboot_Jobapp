@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 public interface JobRepository extends JpaRepository<Job, String> {
     @Query("SELECT j FROM Job j WHERE" +
             " (:title IS NULL OR j.title LIKE %:title%)" +
@@ -19,6 +21,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
             Pageable pageable
     );
 
+    
     Page<Job> findByCategoryId(
             @RequestParam(name = "category", required = false) String categoryId,
             Pageable pageable
@@ -28,5 +31,13 @@ public interface JobRepository extends JpaRepository<Job, String> {
             @RequestParam(name = "employer", required = false) String employerId,
             Pageable pageable
     );
+    @Query("SELECT j FROM Job j JOIN Employer e on j.employerId=e.id " +
+            "WHERE e.id IN (SELECT e.id FROM Employer e JOIN Vip v ON e.id = v.employerId " +
+            "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE())")
+    Page<Job>findJobsWithVipEmployer(Pageable pageable);
+    @Query("SELECT e FROM Employer e JOIN Vip v ON e.id = v.employerId " +
+            "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE()")
+    Page<Employer> findVipEmployers(Pageable pageable);
+
 
 }
