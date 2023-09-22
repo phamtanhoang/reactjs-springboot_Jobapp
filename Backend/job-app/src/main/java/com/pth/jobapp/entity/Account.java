@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -17,8 +18,8 @@ public class Account {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "createdAt")
-    private String createAt;
+    @Column(name = "created_at")
+    private Date createAt;
 
     @Column(name = "state")
     private String state;
@@ -26,8 +27,8 @@ public class Account {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "password")
     private String password;
@@ -36,12 +37,12 @@ public class Account {
 
     }
 
-    public Account(String createAt, String state, String role, String email, String password) {
+    public Account(Date createAt, String state, String role, String username, String password) {
         this.id = String.valueOf(UUID.randomUUID());
         this.createAt = createAt;
         this.state = state;
         this.role = role;
-        this.email = email;
+        this.username = username;
         this.password = password;
     }
 
@@ -53,11 +54,11 @@ public class Account {
         this.id = id;
     }
 
-    public String getCreateAt() {
+    public Date getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(String createAt) {
+    public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
 
@@ -77,12 +78,12 @@ public class Account {
         this.role = role;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

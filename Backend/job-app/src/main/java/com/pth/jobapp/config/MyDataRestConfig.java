@@ -14,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 public class MyDataRestConfig implements RepositoryRestConfigurer {
 
     private String theAllowedOrigins = "http://127.0.0.1:5173/";
-
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration repositoryRestConfiguration,
                                                      CorsRegistry corsRegistry) {
@@ -51,5 +50,6 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
                         httpMethods.disable(theUnsupportedActions))
                 .withCollectionExposure((metdata, httpMethods) ->
                         httpMethods.disable(theUnsupportedActions));
+
     }
 }

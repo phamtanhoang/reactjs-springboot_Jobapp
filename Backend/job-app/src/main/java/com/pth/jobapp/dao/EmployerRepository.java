@@ -22,4 +22,6 @@ public interface EmployerRepository extends JpaRepository<Employer, String> {
             "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE()")
     Page<Employer> findVipEmployers(Pageable pageable);
 
+    @Query("SELECT e FROM Employer e JOIN Account a on  e.accountId = a.id where a.username = :username")
+    Employer findByAccountUsername(@Param("username") String username);
 }
