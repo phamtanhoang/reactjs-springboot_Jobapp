@@ -67,7 +67,7 @@ export const TopEmployers: React.FC<{ employers: EmployerModel[] }> = (
       </div>
 
       <div className="w-10/12 mx-auto">
-        <Slider ref={sliderRef} {...settings}>
+        <Slider ref={sliderRef} {...settings} >
           {props.employers.map((employer) => (
             <div className="px-2 pb-8" key={employer.id}>
               <ReturnEmployer employer={employer} />
@@ -75,18 +75,7 @@ export const TopEmployers: React.FC<{ employers: EmployerModel[] }> = (
           ))}
         </Slider>
       </div>
-      <button
-        className="text-xl p-1 rounded-full ring-2 text-orangetext ring-orangetext hover:bg-orangetext hover:text-white absolute top-1/2 left-4 sm:left-8 lg:left-14 xl:left-20 "
-        onClick={goToPrev}
-      >
-        <AiFillCaretLeft />
-      </button>
-      <button
-        className="text-xl p-1 rounded-full ring-2 text-orangetext ring-orangetext hover:bg-orangetext hover:text-white absolute top-1/2 right-4 sm:right-8 lg:right-14 xl:right-20 "
-        onClick={goToNext}
-      >
-        <AiFillCaretRight />
-      </button>
+      
     </div>
   );
 };

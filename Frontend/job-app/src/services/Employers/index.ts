@@ -6,9 +6,26 @@ const employersAPI = {
     return await instance.get(urlAPI.getEmployers(currentPage, itemsPerPage));
   },
 
-  async getVipEmployers(currentEmployerPage: number, employersPerPage: number) {
+  async getVipEmployers(currentPage?: number, itemsPerPage?: number) {
     return await instance.get(
-      urlAPI.getVipEmployers(currentEmployerPage, employersPerPage)
+      urlAPI.getVipEmployers(currentPage, itemsPerPage)
+    );
+  },
+
+  async getEmployerById(id?: string) {
+    return await instance.get(urlAPI.getEmployerById(id));
+  },
+
+  async getEmployersByNameContaining(
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) {
+    console.log(
+      urlAPI.getEmployersByNameContaining(name, currentPage, itemsPerPage)
+    );
+    return await instance.get(
+      urlAPI.getEmployersByNameContaining(name, currentPage, itemsPerPage)
     );
   },
 };

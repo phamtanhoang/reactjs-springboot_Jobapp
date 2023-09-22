@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import { Layout } from "./layouts/HeaderAndFooter/Layout";
 
-import { JobProfilePage } from "./layouts/JobProfilePage/JobProfilePage";
-import { EmployersPage } from "./layouts/EmployersPage/EmployersPage";
+import { JobProfilePage } from "./layouts/JobDetailPage";
+import { EmployersPage } from "./layouts/EmployersPage";
 import { EmployerProfilePage } from "./layouts/EmployerProfilePage/EmployerProfilePage";
 import { JobsPage } from "./layouts/JobsPage";
 

@@ -23,8 +23,24 @@ export const urlAPI = {
     }
   },
 
-  getVipEmployers: (currentPage: number, itemsPerPage?: number) =>
-    `employers/search/findVipEmployers?page=${currentPage}&size=${itemsPerPage}`,
+  getVipEmployers: (currentPage?: number, itemsPerPage?: number) => {
+    if (currentPage !== undefined || itemsPerPage !== undefined) {
+      return `/employers/search/findVipEmployers?page=${currentPage}&size=${itemsPerPage}`;
+    } else {
+      return "employers/search/findVipEmployers";
+    }
+  },
+
+  getEmployersByNameContaining: (
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => {
+    if (name === "")
+      return `/employers?page=${currentPage}&size=${itemsPerPage}`;
+    else
+      return `/employers/search/findByNameContaining?name=${name}&page=${currentPage}&size=${itemsPerPage}`;
+  },
 
   getJobsByCategoryId: (
     categoryId: string,
@@ -39,7 +55,8 @@ export const urlAPI = {
   },
 
   getJobsByEmployerId: (employerId: string, itemsPerPage?: number) => {
-    const sizeParameter = itemsPerPage !== undefined ? `&size=${itemsPerPage}` : "";
+    const sizeParameter =
+      itemsPerPage !== undefined ? `&size=${itemsPerPage}` : "";
     return `/jobs/search/findByEmployerId?employerId=${employerId}${sizeParameter}`;
   },
 
@@ -50,4 +67,10 @@ export const urlAPI = {
     itemsPerPage: number
   ) =>
     `/jobs/search/findByTitleContainingAndAddress?title=${title}&address=${address}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getCategoryById: (categoryId: string) => `/categories/${categoryId}`,
+
+  getEmployerById: (employerId?: string) => `/employers/${employerId}`,
+
+  getJobById: (jobId: string) => `/jobs/${jobId}`,
 };

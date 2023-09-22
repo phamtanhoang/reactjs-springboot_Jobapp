@@ -8,7 +8,6 @@ import { categoriesAPI, employersAPI, jobsAPI } from "../../services";
 import { CategoryItem, EmployerItem, JobItem } from "./components";
 import { EmployerModel } from "../../models/EmployerModel";
 import { JobModel } from "../../models/JobModel";
-import { TopEmployers } from "../HomePage/components/TopEmployers";
 
 export const JobsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -139,13 +138,16 @@ export const JobsPage = () => {
         });
       }
       setJobs(loadedJobs);
-      setIsLoading(false);
     };
-    fetchJobs().catch((error: any) => {
-      setIsLoading(false);
-      setHttpError(error.message);
-    });
-    window.scrollTo(0, 0);
+
+    fetchJobs()
+      .catch((error: any) => {
+        setHttpError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        window.scrollTo(0, 0);
+      });
   }, [currentPage, jobsPerPage, searchUrl]);
 
   if (isLoading) {
@@ -341,9 +343,6 @@ export const JobsPage = () => {
             </div>
           </div>
         </div>
-      </section>
-      <section className="lg:hidden block">
-        <TopEmployers employers={employers} />
       </section>
     </>
   );

@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { ReturnEmployerInEmployersPage } from "./components/ReturnEmployerInEmployersPage";
 import { TopEmployers } from "../HomePage/components/TopEmployers";
 import { EmployerModel } from "../../models/EmployerModel";
 import { ErrorBox, Pagination, Spinner } from "../../components";
+import { EmployerItem } from "./components";
+import { employersAPI } from "../../services";
 
 export const EmployersPage = () => {
   const [employers, setEmployers] = useState<EmployerModel[]>([]);
-  const [employerVips, setEmployerVips] = useState<EmployerModel[]>([]);
+  const [vipEmployers, setVipEmployers] = useState<EmployerModel[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
@@ -18,54 +19,54 @@ export const EmployersPage = () => {
   const [totalAmountOfEmployers, setTotalAmountOfEmployers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const [searchUrl, setSearchUrl] = useState("");
+  const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
-    const fetchEmployers = async () => {
-      const baseUrl: string = "http://localhost:8080/api/employers";
-
-      let url: string = "";
-
-      if (searchUrl === "") {
-        url = `${baseUrl}?page=${currentPage - 1}&size=${employersPerPage}`;
-      } else {
-        url = baseUrl + searchUrl;
-      }
-
-      const response = await fetch(url);
-
-      const responseJson = await response.json();
-      const responseData = responseJson._embedded.employers;
-      const loadedEmployers: EmployerModel[] = [];
-
-      setTotalAmountOfEmployers(responseJson.page.totalElements);
-      setTotalPages(responseJson.page.totalPages);
-
-      for (const key in responseData) {
-        loadedEmployers.push({
-          id: responseData[key].id,
-          name: responseData[key].name,
-          address: responseData[key].address,
-          description: responseData[key].description,
-          image: responseData[key].image,
-          banner: responseData[key].banner,
-          accountId: responseData[key].accountId,
+    const getEmployers = () => {
+      employersAPI
+        .getEmployersByNameContaining(
+          searchName,
+          currentPage - 1,
+          employersPerPage
+        )
+        .then((res) => {
+          setEmployers(res.data._embedded.employers);
+          setTotalAmountOfEmployers(res.data.page.totalElements);
+          setTotalPages(res.data.page.totalPages);
+        })
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          window.scrollTo(0, 0);
         });
-      }
-
-      setEmployers(loadedEmployers);
-      setIsLoading(false);
     };
-
-    fetchEmployers().catch((error: any) => {
-      setIsLoading(false);
-      setHttpError(error.message);
-    });
-
-    window.scrollTo(0, 0);
-  }, [currentPage, employersPerPage, searchUrl]);
+    getEmployers();
+  }, [currentPage, employersPerPage, searchName]);
+  
+  const searchChange = (value: string) => {
+    setSearchName(value);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
+    //get vip employers
+    const getVipEmployers = () => {
+      employersAPI
+        .getVipEmployers()
+        .then((res) => {
+          setVipEmployers(res.data._embedded.employers);
+        })
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
+    getVipEmployers();
+
+    //Set number of items EmployerVip
     const handleResize = () => {
       if (window.innerWidth < 640) {
         setEmployersPerPage(5);
@@ -84,37 +85,6 @@ export const EmployersPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchEmployers = async () => {
-      const baseUrl: string = `http://localhost:8080/api/employers/search/findVipEmployers`;
-      const response = await fetch(baseUrl);
-
-      const responseJson = await response.json();
-      const responseData = responseJson._embedded.employers;
-      const loadedEmployers: EmployerModel[] = [];
-
-      for (const key in responseData) {
-        loadedEmployers.push({
-          id: responseData[key].id,
-          name: responseData[key].name,
-          address: responseData[key].address,
-          description: responseData[key].description,
-          image: responseData[key].image,
-          banner: responseData[key].banner,
-          accountId: responseData[key].accountId,
-        });
-      }
-
-      setEmployerVips(loadedEmployers);
-      setIsLoading(false);
-    };
-
-    fetchEmployers().catch((error: any) => {
-      setIsLoading(false);
-      setHttpError(error.message);
-    });
-  }, []);
-
   if (isLoading) {
     return (
       <div className="flex-grow">
@@ -131,16 +101,6 @@ export const EmployersPage = () => {
     );
   }
 
-  const searchChange = (value: any) => {
-    if (value === "") {
-      setSearchUrl("");
-    } else {
-      setSearchUrl(
-        `/search/findByNameContaining?name=${value}&page=0&size=${employersPerPage}`
-      );
-    }
-    setCurrentPage(1);
-  };
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
@@ -172,10 +132,7 @@ export const EmployersPage = () => {
               <>
                 <div className="w-full grid gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
                   {employers.map((employer) => (
-                    <ReturnEmployerInEmployersPage
-                      employer={employer}
-                      key={employer.id}
-                    />
+                    <EmployerItem employer={employer} key={employer.id} />
                   ))}
                 </div>
                 <div className="flex justify-center mt-8">
@@ -195,7 +152,7 @@ export const EmployersPage = () => {
           </div>
         </div>
       </section>
-      <TopEmployers employers={employerVips} />
+      <TopEmployers employers={vipEmployers} />
     </>
   );
 };

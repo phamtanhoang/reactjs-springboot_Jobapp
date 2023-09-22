@@ -37,5 +37,10 @@ const jobsAPI = {
       )
     );
   },
+
+  async getJobById(jobId: string){
+    return await instance.get(urlAPI.getJobById(jobId));
+  },
+  
 };
 export default jobsAPI;
