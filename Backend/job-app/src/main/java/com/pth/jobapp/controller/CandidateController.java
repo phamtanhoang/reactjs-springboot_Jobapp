@@ -1,12 +1,20 @@
 package com.pth.jobapp.controller;
 
+import com.pth.jobapp.entity.Application;
 import com.pth.jobapp.entity.Candidate;
+import com.pth.jobapp.entity.Job;
+import com.pth.jobapp.service.ApplicationService;
 import com.pth.jobapp.service.CandidateService;
 import com.pth.jobapp.service.CategoryService;
+import com.pth.jobapp.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin("http://127.0.0.1:5173/")
     @RestController
@@ -14,20 +22,44 @@ import org.springframework.web.bind.annotation.*;
     public class CandidateController {
         @Autowired
         private CandidateService candidateService;
-    @GetMapping("/Profile")
+        @Autowired
+        private ApplicationService applicationService;
+        @Autowired
+        private  JwtService jwtService;
+
+
+    @GetMapping("/profile")
 //    @PreAuthorize("hasAuthority('employer')")
     public String candidateProfile() {
         return "Welcome to User Profile";
     }
+    @PostMapping("/apply")
+    public String applyJob(@RequestBody Application application) {
+        if(applicationService.findByJobIdAndCandidateId(application.getJobId(),application.getCandidateId())==null){
+            UUID uuid = UUID.randomUUID();
+            application.setId(uuid.toString());
+            application.setApplyDate(new Date());
+            application.setState("pending");
+            applicationService.save(application);
+            return "apply job successfully";
+        }
+        else
+            return " apply job failed";
+    }
+    @PutMapping("/update")
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateProfile(@PathVariable String id, @RequestBody Candidate candidate) {
+    public ResponseEntity<String> updateProfile(@RequestHeader("Authorization") String token, @RequestBody Candidate candidate) {
+
         try {
-            // Set the candidate's ID from the path variable into the candidate object
-            candidate.setId(id);
-
-            // Now, update the candidate's profile
-            candidateService.updateCandidate(candidate);
+            String candidateEmail = jwtService.extractUsername(token.substring(7));
+            Optional<Candidate> existingJob = candidateService.findCandidateByAccountUsername(candidateEmail);// Remove "Bearer " prefix from token
+            Candidate updateCandidate= existingJob.get();
+            updateCandidate.setDateOfBirth(candidate.getDateOfBirth());
+            updateCandidate.setAvatar(candidate.getAvatar());
+            updateCandidate.setFirstName(candidate.getFirstName());
+            updateCandidate.setLastName(candidate.getLastName());
+            updateCandidate.setSex(candidate.getSex());
+            candidateService.save(updateCandidate);
 
             return ResponseEntity.ok("Candidate profile updated successfully");
         } catch (Exception e) {

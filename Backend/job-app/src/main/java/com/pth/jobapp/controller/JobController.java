@@ -25,22 +25,9 @@ import java.util.UUID;
 public class JobController {
     @Autowired
     private JobService jobService;
-    @Autowired
-    private ApplicationService applicationService;
-    @PostMapping("/candidate/apply")
-    public String applyJob(@RequestBody Application application) {
-        if(applicationService.findByJobIdAndCandidateId(application.getJobId(),application.getCandidateId())==null){
-            UUID uuid = UUID.randomUUID();
-            application.setId(uuid.toString());
-            application.setApplyDate(new Date());
-            application.setState("pending");
-            applicationService.save(application);
-            return "apply job successfully";
-        }
-        else
-            return " apply job failed";
-    }
-    @PostMapping("/employer/create")
+
+
+    @PostMapping("/create")
     public ResponseEntity<String> createJob(@RequestBody Job job) {
         try {
             UUID uuid = UUID.randomUUID();
@@ -52,7 +39,7 @@ public class JobController {
         }
     }
 
-    @PutMapping("/employer/update/{jobId}")
+    @PutMapping("/update/{jobId}")
     public ResponseEntity<String> updateJob(@PathVariable String jobId, @RequestBody Job updatedJob) {
         try {
             Optional<Job> existingJob = jobService.findById(jobId);
@@ -76,7 +63,7 @@ public class JobController {
         }
     }
 
-    @DeleteMapping("/employer/delete/{jobId}")
+    @DeleteMapping("/delete/{jobId}")
     public ResponseEntity<String> deleteJob(@PathVariable String jobId) {
         try {
             Optional<Job> existingJob = jobService.findById(jobId);

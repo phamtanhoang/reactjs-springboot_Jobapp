@@ -4,10 +4,12 @@ import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.requestmodels.AuthRequest;
 import com.pth.jobapp.requestmodels.CandidateRegistrationRequest;
+import com.pth.jobapp.requestmodels.ChangePasswordRequest;
 import com.pth.jobapp.requestmodels.EmployerRegistrationRequest;
 import com.pth.jobapp.service.*;
 import com.pth.jobapp.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,7 +40,8 @@ public class AccountController {
     private CandidateService candidateService;
     @Autowired
     private JwtService jwtService;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -134,5 +138,31 @@ public class AccountController {
         }
     }
 
+    @PutMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        try {
+            String username = jwtService.extractUsername(changePasswordRequest.getToken()); // Trích xuất tên người dùng từ token
+            Account account = accountService.findByUsername(username);
+
+            if (account != null) {
+                // Kiểm tra xác nhận mật khẩu
+                if (changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+                    // Thay đổi mật khẩu và lưu vào cơ sở dữ liệu
+                    account.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+                    accountService.save(account);
+                    return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
+                } else {
+                    return ResponseEntity.badRequest().body("Xác nhận mật khẩu không khớp");
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.badRequest().body("Tài khoản không tồn tại");
+        } catch (Exception e) {
+            // Handle other exceptions and return an appropriate response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thay đổi mật khẩu thất bại");
+        }
+    }
 
 }

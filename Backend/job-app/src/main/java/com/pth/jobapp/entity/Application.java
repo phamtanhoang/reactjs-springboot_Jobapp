@@ -20,8 +20,11 @@ public class Application {
 
     @Getter
     @Column(name = "CV")
-    private String letter;
+    private String CV;
 
+    @Getter
+    @Column(name = "letter")
+    private String letter;
     @Getter
     @Column(name = "state")
     private String state;
@@ -95,5 +98,11 @@ public class Application {
         this.candidateId = candidateId;
     }
 
+    public String getCV() {
+        return CV;
+    }
 
+    public void setCV(String CV) {
+        this.CV = CV;
+    }
 }
