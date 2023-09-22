@@ -5,7 +5,7 @@ import { jobsAPI } from "../../../../services";
 
 const CategoryItem: React.FC<{
   category: CategoryModel;
-  searchJobsByCategoryId: any;
+  categoryField: any;
 }> = (props) => {
   const [jobCount, setJobCount] = useState(0);
 
@@ -26,7 +26,7 @@ const CategoryItem: React.FC<{
       href="#"
       className="font-semibold mx-1 hover:text-orangetext text-sm"
       onClick={() => {
-        props.searchJobsByCategoryId(props.category.id);
+        props.categoryField(props.category.id);
       }}
     >
       - {props.category.name}

@@ -2,47 +2,42 @@
 import { useEffect, useState } from "react";
 import { AiOutlineEnvironment, AiOutlineSearch } from "react-icons/ai";
 import Select from "react-select";
-import { TopEmployers } from "../HomePage/components/TopEmployers";
-import { JobModel } from "../../models/JobModel";
-import { EmployerModel } from "../../models/EmployerModel";
 import { CategoryModel } from "../../models/CategoryModel";
 import { ErrorBox, Pagination, Spinner } from "../../components";
 import { categoriesAPI, employersAPI, jobsAPI } from "../../services";
-import CategoryItem from "./components/CategoryItem";
-import EmployerItem from "./components/EmployerItem";
+import { CategoryItem, EmployerItem, JobItem } from "./components";
+import { EmployerModel } from "../../models/EmployerModel";
+import { JobModel } from "../../models/JobModel";
+import { TopEmployers } from "../HomePage/components/TopEmployers";
 
 export const JobsPage = () => {
-  const [employers, setEmployers] = useState<EmployerModel[]>([]);
-  const [categories, setCategories] = useState<CategoryModel[]>([]);
-  const [allJob, setAllJob] = useState<JobModel[]>([]);
-  const [jobs, setJobs] = useState<JobModel[]>([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [jobsPerPage] = useState(6);
-  const [totalAmountOfJobs, setTotalAmountOfJobs] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
+  const [employers, setEmployers] = useState<EmployerModel[]>([]);
+  const [allJob, setAllJob] = useState<JobModel[]>([]);
+  const [jobs, setJobs] = useState<JobModel[]>([]);
 
   const [currentEmployerPage, setCurrentEmployerPage] = useState(1);
   const [employersPerPage] = useState(6);
   const [totalAmountOfEmployers, setTotalAmountOfEmployers] = useState(0);
   const [totalEmployerPages, setTotalEmployerPages] = useState(0);
 
+  const [selectedOption, setSelectedOption] = useState("Tất cả tỉnh/thành phố");
+  const [uniqueAddresses, setUniqueAddresses] = useState<string[]>([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [jobsPerPage] = useState(6);
+  const [totalAmountOfJobs, setTotalAmountOfJobs] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
   const [searchTitle, setSearchTitle] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
   const [searchUrl, setSearchUrl] = useState("");
 
-  const [selectedOption, setSelectedOption] = useState("Tất cả tỉnh/thành phố");
-  const [uniqueAddresses, setUniqueAddresses] = useState<string[]>([]);
-
-  const handleChange = (selectedOption: any) => {
-    setSelectedOption(selectedOption);
-    setSearchAddress(selectedOption.value);
-  };
-
-  const getJobAddresses = (jobs: JobModel[]) => {
+  //Get unique address in all job
+  const handleJobAddresses = (jobs: JobModel[]) => {
     const addresses: string[] = jobs.map((job) => job.address);
     const uniqueAddresses: string[] = [...new Set(addresses)];
     setUniqueAddresses(uniqueAddresses);
@@ -53,23 +48,14 @@ export const JobsPage = () => {
     ...uniqueAddresses.map((address) => ({ value: address, label: address })),
   ];
 
-  // const mapResponseToJobs = (responseData: any) => {
-  //   return responseData.map((item: any) => ({
-  //     id: item.id,
-  //     title: item.title,
-  //     description: item.description,
-  //     salary: item.salary,
-  //     fromDate: item.fromDate,
-  //     toDate: item.toDate,
-  //     address: item.address,
-  //     categoryId: item.categoryId,
-  //     employerId: item.employerId,
-  //     state: item.state,
-  //   }));
-  // };
+  const handleChange = (selectedOption: any) => {
+    setSelectedOption(selectedOption);
+    setSearchAddress(selectedOption.value);
+  };
 
+  //Get all Category
   useEffect(() => {
-    const getAllCategories = () => {
+    const getCategories = () => {
       categoriesAPI
         .getCategories()
         .then((res) => {
@@ -88,7 +74,7 @@ export const JobsPage = () => {
         .getJobs()
         .then((res) => {
           setAllJob(res.data._embedded.jobs);
-          getJobAddresses(res.data._embedded.jobs);
+          handleJobAddresses(res.data._embedded.jobs);
         })
         .catch((error: any) => {
           setHttpError(error.message);
@@ -98,12 +84,13 @@ export const JobsPage = () => {
         });
     };
 
-    getAllCategories();
+    getCategories();
     getAllJobs();
   }, []);
 
+  //Get EmployerVIP
   useEffect(() => {
-    const getVipEmployers = () => {
+    const getEmployers = () => {
       employersAPI
         .getVipEmployers(currentEmployerPage - 1, employersPerPage)
         .then((res) => {
@@ -118,50 +105,48 @@ export const JobsPage = () => {
           setIsLoading(false);
         });
     };
-    getVipEmployers();
+    getEmployers();
   }, [currentEmployerPage, employersPerPage]);
 
+  //Get job
   useEffect(() => {
-    const getJobs = () => {
-      jobsAPI.getJobs(currentPage - 1, jobsPerPage).then((res) => {
-        setJobs(res.data._embedded.jobs);
-      }).catch((error:any)=>z)
+    const fetchJobs = async () => {
+      const baseUrl: string = "http://localhost:8080/api/jobs";
+      let url: string = "";
+      if (searchUrl === "") {
+        url = `${baseUrl}?page=${currentPage - 1}&size=${jobsPerPage}`;
+      } else {
+        url = baseUrl + searchUrl;
+      }
+      const response = await fetch(url);
+      const responseJson = await response.json();
+      const responseData = responseJson._embedded.jobs;
+      setTotalAmountOfJobs(responseJson.page.totalElements);
+      setTotalPages(responseJson.page.totalPages);
+      const loadedJobs: JobModel[] = [];
+      for (const key in responseData) {
+        loadedJobs.push({
+          id: responseData[key].id,
+          title: responseData[key].title,
+          description: responseData[key].description,
+          salary: responseData[key].salary,
+          fromDate: responseData[key].fromDate,
+          toDate: responseData[key].toDate,
+          address: responseData[key].address,
+          categoryId: responseData[key].categoryId,
+          employerId: responseData[key].employerId,
+          state: responseData[key].state,
+        });
+      }
+      setJobs(loadedJobs);
+      setIsLoading(false);
     };
-  });
-
-  // useEffect(() => {
-  //   const fetchJobs = async () => {
-  //     const baseUrl: string = "http://localhost:8080/api/jobs";
-  //     let url: string = "";
-
-  //     if (searchUrl === "") {
-  //       url = `${baseUrl}?page=${currentPage - 1}&size=${jobsPerPage}`;
-  //     } else {
-  //       url = baseUrl + searchUrl + ``;
-  //     }
-
-  //     const response = await fetch(url);
-
-  //     const responseJson = await response.json();
-
-  //     const responseData = responseJson._embedded.jobs;
-
-  //     setTotalAmountOfJobs(responseJson.page.totalElements);
-  //     setTotalPages(responseJson.page.totalPages);
-
-  //     const loadedJobs = mapResponseToJobs(responseData);
-
-  //     setJobs(loadedJobs);
-  //     setIsLoading(false);
-  //   };
-
-  //   fetchJobs().catch((error: any) => {
-  //     setIsLoading(false);
-  //     setHttpError(error.message);
-  //   });
-
-  //   window.scrollTo(0, 0);
-  // }, [currentPage, jobsPerPage, searchUrl]);
+    fetchJobs().catch((error: any) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
+    window.scrollTo(0, 0);
+  }, [currentPage, jobsPerPage, searchUrl]);
 
   if (isLoading) {
     return (
@@ -199,10 +184,10 @@ export const JobsPage = () => {
     setCurrentPage(1);
   };
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   const paginateEmployer = (pageNumber: number) =>
     setCurrentEmployerPage(pageNumber);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <>
@@ -230,7 +215,10 @@ export const JobsPage = () => {
                     </li>
                     {categories.map((category) => (
                       <li key={category.id} className="flex items-center py-2">
-                        <CategoryItem category={category} />
+                        <CategoryItem
+                          category={category}
+                          categoryField={categoryField}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -327,15 +315,14 @@ export const JobsPage = () => {
               {totalAmountOfJobs > 0 ? (
                 <>
                   <div className="mt-5 w-full">
-                    {/* {jobs.map((job) => (
+                    {jobs.map((job) => (
                       <JobItem key={job.id} job={job} />
-                    ))} */}
+                    ))}
                   </div>
                   <div className="flex justify-center sm:justify-between mt-8">
                     <div className="font-medium hidden sm:block">
                       <p>Hiện tối đa {jobsPerPage} công việc trên 1 trang:</p>
                     </div>
-
                     {totalPages > 0 && (
                       <Pagination
                         currentPage={currentPage}
