@@ -29,10 +29,9 @@ public class SecurityConfig {
     private JwtAuthFilter authFilter;
 
     // User Creation
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new AccountInfoService();
-    }
+    @Autowired
+    private UserDetailsService userDetailsService;
+
 
     // Configuring HttpSecurity
     @Bean
@@ -47,19 +46,30 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        new AntPathRequestMatcher("/auth/user/**")
-                ).authenticated()
+                        new AntPathRequestMatcher("/api/candidates/profile") // Thêm quyền truy cập cho /auth/candidates/**
+                ).authenticated() // Yêu cầu xác thực cho /auth/candidates/**
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(
                         new AntPathRequestMatcher("/auth/admin/**")
                 ).authenticated()
                 .and()
+                .authorizeHttpRequests()
+                .requestMatchers(
+                        new AntPathRequestMatcher("/api/auth/logout")
+                ).authenticated()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers(
+                        new AntPathRequestMatcher("/api/candidates/**")
+                ).authenticated()
+                .and()
+
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class) // Thêm authFilter
                 .build();
     }
 
@@ -72,7 +82,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }

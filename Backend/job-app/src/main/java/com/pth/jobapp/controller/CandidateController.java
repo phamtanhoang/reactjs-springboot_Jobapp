@@ -1,5 +1,7 @@
 package com.pth.jobapp.controller;
 
+import com.pth.jobapp.ResponseModels.CandidateApplicationResponse;
+import com.pth.jobapp.ResponseModels.CandidateProfileResponse;
 import com.pth.jobapp.entity.Application;
 import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.entity.Job;
@@ -28,11 +30,11 @@ import java.util.UUID;
         private  JwtService jwtService;
 
 
-    @GetMapping("/profile")
-//    @PreAuthorize("hasAuthority('employer')")
-    public String candidateProfile() {
-        return "Welcome to User Profile";
-    }
+//    @GetMapping("/profile")
+////    @PreAuthorize("hasAuthority('employer')")
+//    public String candidateProfile() {
+//        return "Welcome to User Profile";
+//    }
     @PostMapping("/apply")
     public String applyJob(@RequestBody Application application) {
         if(applicationService.findByJobIdAndCandidateId(application.getJobId(),application.getCandidateId())==null){
@@ -67,5 +69,35 @@ import java.util.UUID;
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate profile");
         }
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
+        try {
+            String token = tokenHeader.substring(7); // Loại bỏ tiền tố "Bearer "
+            String username = jwtService.extractUsername(token);
+            System.out.println(username);
+
+            Candidate candidate = candidateService.findCandidateByAccountUsername(username).orElse(null);
+
+            if (candidate != null) {
+                CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
+                candidateProfileResponse.setUsername(username);
+                candidateProfileResponse.setLastName(candidate.getFirstName());
+                candidateProfileResponse.setFirstName(candidate.getFirstName());
+                candidateProfileResponse.setSex(candidate.getSex());
+                candidateProfileResponse.setAvatar(candidate.getAvatar());
+                candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
+                System.out.println(candidate);
+                return ResponseEntity.ok(candidateProfileResponse);
+            } else {
+                System.out.println("Người dùng không tồn tại");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
+        }
     }
+
+}
 

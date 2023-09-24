@@ -38,6 +38,7 @@ public class CandidateService {
         return candidateRepository.save(existingCandidate);
     }
     public Optional<Candidate> findCandidateByAccountUsername(String username){
+        System.out.println(username);
         return candidateRepository.findCandidateByAccountUsername(username);
     }
     public Optional<Candidate> findCandidateByApplicationId(String applicationId){return candidateRepository.findCandidateByApplicationId(applicationId);}
