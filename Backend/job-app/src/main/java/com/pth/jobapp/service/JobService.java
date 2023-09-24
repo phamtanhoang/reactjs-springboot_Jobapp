@@ -38,6 +38,11 @@ public class JobService {
             jobRepository.save(job);
         }
     }
+
+    public  Page<Job> findAvailableJobs(Pageable pageable){
+        return jobRepository.findAvailableJobs(pageable);
+    }
+
     public Optional<Job> findJobByApplicationId( String applicationId){
         return jobRepository.findJobByApplicationId(applicationId);
     };

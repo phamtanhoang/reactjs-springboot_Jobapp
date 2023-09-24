@@ -39,6 +39,9 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
     @Query("SELECT j FROM Job j WHERE j.toDate < CURRENT_DATE()")
     List<Job> findExpiredJobs();
+
+    @Query("SELECT j FROM Job j WHERE j.toDate >= CURRENT_DATE()")
+    Page<Job> findAvailableJobs(Pageable pageable);
     @Query("SELECT j FROM Job j JOIN Application a ON j.id = a.jobId " +
             "WHERE a.id=:applicationId")
     Optional<Job> findJobByApplicationId( @RequestParam(name = "applicationId") String applicationId);
