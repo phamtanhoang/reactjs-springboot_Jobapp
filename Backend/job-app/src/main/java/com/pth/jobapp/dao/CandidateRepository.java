@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface CandidateRepository extends JpaRepository<Candidate, Long> {
+public interface CandidateRepository extends JpaRepository<Candidate, String> {
 
     @Query("SELECT c FROM Candidate c JOIN Account a on  c.accountId = a.id where a.username = :username")
     Optional<Candidate> findCandidateByAccountUsername(String username);

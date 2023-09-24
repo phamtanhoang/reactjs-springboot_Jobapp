@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ApplicationRepository extends JpaRepository<Application, Long> {
+public interface ApplicationRepository extends JpaRepository<Application, String> {
     Application findByJobIdAndCandidateId(String jobId,String candidateId);
     Page <Application> findApplicationsByJobId(String jobId, Pageable pageable);
 

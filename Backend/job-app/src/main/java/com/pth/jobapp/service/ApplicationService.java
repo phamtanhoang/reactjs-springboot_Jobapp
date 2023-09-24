@@ -25,7 +25,7 @@ public class ApplicationService {
         return applicationRepository.save(application);
     }
     public Optional<Application> findById(String id) {
-        return applicationRepository.findById(Long.parseLong(id));
+        return applicationRepository.findById(id);
     }
     public Page<Application> findPendingApplicationsByEmployerName(String username, Pageable pageable ){
         return applicationRepository.findPendingApplicationsByEmployerName(username,pageable);
