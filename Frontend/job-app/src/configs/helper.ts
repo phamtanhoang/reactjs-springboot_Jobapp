@@ -86,7 +86,7 @@ export const urlAPI = {
 
   loginCandidate: "/auth/candidate/login",
 
-  currentCandidate: "/candidates/profile",
+  currentCandidate: "/auth/candidate/profile",
   
   registerCandidate: "/auth/candidate/addNewCandidate",
 

@@ -14,6 +14,7 @@ export const LoginEmployer = () => {
         .then((res) => {
           localStorage.setItem("employerToken", res.data);
           Swal.fire("Thành công!", "Đăng nhập thành công!", "success");
+          localStorage.removeItem("candidateToken");
           window.location.reload();
         })
         .catch(() => {

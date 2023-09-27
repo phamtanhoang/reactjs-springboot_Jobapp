@@ -9,6 +9,16 @@ public class ApplicationResponse {
     String title;
     String state;
 
+    String applicationId;
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
     public String getFirstName() {
         return firstName;
     }

@@ -678,6 +678,18 @@ body {
   z-index: 999;
 }
 
+.z-\[99\] {
+  z-index: 99;
+}
+
+.z-\[9999\] {
+  z-index: 9999;
+}
+
+.z-\[999999\] {
+  z-index: 999999;
+}
+
 .m-0 {
   margin: 0px;
 }
@@ -1291,6 +1303,11 @@ body {
   border-color: rgb(229 231 235 / var(--tw-divide-opacity));
 }
 
+.divide-gray-500 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-divide-opacity));
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1493,6 +1510,14 @@ body {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#fffefefc\] {
+  background-color: #fffefefc;
+}
+
+.bg-\[\#fffefe09\] {
+  background-color: #fffefe09;
 }
 
 .fill-blue-600 {

@@ -1,5 +1,6 @@
 package com.pth.jobapp.controller;
 
+import com.pth.jobapp.ResponseModels.CandidateProfileResponse;
 import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.requestmodels.AuthRequest;
@@ -32,9 +33,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+@CrossOrigin("http://127.0.0.1:5173/")
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://127.0.0.1:5173/")
 public class AccountController {
 
 //    @Autowired
@@ -62,6 +63,7 @@ public class AccountController {
 
     @PostMapping("/employer/register")
     public String addNewEmployer(@RequestBody EmployerRegistrationRequest employerRegistrationRequest) {
+
         if (accountService.findByUsername(employerRegistrationRequest.getUsername()) == null) {
             UUID uuid = UUID.randomUUID();
             Account account= new Account();
@@ -114,7 +116,6 @@ public class AccountController {
             candidate.setSex(candidateRegistrationRequest.getSex());
             candidate.setAccountId(uuid.toString());
             System.out.println(uuid);
-            // Sử dụng thể hiện của EmployerService đã được Spring quản lý thông qua injection
             candidateService.save(candidate);
             return "add new employer successfully";
 
@@ -129,67 +130,89 @@ public class AccountController {
 //        return "Welcome to Admin Profile";
 //    }
 
-
-    @PostMapping("/candidate/login")
-    public String authenticateCandidate(@RequestBody AuthRequest authRequest) {
+    @GetMapping("/candidate/profile")
+    public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
         try {
-            Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            String token = tokenHeader.substring(7); // Loại bỏ tiền tố "Bearer "
+            String username = jwtService.extractUsername(token);
+            System.out.println(username);
+
+            Candidate candidate = candidateService.findCandidateByAccountUsername(username).orElse(null);
+
+            if (candidate != null) {
+                CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
+                candidateProfileResponse.setUsername(username);
+                candidateProfileResponse.setLastName(candidate.getLastName());
+                candidateProfileResponse.setFirstName(candidate.getFirstName());
+                candidateProfileResponse.setSex(candidate.getSex());
+                candidateProfileResponse.setAvatar(candidate.getAvatar());
+                candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
+                System.out.println(candidate);
+                return ResponseEntity.ok(candidateProfileResponse);
+            } else {
+                System.out.println("Người dùng không tồn tại");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
+        }
+    }
+    @PostMapping("/candidate/login")
+    public ResponseEntity<String> authenticateCandidate(@RequestBody AuthRequest authRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
             if (authentication.isAuthenticated()) {
+                Account account = accountService.findByUsername(authentication.getName());
 
-                if(accountService.findByUsername(authentication.getName()).getRole().equals("candidate")
-                        &&accountService.findByUsername(authentication.getName()).getState().equals("active"))
-                {
+                if ("candidate".equals(account.getRole()) && "active".equals(account.getState())) {
                     String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
-                    System.out.println("User '" + authRequest.getUsername() +
-                            "' successfully authenticated and received JWT token: " + token);
-//                    httpSession.setAttribute("userToken", token);
-                    return token;
+                    System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
+
+                    return ResponseEntity.ok(token);
                 } else {
-                    return "user is not valid";
+                    throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
                 }
             } else {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (AuthenticationException e) {
             System.err.println("Authentication error: " + e.getMessage());
-            throw e;
+            throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
+
         }
     }
+
+
 
 
     @PostMapping("/employer/login")
-    public String authenticateEmployer(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<?> authenticateEmployer(@RequestBody AuthRequest authRequest) {
         try {
-            Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
             if (authentication.isAuthenticated()) {
-                if(accountService.findByUsername(authentication.getName()).getRole().equals("employer")
-                        &&accountService.findByUsername(authentication.getName()).getState().equals("active"))
-                {
+                if (accountService.findByUsername(authentication.getName()).getRole().equals("employer") && accountService.findByUsername(authentication.getName()).getState().equals("active")) {
                     String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
-                    System.out.println("User '" + authRequest.getUsername() +
-                            "' successfully authenticated and received JWT token: " + token);
-//                    httpSession.setAttribute("userToken", token);
-                    return token;
+                    System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
+                    return ResponseEntity.ok(token);
                 } else {
-                    return "user is not valid";
+                    // Handle the case where the user is not an employer or not in the active state
+                    throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
                 }
             } else {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (AuthenticationException e) {
             System.err.println("Authentication error: " + e.getMessage());
-            throw e;
+            throw new UsernameNotFoundException("Authentication error: " + e.getMessage()); // Replace YourCustomException with the appropriate exception class
         }
     }
+
     @PutMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String tokenHeader,
-                                                 @RequestBody ChangePasswordRequest changePasswordRequest) {
+    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String tokenHeader, @RequestBody ChangePasswordRequest changePasswordRequest) {
         try {
-            System.out.println( SecurityContextHolder.getContext().getAuthentication());
             String token = tokenHeader.substring(7);
             String username = jwtService.extractUsername(token); // Trích xuất tên người dùng từ token
             Account account = accountService.findByUsername(username);
@@ -236,5 +259,7 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout thất bại");
         }
     }
+
+
 
 }

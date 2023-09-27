@@ -2,7 +2,8 @@ package com.pth.jobapp.ResponseModels;
 
 import java.util.Date;
 
-public class CandidateApplicationResponse {
+public class ApplicationDetailsResponse {
+    String title;
     String username;
     String firstName;
     String lastName;
@@ -13,6 +14,14 @@ public class CandidateApplicationResponse {
     String CV;
     String letter;
     String state;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getUsername() {
         return username;

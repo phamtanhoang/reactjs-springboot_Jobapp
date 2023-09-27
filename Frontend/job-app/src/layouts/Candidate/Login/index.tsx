@@ -17,6 +17,7 @@ export const Login = () => {
         .then((res) => {
           Swal.fire("Thành công!", "Đăng nhập thành công!", "success");
           localStorage.setItem("candidateToken", res.data);
+          localStorage.removeItem("employerToken");
           navigate("/");
         })
         .catch(() => {

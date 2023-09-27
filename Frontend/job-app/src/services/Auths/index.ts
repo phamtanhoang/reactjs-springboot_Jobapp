@@ -46,6 +46,7 @@ const authsAPI = {
   async currentCandidate(token: string) {
     const headers = {
       Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
     };
     return await instance.get(urlAPI.currentCandidate, { headers });
   },

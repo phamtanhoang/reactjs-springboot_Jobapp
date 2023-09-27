@@ -3,14 +3,19 @@
 import { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
-import authsAPI from "../../../../../services/Auths";
 import Swal from "sweetalert2";
+import authsAPI from "../../../../../services/Auths";
+import { error } from "console";
+import { CandidateResponseModel } from "../../../../../models/CandidateResponseModel";
 
 const NavBar = () => {
   const [sticky, setSticky] = useState(false);
   const [open, setOpen] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
   const [candidateToken, setCandidateToken] = useState("");
+
+  const [candidateRes, setCandidateRes] = useState<CandidateResponseModel>();
+
   useEffect(() => {
     setCandidateToken(localStorage.getItem("candidateToken") || "");
 
@@ -19,25 +24,33 @@ const NavBar = () => {
     });
 
     if (candidateToken) {
-      const fetchUserReviewBook = async () => {
-        const url = "http://localhost:8080/api/candidates/profile";
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            Authorization: `${candidateToken}`,
-            "Content-Type": "application/json",
-          },
-        };
-        const userReview = await fetch(url, requestOptions);
-        if (!userReview.ok) {
-          throw new Error("Something went wrong");
-        }
-        // const userReviewResponseJson = await userReview.json();
-        console.log(userReview);
-      };
-      fetchUserReviewBook().catch((error: any) => {
-        console.log(error.message);
-      });
+      authsAPI
+        .currentCandidate(candidateToken)
+        .then((res) => {
+          setCandidateRes(res.data);
+        })
+        .catch((error: any) => {
+          console.log(error.message);
+        });
+      // const fetchCurrent = async () => {
+      //   const url = "http://localhost:8080/api/auth/candidate/profile";
+      //   const requestOptions = {
+      //     method: "GET",
+      //     headers: {
+      //       Authorization: `Bearer ${candidateToken}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //   };
+      //   const userReview = await fetch(url, requestOptions);
+      //   if (!userReview.ok) {
+      //     throw new Error("Something went wrong");
+      //   }
+      //   const userReviewResponseJson = await userReview.json();
+      //   console.log(userReviewResponseJson);
+      // };
+      // fetchCurrent().catch((error: any) => {
+      //   console.log(error.message);
+      // });
 
       // fetch("http://localhost:8080/api/candidates/profile", {
       //   headers: {
@@ -53,6 +66,8 @@ const NavBar = () => {
       //   });
     }
   }, [candidateToken, localStorage.getItem("candidateToken")]);
+
+  console.log(candidateRes);
 
   const LogoutHandle = () => {
     // authsAPI
@@ -128,31 +143,44 @@ const NavBar = () => {
                   className="flex mr-3 rounded-full md:mr-0 group"
                   onClick={() => setOpenInfo(!openInfo)}
                 >
-                  <img
-                    className="w-8 h-8 p-1 rounded-full ring-2 ring-orangetext group-hover:ring-[#fe825c]"
-                    src="https://res.cloudinary.com/dcpatkvcu/image/upload/v1692603729/samples/people/boy-snow-hoodie.jpg"
-                    alt="user photo"
-                  />
+                  {candidateRes?.avatar ? (
+                    <>
+                      <img
+                        className="w-8 h-8 rounded-full ring-2 ring-orangetext group-hover:ring-[#fe825c]"
+                        src={candidateRes.avatar}
+                        alt="user photo"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        className="w-8 h-8 rounded-full ring-2 ring-orangetext group-hover:ring-[#fe825c]"
+                        src="https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+                        alt="user photo"
+                      />
+                    </>
+                  )}
+
                   <p className="hidden text-xs px-2 pt-1 sm:block">
                     Chào{" "}
                     <span className="text-sm text-orangetext group-hover:text-[#fe825c]">
-                      Hoàng
+                      {candidateRes?.lastName}
                     </span>
                     !!!
                   </p>
                 </button>
                 <div
-                  className={`top-9 -right-8 z-50 absolute my-4 text-base list-none bg-[#fffefe] divide-y divide-gray-200 rounded-lg shadow-2xl ${
+                  className={`top-9  absolute my-4 text-base list-none bg-[#fffefe] divide-y divide-gray-200 rounded-lg shadow-2xl z-[999999] ${
                     !openInfo ? "hidden" : ""
                   }`}
                   id="user-dropdown"
                 >
                   <div className="px-4 py-3">
                     <span className="block text-sm text-gray-900 ">
-                      Phạm Hoàng
+                      {candidateRes?.firstName} {candidateRes?.lastName}
                     </span>
                     <span className="block text-xs text-gray-500 truncate ">
-                      phamtanhoang@gmail.com
+                      {candidateRes?.username}
                     </span>
                   </div>
                   <ul className="py-2">
