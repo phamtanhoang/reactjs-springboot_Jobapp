@@ -27,7 +27,7 @@ export const urlAPI = {
     if (currentPage !== undefined || itemsPerPage !== undefined) {
       return `/employers/search/findVipEmployers?page=${currentPage}&size=${itemsPerPage}`;
     } else {
-      return "employers/search/findVipEmployers";
+      return "/employers/search/findVipEmployers";
     }
   },
 
@@ -43,7 +43,7 @@ export const urlAPI = {
   },
 
   getJobsByCategoryId: (
-    categoryId: string,
+    id: string,
     currentPage?: number,
     itemsPerPage?: number
   ) => {
@@ -51,13 +51,17 @@ export const urlAPI = {
       itemsPerPage !== undefined || currentPage !== undefined
         ? `&page=${currentPage}&size=${itemsPerPage}`
         : "";
-    return `/jobs/search/findByCategoryId?categoryId=${categoryId}${sizeParameter}`;
+    return `/jobs/search/findByCategoryId?categoryId=${id}${sizeParameter}`;
   },
 
-  getJobsByEmployerId: (employerId: string, itemsPerPage?: number) => {
+  getJobsByEmployerId: (id: string, itemsPerPage?: number) => {
     const sizeParameter =
       itemsPerPage !== undefined ? `&size=${itemsPerPage}` : "";
-    return `/jobs/search/findByEmployerId?employerId=${employerId}${sizeParameter}`;
+    return `/jobs/search/findByEmployerId?employerId=${id}${sizeParameter}`;
+  },
+
+  getVipJobs: (currentPage: number, itemsPerPage: number) => {
+    return `/jobs/search/findJobsWithVipEmployer?page=${currentPage}&size=${itemsPerPage}`;
   },
 
   getJobsByTitleContainingAndAddress: (
@@ -68,9 +72,29 @@ export const urlAPI = {
   ) =>
     `/jobs/search/findByTitleContainingAndAddress?title=${title}&address=${address}&page=${currentPage}&size=${itemsPerPage}`,
 
-  getCategoryById: (categoryId: string) => `/categories/${categoryId}`,
+  getCategoryById: (id: string) => `/categories/${id}`,
 
-  getEmployerById: (employerId?: string) => `/employers/${employerId}`,
+  getEmployerById: (id?: string) => `/employers/${id}`,
 
-  getJobById: (jobId: string) => `/jobs/${jobId}`,
+  getJobById: (id: string) => `/jobs/${id}`,
+
+  getAccountById: (id: string) => `/accounts/${id}`,
+
+  getAccountByUserName: (userName: string) => `/accounts/search/findByUsername?username=${userName}`,
+
+  getCandidateById: (id:string) => `/candidates/${id}`,
+
+  loginCandidate: "/auth/candidate/login",
+
+  currentCandidate: "/candidates/profile",
+  
+  registerCandidate: "/auth/candidate/addNewCandidate",
+
+  loginEmployer: "/auth/employer/login",
+
+  registerEmployer: "/auth/employer/register",
+
+  logout: "/auth/logout",
+
+
 };

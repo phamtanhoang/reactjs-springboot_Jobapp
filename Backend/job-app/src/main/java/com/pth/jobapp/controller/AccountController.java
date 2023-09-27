@@ -17,18 +17,28 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://127.0.0.1:5173/")
 public class AccountController {
+
+//    @Autowired
+//    private HttpSession httpSession;
 
     @Autowired
     private AccountInfoService service;
@@ -50,9 +60,8 @@ public class AccountController {
         return "Welcome this endpoint is not secure";
     }
 
-    @PostMapping("/employer/addNewEmployer")
+    @PostMapping("/employer/register")
     public String addNewEmployer(@RequestBody EmployerRegistrationRequest employerRegistrationRequest) {
-
         if (accountService.findByUsername(employerRegistrationRequest.getUsername()) == null) {
             UUID uuid = UUID.randomUUID();
             Account account= new Account();
@@ -114,23 +123,34 @@ public class AccountController {
             return "add new employer failed";
     }
 
-    @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('admin')")
-    public String adminProfile() {
-        return "Welcome to Admin Profile";
-    }
+//    @GetMapping("/admin/adminProfile")
+//    @PreAuthorize("hasAuthority('employer')")
+//    public String adminProfile() {
+//        return "Welcome to Admin Profile";
+//    }
 
 
-    @PostMapping("/login")
-    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+    @PostMapping("/candidate/login")
+    public String authenticateCandidate(@RequestBody AuthRequest authRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
             if (authentication.isAuthenticated()) {
-                String token = jwtService.generateToken(authRequest.getUsername(),authRequest.getState());
-                System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
-                return token;
+
+                if(accountService.findByUsername(authentication.getName()).getRole().equals("candidate")
+                        &&accountService.findByUsername(authentication.getName()).getState().equals("active"))
+                {
+                    String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
+                    System.out.println("User '" + authRequest.getUsername() +
+                            "' successfully authenticated and received JWT token: " + token);
+//                    httpSession.setAttribute("userToken", token);
+                    return token;
+                } else {
+                    return "user is not valid";
+                }
             } else {
-                throw new UsernameNotFoundException("invalid user request !");
+                throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (AuthenticationException e) {
             System.err.println("Authentication error: " + e.getMessage());
@@ -138,10 +158,40 @@ public class AccountController {
         }
     }
 
-    @PutMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+
+    @PostMapping("/employer/login")
+    public String authenticateEmployer(@RequestBody AuthRequest authRequest) {
         try {
-            String username = jwtService.extractUsername(changePasswordRequest.getToken()); // Trích xuất tên người dùng từ token
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
+            if (authentication.isAuthenticated()) {
+                if(accountService.findByUsername(authentication.getName()).getRole().equals("employer")
+                        &&accountService.findByUsername(authentication.getName()).getState().equals("active"))
+                {
+                    String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
+                    System.out.println("User '" + authRequest.getUsername() +
+                            "' successfully authenticated and received JWT token: " + token);
+//                    httpSession.setAttribute("userToken", token);
+                    return token;
+                } else {
+                    return "user is not valid";
+                }
+            } else {
+                throw new UsernameNotFoundException("Invalid user request!");
+            }
+        } catch (AuthenticationException e) {
+            System.err.println("Authentication error: " + e.getMessage());
+            throw e;
+        }
+    }
+    @PutMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String tokenHeader,
+                                                 @RequestBody ChangePasswordRequest changePasswordRequest) {
+        try {
+            System.out.println( SecurityContextHolder.getContext().getAuthentication());
+            String token = tokenHeader.substring(7);
+            String username = jwtService.extractUsername(token); // Trích xuất tên người dùng từ token
             Account account = accountService.findByUsername(username);
 
             if (account != null) {
@@ -162,6 +212,28 @@ public class AccountController {
         } catch (Exception e) {
             // Handle other exceptions and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thay đổi mật khẩu thất bại");
+        }
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> performLogout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // Lấy token từ tiêu đề "Authorization" trong request
+            String tokenHeader = request.getHeader("Authorization");
+
+            if (tokenHeader != null ) {
+                String token = tokenHeader.substring(7);
+                    jwtService.invalidateToken(token);
+                    SecurityContextHolder.clearContext();
+                    return ResponseEntity.ok("Logout thành công");
+
+            } else {
+                return ResponseEntity.badRequest().body("Không tìm thấy token trong tiêu đề 'Authorization'");
+            }
+        } catch (Exception e) {
+            // Xử lý các ngoại lệ và trả về phản hồi phù hợp
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout thất bại");
         }
     }
 

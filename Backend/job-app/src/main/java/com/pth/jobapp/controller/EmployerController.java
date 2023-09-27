@@ -164,7 +164,7 @@ public class EmployerController {
 
     }
 
-    @GetMapping("/applies")
+    @GetMapping("/apply-details")
     public ResponseEntity<CandidateApplicationResponse> getApplications(
             @RequestHeader("Authorization") String token,
             @RequestParam(name = "jobId") String jobId,

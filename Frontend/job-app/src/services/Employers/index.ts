@@ -21,9 +21,6 @@ const employersAPI = {
     currentPage: number,
     itemsPerPage: number
   ) {
-    console.log(
-      urlAPI.getEmployersByNameContaining(name, currentPage, itemsPerPage)
-    );
     return await instance.get(
       urlAPI.getEmployersByNameContaining(name, currentPage, itemsPerPage)
     );

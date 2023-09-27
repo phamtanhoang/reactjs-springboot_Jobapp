@@ -16,7 +16,7 @@ public class AccountService {
     public Account findByUsername(String username) {
         return accountRepository.findByUsername(username);
     }
-    public Optional<Account> findById(String accountId){return accountRepository.findById(Long.parseLong(accountId));}
+    public Optional<Account> findById(String accountId){return accountRepository.findById(accountId);}
     public Account save(Account user) {
         return accountRepository.save(user);
     }

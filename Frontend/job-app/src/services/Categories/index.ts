@@ -6,8 +6,10 @@ const categoriesAPI = {
     return await instance.get(urlAPI.getCategories(currentPage, itemsPerPage));
   },
 
-  async getCategoryByID(categoryId: string){
-    return await instance.get(urlAPI.getCategoryById(categoryId));
+  async getCategoryByID(id: string){
+    return await instance.get(urlAPI.getCategoryById(id));
   },
+
+
 };
 export default categoriesAPI;

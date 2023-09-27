@@ -3,7 +3,6 @@ package com.pth.jobapp.requestmodels;
 public class ChangePasswordRequest   {
     private String confirmPassword;
     private String newPassword;
-    private String token;
 
     public String getConfirmPassword() {
         return confirmPassword;
@@ -21,12 +20,6 @@ public class ChangePasswordRequest   {
         this.newPassword = newPassword;
     }
 
-    public String getToken() {
-        return token;
-    }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
 }
 

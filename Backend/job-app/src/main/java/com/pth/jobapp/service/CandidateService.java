@@ -25,7 +25,7 @@ public class CandidateService {
         return candidateRepository.save(candidate);
     }
     public Candidate updateCandidate(Candidate updatedCandidate) {
-        Candidate existingCandidate = candidateRepository.findById(Long.parseLong(updatedCandidate.getId()))
+        Candidate existingCandidate = candidateRepository.findById(updatedCandidate.getId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy ứng viên với ID: " + updatedCandidate.getId()));
 
 
@@ -38,6 +38,7 @@ public class CandidateService {
         return candidateRepository.save(existingCandidate);
     }
     public Optional<Candidate> findCandidateByAccountUsername(String username){
+        System.out.println(username);
         return candidateRepository.findCandidateByAccountUsername(username);
     }
     public Optional<Candidate> findCandidateByApplicationId(String applicationId){return candidateRepository.findCandidateByApplicationId(applicationId);}

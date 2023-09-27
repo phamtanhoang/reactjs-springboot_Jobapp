@@ -1,5 +1,6 @@
 package com.pth.jobapp.config;
 
+import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.entity.Category;
 import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.entity.Job;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
 
-    private String theAllowedOrigins = "http://127.0.0.1:5173/";
+    private String theAllowedOrigins = "*";
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration repositoryRestConfiguration,
                                                      CorsRegistry corsRegistry) {
@@ -26,10 +27,12 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         repositoryRestConfiguration.exposeIdsFor(Job.class);
         repositoryRestConfiguration.exposeIdsFor(Employer.class);
         repositoryRestConfiguration.exposeIdsFor(Category.class);
+        repositoryRestConfiguration.exposeIdsFor(Candidate.class);
 
         disableHttpMethods(Job.class, repositoryRestConfiguration, theUnsupportedActions);
         disableHttpMethods(Employer.class, repositoryRestConfiguration, theUnsupportedActions);
         disableHttpMethods(Category.class, repositoryRestConfiguration, theUnsupportedActions);
+        disableHttpMethods(Candidate.class, repositoryRestConfiguration, theUnsupportedActions);
 
 //        // Thiết lập cấu hình JSON response
 //        repositoryRestConfiguration.setDefaultMediaType(MediaType.APPLICATION_JSON);

@@ -7,19 +7,17 @@ const jobsAPI = {
   },
 
   async getJobsByCategoryId(
-    categoryId: string,
+    id: string,
     currentPage?: number,
     itemsPerPage?: number
   ) {
     return await instance.get(
-      urlAPI.getJobsByCategoryId(categoryId, currentPage, itemsPerPage)
+      urlAPI.getJobsByCategoryId(id, currentPage, itemsPerPage)
     );
   },
 
-  async getJobsByEmployerId(employerId: string, itemsPerPage?: number) {
-    return await instance.get(
-      urlAPI.getJobsByCategoryId(employerId, itemsPerPage)
-    );
+  async getJobsByEmployerId(id: string, itemsPerPage?: number) {
+    return await instance.get(urlAPI.getJobsByCategoryId(id, itemsPerPage));
   },
 
   async getJobsByTitleContainingAndAddress(
@@ -38,9 +36,12 @@ const jobsAPI = {
     );
   },
 
-  async getJobById(jobId: string){
+  async getJobById(jobId: string) {
     return await instance.get(urlAPI.getJobById(jobId));
   },
-  
+
+  async getVipJobs(currentPage: number, itemsPerPage: number) {
+    return await instance.get(urlAPI.getVipJobs(currentPage, itemsPerPage));
+  },
 };
 export default jobsAPI;
