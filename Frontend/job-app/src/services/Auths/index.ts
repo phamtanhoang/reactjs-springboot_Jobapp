@@ -46,7 +46,7 @@ const authsAPI = {
   async currentCandidate(token: string) {
     const headers = {
       Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+      "Content-Type": "application/json",
     };
     return await instance.get(urlAPI.currentCandidate, { headers });
   },
@@ -54,6 +54,7 @@ const authsAPI = {
   async logout(token: string) {
     const headers = {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     };
 
     return await instance.post(urlAPI.logout, { headers });

@@ -80,14 +80,15 @@ export const urlAPI = {
 
   getAccountById: (id: string) => `/accounts/${id}`,
 
-  getAccountByUserName: (userName: string) => `/accounts/search/findByUsername?username=${userName}`,
+  getAccountByUserName: (userName: string) =>
+    `/accounts/search/findByUsername?username=${userName}`,
 
-  getCandidateById: (id:string) => `/candidates/${id}`,
+  getCandidateById: (id: string) => `/candidates/${id}`,
 
   loginCandidate: "/auth/candidate/login",
 
-  currentCandidate: "/auth/candidate/profile",
-  
+  currentCandidate: "/candidates/profile",
+
   registerCandidate: "/auth/candidate/addNewCandidate",
 
   loginEmployer: "/auth/employer/login",
@@ -95,6 +96,4 @@ export const urlAPI = {
   registerEmployer: "/auth/employer/register",
 
   logout: "/auth/logout",
-
-
 };

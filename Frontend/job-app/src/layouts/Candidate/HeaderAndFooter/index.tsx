@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Footer, NavBar } from "./components";
-
+import { FavoriteTicket } from "../../../components";
 
 export const HeaderAndFooter = () => {
   return (
@@ -8,6 +8,7 @@ export const HeaderAndFooter = () => {
       <NavBar />
       <Outlet />
       <Footer />
+      <FavoriteTicket />
     </div>
   );
 };

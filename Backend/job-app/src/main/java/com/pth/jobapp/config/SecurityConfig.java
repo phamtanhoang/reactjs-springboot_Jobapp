@@ -36,41 +36,19 @@ public class SecurityConfig {
     // Configuring HttpSecurity
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        new AntPathRequestMatcher("/auth/welcome"),
-                        new AntPathRequestMatcher("/auth/addNewUser"),
-                        new AntPathRequestMatcher("/auth/generateToken")
-                ).permitAll()
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
+                .anyRequest().permitAll() // Allow access to all other endpoints without authentication
                 .and()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        new AntPathRequestMatcher("/api/candidates/profile") // Thêm quyền truy cập cho /auth/candidates/**
-                ).authenticated() // Yêu cầu xác thực cho /auth/candidates/**
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        new AntPathRequestMatcher("/auth/admin/**")
-                ).authenticated()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        new AntPathRequestMatcher("/api/auth/logout")
-                ).authenticated()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        new AntPathRequestMatcher("/api/candidates/**")
-                ).authenticated()
-                .and()
-
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class) // Thêm authFilter
-                .build();
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class); // Thêm authFilter
+
+        return http.build();
     }
 
 

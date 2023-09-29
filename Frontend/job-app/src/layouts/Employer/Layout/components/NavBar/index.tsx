@@ -1,13 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Swal from "sweetalert2";
 import NavItem from "../NavItem";
 
-const NavBar = () => {
+const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
   const LogoutHandle = () => {
-    // authsAPI
-    //   .logout(candidateToken)
-    //   .then((res) => console.log(res))
-    //   .catch((error: any) => console.log(error.message));
-
     Swal.fire({
       title: "Bạn có muốn đăng xuất?",
       icon: "warning",
@@ -25,7 +21,9 @@ const NavBar = () => {
   return (
     <div
       id="main-nav"
-      className="w-1/2 md:w-1/3 lg:w-64 fixed md:top-0 md:left-0 h-screen lg:block bg-gray-100 border-r z-30 hidden"
+      className={`w-3/5 sm:w-1/2 md:w-1/3 lg:w-64 fixed md:top-0 md:left-0 h-screen lg:block bg-white border-r z-30  ${
+        props.isNavBarVisible ? "block" : "hidden "
+      }`}
     >
       <div className="w-full h-20 border-b flex px-4 items-center mb-8">
         <p className="font-semibold text-3xl text-blue-400 pl-4 text-center">

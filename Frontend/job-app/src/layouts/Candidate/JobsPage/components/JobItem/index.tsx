@@ -4,34 +4,64 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import { JobModel } from "../../../../../models/JobModel";
+import { employersAPI } from "../../../../../services";
+import Swal from "sweetalert2";
 
 const JobItem: React.FC<{
   job: JobModel;
 }> = (props) => {
   const [employer, setEmPloyer] = useState<EmployerModel>();
+  const [isJobSaved, setIsJobSaved] = useState(false);
 
   useEffect(() => {
     const fetchEmployer = async () => {
-      const baseUrl: string = `http://localhost:8080/api/employers/${props.job.employerId}`;
-
-      const response = await fetch(baseUrl);
-
-      const responseJson = await response.json();
-
-      const loadedEmployer: EmployerModel = {
-        id: responseJson.id,
-        name: responseJson.name,
-        address: responseJson.address,
-        description: responseJson.description,
-        image: responseJson.image,
-        banner: responseJson.banner,
-        accountId: responseJson.accountId,
-      };
-
-      setEmPloyer(loadedEmployer);
+      employersAPI.getEmployerById(props.job.employerId).then((res) => {
+        setEmPloyer(res.data);
+      });
     };
     fetchEmployer();
   }, [props.job.employerId]);
+
+  useEffect(() => {
+    const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
+    const isSaved = savedJobs.some(
+      (savedJob: any) => savedJob.id === props.job?.id
+    );
+
+    if (isSaved) {
+      setIsJobSaved(true);
+    }
+  }, [props.job]);
+
+  const handleSaveJob = () => {
+    if (!isJobSaved) {
+      const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
+      savedJobs.push(props.job);
+      sessionStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+      setIsJobSaved(true);
+      Swal.fire("Thành công!", "Lưu công việc thành công", "success");
+    } else {
+      Swal.fire({
+        title: "Bạn có muốn bỏ lưu không?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Đồng ý",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const savedJobs = JSON.parse(
+            sessionStorage.getItem("savedJobs") || "[]"
+          );
+          const updatedSavedJobs = savedJobs.filter(
+            (savedJob: any) => savedJob.id !== props.job?.id
+          );
+          sessionStorage.setItem("savedJobs", JSON.stringify(updatedSavedJobs));
+          setIsJobSaved(false);
+        }
+      });
+    }
+  };
 
   const calculateDaysRemaining = (toDate: string) => {
     const currentDate: any = new Date(); // Ngày hiện tại
@@ -50,7 +80,11 @@ const JobItem: React.FC<{
     <div className="max-full px-4 py-2 sm:px-10 sm:py-4 bg-white rounded-lg shadow-md flex my-4">
       <div className="w-1/4 sm:w-1/5 flex items-center">
         <img
-          src={employer?.image}
+          src={
+            employer?.image
+              ? employer?.image
+              : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+          }
           alt="avatar"
           className="w-[90%] object-cover p-1 md:p-4"
         />
@@ -61,8 +95,13 @@ const JobItem: React.FC<{
           <span className="font-light text-xs md:text-sm text-neutral-500">
             Còn {calculateDaysRemaining(props.job.toDate)} ngày
           </span>
-          <div className="cursor-pointer text-neutral-500 hover:text-red-600">
-            <AiFillHeart className="w-8 h-8" />
+          <div
+            className={`cursor-pointer text-neutral-500 hover:text-red-600 ${
+              isJobSaved ? "text-red-600" : ""
+            }`}
+            onClick={handleSaveJob}
+          >
+            <AiFillHeart className="w-6 h-6 xl:w-8 xl:h-8" />
           </div>
         </div>
         <div className="mt-1">

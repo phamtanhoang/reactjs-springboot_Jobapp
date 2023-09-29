@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useNavigate } from "react-router-dom";
 import authsAPI from "../../../services/Auths";
 import { useState } from "react";
@@ -15,7 +16,7 @@ export const Register = () => {
 
   const navigate = useNavigate();
 
-  const handleDateChange = (e) => {
+  const handleDateChange = (e: any) => {
     const inputDate = e.target.value;
     const dateObj = new Date(inputDate);
 

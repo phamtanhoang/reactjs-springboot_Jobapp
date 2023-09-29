@@ -3,8 +3,54 @@ import { useEffect, useState } from "react";
 import { JobModel } from "../../../../../models/JobModel";
 import { employersAPI } from "../../../../../services";
 import { EmployerModel } from "../../../../../models/EmployerModel";
+import Swal from "sweetalert2";
 
 export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
+  const [showBox, setShowBox] = useState(false);
+  const [isJobSaved, setIsJobSaved] = useState(false);
+
+  useEffect(() => {
+    const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
+    const isSaved = savedJobs.some(
+      (savedJob: any) => savedJob.id === props.job?.id
+    );
+
+    if (isSaved) {
+      setIsJobSaved(true);
+    }
+  }, [props.job]);
+
+  const handleSaveJob = () => {
+    if (!isJobSaved) {
+      const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
+      savedJobs.push(props.job);
+      sessionStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+      setIsJobSaved(true);
+      Swal.fire("Thành công!", "Lưu công việc thành công", "success");
+    } else {
+      Swal.fire({
+        title: "Bạn có muốn bỏ lưu không?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Đồng ý",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const savedJobs = JSON.parse(
+            sessionStorage.getItem("savedJobs") || "[]"
+          );
+          const updatedSavedJobs = savedJobs.filter(
+            (savedJob: any) => savedJob.id !== props.job?.id
+          );
+          sessionStorage.setItem("savedJobs", JSON.stringify(updatedSavedJobs));
+          setIsJobSaved(false);
+        }
+      });
+    }
+  };
+  console.log(isJobSaved);
+
   const calculateDaysRemaining = (toDate: string) => {
     const currentDate = new Date() as any; // Ngày hiện tại
     const targetDate = new Date(toDate) as any; // Chuyển đổi chuỗi toDate thành đối tượng Date
@@ -18,7 +64,6 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
     return daysRemaining;
   };
 
-
   const [employer, setEmployer] = useState<EmployerModel>();
 
   useEffect(() => {
@@ -28,58 +73,159 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
       });
     };
     getEmployer();
-  },[props.job?.employerId]);
-
+  }, [props.job?.employerId]);
 
   const dayRemaining = calculateDaysRemaining(props.job?.toDate || "");
 
-  return (
-    <div className="w-full lg:w-[70%] bg-white rounded-lg p-5 flex">
-      <div className="w-1/4 sm:w-1/5 flex items-center lg:hidden">
-        <img
-          src="https://res.cloudinary.com/dcpatkvcu/image/upload/v1694701182/Google_oecx0q.png"
-          alt="avatar"
-          className="w-[90%] object-cover p-1 md:p-4"
-        />
-      </div>
-      <div className="w-3/4 sm:w-4/5 lg:w-full">
-        <div>
-          <p className=" text-gray-700 font-bold hover:text-orangetext text-base md:text-xl truncate cursor-pointer">
-            {props.job?.title}
-          </p>
-        </div>
-        <div className="md:mt-2">
-          <p className="text-gray-600 text-sm md:text-base truncate cursor-pointer">
-            {employer?.name}
-          </p>
-        </div>
+  const ApplyJobHandle = () => {
+    if (localStorage.getItem("candidateToken")) {
+      setShowBox(!showBox);
+    } else {
+      Swal.fire({
+        title: "Bạn cần đăng nhập để ứng tuyển?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Đồng ý",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/home/login";
+        }
+      });
+    }
+  };
 
-        {dayRemaining > 0 ? (
-          <>
-            <div className="md:mt-1">
-              <span className="font-light text-xs md:text-sm text-neutral-500">
-                Hết hạn trong {dayRemaining} ngày
-              </span>
-            </div>
-            <div className="flex w-full mt-3 gap-1 sm:gap-3">
-              <button className="bg-orangetext hover:bg-[#fe825c] text-white font-semibold py-2 px-2 sm:px-4 rounded w-[65%] sm:w-[70%] text-sm md:text-base">
-                Ứng tuyển ngay
-              </button>
-              <button className="bg-transparent text-orangetext hover:text-[#fe825c] font-semibold py-2 px-2 sm:px-4 border border-orangetext hover:border-[#fe825c] rounded w-[35%] sm:w-[30%] text-sm md:text-base">
-                Lưu tin
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="mt-4 ">
-              <span className="font-semibold text-lg md:text-xl text-red-500">
-                Đã hết hạn
-              </span>
-            </div>
-          </>
-        )}
+  return (
+    <>
+      <div className="w-full lg:w-[70%] bg-white rounded-lg p-5 flex">
+        <div className="w-1/4 sm:w-1/5 flex items-center lg:hidden">
+          <img
+            src={
+              employer?.image
+                ? employer?.image
+                : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+            }
+            alt="avatar"
+            className="w-[90%] object-cover p-1 md:p-4"
+          />
+        </div>
+        <div className="w-3/4 sm:w-4/5 lg:w-full">
+          <div>
+            <p className=" text-gray-700 font-bold hover:text-orangetext text-base md:text-xl truncate cursor-pointer">
+              {props.job?.title}
+            </p>
+          </div>
+          <div className="md:mt-2">
+            <p className="text-gray-600 text-sm md:text-base truncate cursor-pointer">
+              {employer?.name}
+            </p>
+          </div>
+
+          {dayRemaining > 0 ? (
+            <>
+              <div className="md:mt-1">
+                <span className="font-light text-xs md:text-sm text-neutral-500">
+                  Hết hạn trong {dayRemaining} ngày
+                </span>
+              </div>
+              <div className="flex w-full mt-3 gap-1 sm:gap-3">
+                <button
+                  className="bg-orangetext hover:bg-[#fe825c] text-white font-semibold py-2 px-2 sm:px-4 rounded w-[65%] sm:w-[70%] text-sm md:text-base"
+                  onClick={ApplyJobHandle}
+                >
+                  Ứng tuyển ngay
+                </button>
+                <button
+                  className="bg-transparent text-orangetext hover:text-[#fe825c] font-semibold py-2 px-2 sm:px-4 border border-orangetext hover:border-[#fe825c] rounded w-[35%] sm:w-[30%] text-sm md:text-base"
+                  onClick={handleSaveJob}
+                >
+                  {!isJobSaved ? "Lưu tin" : "Bỏ lưu"}
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="mt-4 ">
+                <span className="font-semibold text-lg md:text-xl text-red-500">
+                  Đã hết hạn
+                </span>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+      {showBox && localStorage.getItem("candidateToken") ? (
+        <div className="fixed inset-0 flex items-center justify-center z-[999999999] bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded shadow-lg w-[90%] sm:w-[75%] md:w-3/5 xl:w-1/2 text-sm">
+            <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
+              Ứng tuyển vị trí{" "}
+              <span className="hover:text-orangetext cursor-default">
+                {props.job?.title}
+              </span>{" "}
+              tại{" "}
+              <span className="hover:text-orangetext cursor-default">
+                {employer?.name}
+              </span>
+            </h1>
+            <label className="block mb-3">
+              <span className="">Họ Tên:</span>
+              <input
+                type="text"
+                className="border rounded-lg px-3 py-2 mt-1   w-full"
+                placeholder="Nhập họ và tên..."
+              />
+            </label>
+
+            <label className="block mb-3">
+              <span className="">Email:</span>
+              <input
+                type="email"
+                className="border rounded-lg px-3 py-2 mt-1  w-full"
+                placeholder="Nhập Email..."
+              />
+            </label>
+
+            <label className="block mb-3">
+              <span className="">Số điện thoại:</span>
+              <input
+                type="phone"
+                className="border rounded-lg px-3 py-2 mt-1  w-full"
+                placeholder="Nhập số điện thoại..."
+              />
+            </label>
+            <label className="block mb-2">
+              <span className="">Thư giới thiệu:</span>
+              <textarea
+                name="message"
+                className="border rounded-lg px-3 py-2 mt-1  w-full h-[100px]"
+                placeholder="Nội dung thư..."
+              ></textarea>
+            </label>
+            <label className="block mb-3">
+              <span className="text-gray-700">CV của bạn</span>
+              <input
+                type="file"
+                className="border rounded-lg px-3 py-2 mt-1   w-full"
+              />
+            </label>
+
+            <div className="mb-3 flex gap-5 justify-end">
+              <button
+                className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
+                onClick={() => setShowBox(!showBox)}
+              >
+                Hủy bỏ
+              </button>
+              <button className="bg-blue-600 text-white px-4 py-2 mt-4 rounded">
+                Ứng tuyển
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };

@@ -9,14 +9,14 @@ const EmployerItem: React.FC<{
       <div className="overflow-hidden rounded-tl-lg rounded-tr-lg bg-orangebackground">
         <img
           className="rounded-tl-xl rounded-tr-xl"
-          src={props.employer?.banner}
+          src={props.employer?.banner?(props.employer?.banner):("https://res.cloudinary.com/dcpatkvcu/image/upload/v1695882546/light-gray-color-solid-background-1920x1080_kvwkxg.png")}
           alt="banner"
         />
       </div>
       <div className="-mt-[12%] flex justify-center">
         <img
           className="w-[23%] rounded-lg bg-white p-1 shadow-xl"
-          src={props.employer?.image}
+          src={props.employer?.image?(props.employer?.image):("https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg")}
           alt="logo"
         />
       </div>

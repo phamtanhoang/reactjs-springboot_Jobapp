@@ -1,14 +1,16 @@
 import React from "react";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 
-export const EmployerItem: React.FC<{ employer: EmployerModel }> = (
-  props
-) => {
+export const EmployerItem: React.FC<{ employer: EmployerModel }> = (props) => {
   return (
     <div className="group w-full h-[150px] max-w-sm bg-white border border-gray-200 rounded-lg hover:shadow-lg hover:shadow-orangetext/30">
       <div className="flex justify-center items-center rounded-t-lg h-[60%]">
         <img
-          src={props.employer.image}
+          src={
+            props.employer.image
+              ? props.employer.image
+              : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+          }
           className="w-[20%] h-auto"
           alt="employer"
         />

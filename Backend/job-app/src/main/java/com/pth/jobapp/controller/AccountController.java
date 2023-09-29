@@ -129,35 +129,6 @@ public class AccountController {
 //    public String adminProfile() {
 //        return "Welcome to Admin Profile";
 //    }
-
-    @GetMapping("/candidate/profile")
-    public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
-        try {
-            String token = tokenHeader.substring(7); // Loại bỏ tiền tố "Bearer "
-            String username = jwtService.extractUsername(token);
-            System.out.println(username);
-
-            Candidate candidate = candidateService.findCandidateByAccountUsername(username).orElse(null);
-
-            if (candidate != null) {
-                CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
-                candidateProfileResponse.setUsername(username);
-                candidateProfileResponse.setLastName(candidate.getLastName());
-                candidateProfileResponse.setFirstName(candidate.getFirstName());
-                candidateProfileResponse.setSex(candidate.getSex());
-                candidateProfileResponse.setAvatar(candidate.getAvatar());
-                candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
-                System.out.println(candidate);
-                return ResponseEntity.ok(candidateProfileResponse);
-            } else {
-                System.out.println("Người dùng không tồn tại");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
-            }
-        } catch (Exception e) {
-            System.out.println("Lỗi");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
-        }
-    }
     @PostMapping("/candidate/login")
     public ResponseEntity<String> authenticateCandidate(@RequestBody AuthRequest authRequest) {
         try {
@@ -183,9 +154,6 @@ public class AccountController {
 
         }
     }
-
-
-
 
     @PostMapping("/employer/login")
     public ResponseEntity<?> authenticateEmployer(@RequestBody AuthRequest authRequest) {
@@ -260,6 +228,33 @@ public class AccountController {
         }
     }
 
-
+//    @GetMapping("/candidate/profile")
+//    public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.substring(7); // Loại bỏ tiền tố "Bearer "
+//            String username = jwtService.extractUsername(token);
+//            System.out.println(username);
+//
+//            Candidate candidate = candidateService.findCandidateByAccountUsername(username).orElse(null);
+//
+//            if (candidate != null) {
+//                CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
+//                candidateProfileResponse.setUsername(username);
+//                candidateProfileResponse.setLastName(candidate.getLastName());
+//                candidateProfileResponse.setFirstName(candidate.getFirstName());
+//                candidateProfileResponse.setSex(candidate.getSex());
+//                candidateProfileResponse.setAvatar(candidate.getAvatar());
+//                candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
+//                System.out.println(candidate);
+//                return ResponseEntity.ok(candidateProfileResponse);
+//            } else {
+//                System.out.println("Người dùng không tồn tại");
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Lỗi");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
+//        }
+//    }
 
 }

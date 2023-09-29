@@ -1,9 +1,6 @@
 package com.pth.jobapp.config;
 
-import com.pth.jobapp.entity.Candidate;
-import com.pth.jobapp.entity.Category;
-import com.pth.jobapp.entity.Employer;
-import com.pth.jobapp.entity.Job;
+import com.pth.jobapp.entity.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -28,11 +25,13 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         repositoryRestConfiguration.exposeIdsFor(Employer.class);
         repositoryRestConfiguration.exposeIdsFor(Category.class);
         repositoryRestConfiguration.exposeIdsFor(Candidate.class);
+        repositoryRestConfiguration.exposeIdsFor(Account.class);
 
         disableHttpMethods(Job.class, repositoryRestConfiguration, theUnsupportedActions);
         disableHttpMethods(Employer.class, repositoryRestConfiguration, theUnsupportedActions);
         disableHttpMethods(Category.class, repositoryRestConfiguration, theUnsupportedActions);
         disableHttpMethods(Candidate.class, repositoryRestConfiguration, theUnsupportedActions);
+        disableHttpMethods(Account.class, repositoryRestConfiguration, theUnsupportedActions);
 
 //        // Thiết lập cấu hình JSON response
 //        repositoryRestConfiguration.setDefaultMediaType(MediaType.APPLICATION_JSON);

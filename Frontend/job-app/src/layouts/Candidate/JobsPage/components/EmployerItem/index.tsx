@@ -24,7 +24,7 @@ const EmployerItem: React.FC<{
   return (
     <>
       <div className="w-1/5 items-center ">
-        <img src={props.employer.image} alt="avatar" className="w-2/3 " />
+        <img src={props.employer.image?(props.employer.image):("https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg")} alt="avatar" className="w-2/3 " />
       </div>
       <div className="w-4/5">
         <Link

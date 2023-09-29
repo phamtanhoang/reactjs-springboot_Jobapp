@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [candidateToken, setCandidateToken] = useState("");
@@ -29,9 +30,12 @@ const Profile = () => {
                 ngày thông báo và bạn có thể dễ dàng nộp đơn trực tiếp cho công
                 ty bạn muốn và tạo một tài khoản miễn phí ngay bây giờ
               </p>
-              <button className="text-white px-8 py-2 rounded-full font-semibold bg-orangetext">
+              <Link
+                to="/home/profile"
+                className="text-white px-8 py-2 rounded-full font-semibold bg-orangetext"
+              >
                 Chỉnh sửa ngay
-              </button>
+              </Link>
             </>
           ) : (
             <>
@@ -46,9 +50,12 @@ const Profile = () => {
                 ngày thông báo và bạn có thể dễ dàng nộp đơn trực tiếp cho công
                 ty bạn muốn và tạo một tài khoản miễn phí ngay bây giờ
               </p>
-              <button className="text-white px-8 py-2 rounded-full font-semibold bg-orangetext">
+              <Link
+                to="/home/register"
+                className="text-white px-8 py-2 rounded-full font-semibold bg-orangetext"
+              >
                 Đăng kí
-              </button>
+              </Link>
             </>
           )}
         </div>

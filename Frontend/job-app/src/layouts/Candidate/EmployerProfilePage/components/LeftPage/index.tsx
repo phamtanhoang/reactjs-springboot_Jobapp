@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import { AccountModel } from "../../../../../models/AccountModel";
-import { accountsAPI} from "../../../../../services";
+import { accountsAPI } from "../../../../../services";
 
 export const LeftPage: React.FC<{
   employer?: EmployerModel;
@@ -17,20 +17,32 @@ export const LeftPage: React.FC<{
       }
     };
     getAccountById();
-  },[props.employer?.accountId]);
-  
+  }, [props.employer?.accountId]);
+
   return (
     <div className="w-full lg:w-[65%]">
       <div className="w-full bg-white">
         <div className="overflow-hidden">
-          <img className="w-full" src={props.employer?.banner} alt="banner" />
+          <img
+            className="w-full"
+            src={
+              props.employer?.banner
+                ? props.employer?.banner
+                : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695882546/light-gray-color-solid-background-1920x1080_kvwkxg.png"
+            }
+            alt="banner"
+          />
         </div>
         <div className="-mt-[11%] flex w-[95%] mx-auto">
           <div className="rounded-xl  sm:flex bg-white shadow-lg">
             <div className="w-1/4 p-2 sm:p-5 mx-auto flex items-center">
               <img
                 className="w-full rounded-xl p-2 border-2 "
-                src={props.employer?.image}
+                src={
+                  props.employer?.image
+                    ? props.employer?.image
+                    : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+                }
                 alt="logo"
               />
             </div>

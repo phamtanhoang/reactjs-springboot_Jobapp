@@ -16,23 +16,46 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-    @CrossOrigin("http://127.0.0.1:5173/")
-    @RestController
-    @RequestMapping("/api/candidates")
-    public class CandidateController {
-        @Autowired
-        private CandidateService candidateService;
-        @Autowired
-        private ApplicationService applicationService;
-        @Autowired
-        private  JwtService jwtService;
+@CrossOrigin("http://127.0.0.1:5173/")
+@RestController
+@RequestMapping("/api/candidates")
+public class CandidateController {
+    @Autowired
+    private CandidateService candidateService;
+    @Autowired
+    private ApplicationService applicationService;
+    @Autowired
+    private  JwtService jwtService;
 
+    @GetMapping("/profile")
+    public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
+        try {
+            String token = tokenHeader.substring(7); // Loại bỏ tiền tố "Bearer "
+            String username = jwtService.extractUsername(token);
+            System.out.println(username);
 
-//    @GetMapping("/profile")
-////    @PreAuthorize("hasAuthority('employer')")
-//    public String candidateProfile() {
-//        return "Welcome to User Profile";
-//    }
+            Candidate candidate = candidateService.findCandidateByAccountUsername(username).orElse(null);
+
+            if (candidate != null) {
+                CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
+                candidateProfileResponse.setUsername(username);
+                candidateProfileResponse.setLastName(candidate.getLastName());
+                candidateProfileResponse.setFirstName(candidate.getFirstName());
+                candidateProfileResponse.setSex(candidate.getSex());
+                candidateProfileResponse.setAvatar(candidate.getAvatar());
+                candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
+                System.out.println(candidate);
+                return ResponseEntity.ok(candidateProfileResponse);
+            } else {
+                System.out.println("Người dùng không tồn tại");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
+        }
+    }
+
     @PostMapping("/apply")
     public String applyJob(@RequestBody Application application,@RequestHeader("Authorization") String tokenHeader) {
         String candidateEmail = jwtService.extractUsername(tokenHeader.substring(7));
@@ -89,8 +112,6 @@ import java.util.UUID;
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
             }
         }
-
-
 
 }
 

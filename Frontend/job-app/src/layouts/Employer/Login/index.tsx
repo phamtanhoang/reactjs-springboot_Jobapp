@@ -53,6 +53,7 @@ export const LoginEmployer = () => {
                   type="email"
                   className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full"
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Nhập Email..."
                 />
                 <label className="font-semibold text-base text-gray-600 pb-1 block">
                   Mật khẩu:
@@ -61,6 +62,7 @@ export const LoginEmployer = () => {
                   type="password"
                   className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full"
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Nhập mật khẩu..."
                 />
               </div>
               <div className="text-center ">

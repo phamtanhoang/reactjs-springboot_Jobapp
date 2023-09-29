@@ -11,6 +11,8 @@ import { Layout } from "./layouts/Employer/Layout";
 import { HomePageEmployer } from "./layouts/Employer/HomePageEmployer";
 import { LoginEmployer } from "./layouts/Employer/Login";
 import { RegisterEmployer } from "./layouts/Employer/Register";
+import { Profile } from "./layouts/Candidate/Profile";
+import { FavoritePage } from "./layouts/Candidate/FavoritePage";
 
 function App() {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -29,6 +31,7 @@ function App() {
               path="/home/employer/:id"
               element={<EmployerProfilePage />}
             />
+            <Route path="/home/favorite" element={<FavoritePage />} />
             {candidateToken ? (
               <>
                 <Route path="/home/login" element={<Navigate to="/home" />} />
@@ -36,11 +39,16 @@ function App() {
                   path="/home/register"
                   element={<Navigate to="/home" />}
                 />
+                <Route path="/home/profile" element={<Profile />} />
               </>
             ) : (
               <>
                 <Route path="/home/login" element={<Login />} />
                 <Route path="/home/register" element={<Register />} />
+                <Route
+                  path="/home/profile"
+                  element={<Navigate to="/home/login" />}
+                />
               </>
             )}
           </Route>

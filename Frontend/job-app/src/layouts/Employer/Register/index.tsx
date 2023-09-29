@@ -56,46 +56,6 @@ export const RegisterEmployer = () => {
     }
   };
 
-  //   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const file = e.target.files?.[0];
-  //     if (file) {
-  //       const reader = new FileReader();
-  //       reader.onload = (event) => {
-  //         const img = new Image();
-  //         img.src = event.target?.result as string;
-  //         img.onload = () => {
-  //           if (img.width === img.height) {
-  //             setImage(e.target.value);
-  //           } else {
-  //             // Ảnh không có tỉ lệ 1:1, bạn có thể hiển thị thông báo hoặc không chấp nhận ảnh này
-  //             alert("Vui lòng chọn ảnh có tỉ lệ 1:1.");
-  //           }
-  //         };
-  //       };
-  //       reader.readAsDataURL(file);
-  //     }
-  //   };
-
-  //   const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const file = e.target.files?.[0];
-  //     if (file) {
-  //       const reader = new FileReader();
-  //       reader.onload = (event) => {
-  //         const img = new Image();
-  //         img.src = event.target?.result as string;
-  //         img.onload = () => {
-  //           if (img.width === 2*img.height) {
-  //             setBanner(e.target.value);
-  //           } else {
-  //             // Ảnh không có tỉ lệ 1:1, bạn có thể hiển thị thông báo hoặc không chấp nhận ảnh này
-  //             alert("Vui lòng chọn ảnh có tỉ lệ 1:2");
-  //           }
-  //         };
-  //       };
-  //       reader.readAsDataURL(file);
-  //     }
-  //   };
-
   return (
     <section className="h-screen container mx-auto">
       <div className="h-full">
@@ -126,6 +86,7 @@ export const RegisterEmployer = () => {
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
                       onChange={(e) => setName(e.target.value)}
+                      placeholder="Nhập tên nhà tuyển dụng..."
                     />
                   </div>
                   <div className="w-full md:w-1/2 px-3 mb-2">
@@ -136,6 +97,7 @@ export const RegisterEmployer = () => {
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
                       onChange={(e) => setAddress(e.target.value)}
+                      placeholder="Nhập địa chỉ..."
                     />
                   </div>
                 </div>
@@ -147,6 +109,7 @@ export const RegisterEmployer = () => {
                   <textarea
                     className="border rounded-lg px-3 py-4 mt-1  w-full"
                     onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Nhập mô tả..."
                   />
                 </div>
 
@@ -157,6 +120,7 @@ export const RegisterEmployer = () => {
                   type="email"
                   className="border rounded-lg px-3 py-2 mt-1 w-full mb-2"
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Nhập Email..."
                 />
 
                 <label className="font-semibold text-sm text-gray-600 block">
@@ -166,6 +130,7 @@ export const RegisterEmployer = () => {
                   type="password"
                   className="border rounded-lg px-3 py-2 mt-1  w-full mb-2"
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Nhập mật khẩu..."
                 />
                 <label className="font-semibold text-sm text-gray-600 block">
                   Nhập lại mật khẩu:
@@ -174,6 +139,7 @@ export const RegisterEmployer = () => {
                   type="password"
                   className="border rounded-lg px-3 py-2 mt-1   w-full"
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Nhập lại mật khẩu..."
                 />
               </div>
 

@@ -21,7 +21,11 @@ export const EmployerInfo: React.FC<{ job?: JobModel }> = (props) => {
       <div className="flex">
         <div className="w-[25%] mx-2 ring-2 ring-gray-200 rounded-lg">
           <img
-            src={employer?.image}
+            src={
+              employer?.image
+                ? employer?.image
+                : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+            }
             alt="avatar"
             className="object-cover p-2"
           />

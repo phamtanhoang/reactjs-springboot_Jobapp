@@ -5,7 +5,6 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
 import authsAPI from "../../../../../services/Auths";
-import { error } from "console";
 import { CandidateResponseModel } from "../../../../../models/CandidateResponseModel";
 
 const NavBar = () => {
@@ -32,49 +31,10 @@ const NavBar = () => {
         .catch((error: any) => {
           console.log(error.message);
         });
-      // const fetchCurrent = async () => {
-      //   const url = "http://localhost:8080/api/auth/candidate/profile";
-      //   const requestOptions = {
-      //     method: "GET",
-      //     headers: {
-      //       Authorization: `Bearer ${candidateToken}`,
-      //       "Content-Type": "application/json",
-      //     },
-      //   };
-      //   const userReview = await fetch(url, requestOptions);
-      //   if (!userReview.ok) {
-      //     throw new Error("Something went wrong");
-      //   }
-      //   const userReviewResponseJson = await userReview.json();
-      //   console.log(userReviewResponseJson);
-      // };
-      // fetchCurrent().catch((error: any) => {
-      //   console.log(error.message);
-      // });
-
-      // fetch("http://localhost:8080/api/candidates/profile", {
-      //   headers: {
-      //     Authorization: `Bearer ${candidateToken}`,
-      //   },
-      // })
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //     console.log(data);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Lỗi khi lấy hồ sơ ứng viên:", error);
-      //   });
     }
   }, [candidateToken, localStorage.getItem("candidateToken")]);
 
-  console.log(candidateRes);
-
   const LogoutHandle = () => {
-    // authsAPI
-    //   .logout(candidateToken)
-    //   .then((res) => console.log(res))
-    //   .catch((error: any) => console.log(error.message));
-
     Swal.fire({
       title: "Bạn có muốn đăng xuất?",
       icon: "warning",
@@ -170,7 +130,7 @@ const NavBar = () => {
                   </p>
                 </button>
                 <div
-                  className={`top-9  absolute my-4 text-base list-none bg-[#fffefe] divide-y divide-gray-200 rounded-lg shadow-2xl z-[999999] ${
+                  className={`top-9 -right-8 absolute my-4 text-base list-none  bg-[#fffefe] divide-y divide-gray-200 rounded-lg shadow-2xl z-[999999] ${
                     !openInfo ? "hidden" : ""
                   }`}
                   id="user-dropdown"
@@ -183,13 +143,29 @@ const NavBar = () => {
                       {candidateRes?.username}
                     </span>
                   </div>
-                  <ul className="py-2">
+                  <ul className="py-2 w-[200px]">
+                    <li>
+                      <a
+                        href="/home/profile"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
+                      >
+                        Quản lý hồ sơ
+                      </a>
+                    </li>
                     <li>
                       <a
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
                       >
-                        Quản lý hồ sơ
+                        Công việc đã lưu
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
+                      >
+                        Công việc đã ứng tuyển
                       </a>
                     </li>
                     <li>
