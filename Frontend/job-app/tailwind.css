@@ -634,8 +634,8 @@ body {
   bottom: 2.5rem;
 }
 
-.bottom-5 {
-  bottom: 1.25rem;
+.bottom-6 {
+  bottom: 1.5rem;
 }
 
 .left-0 {
@@ -666,16 +666,20 @@ body {
   top: 2.25rem;
 }
 
-.bottom-6 {
-  bottom: 1.5rem;
-}
-
 .z-30 {
   z-index: 30;
 }
 
 .z-40 {
   z-index: 40;
+}
+
+.z-\[1000\] {
+  z-index: 1000;
+}
+
+.z-\[100\] {
+  z-index: 100;
 }
 
 .z-\[999999999\] {
@@ -692,6 +696,10 @@ body {
 
 .z-\[999\] {
   z-index: 999;
+}
+
+.z-\[1999\] {
+  z-index: 1999;
 }
 
 .m-0 {
@@ -871,6 +879,10 @@ body {
   margin-left: 1rem;
 }
 
+.ml-5 {
+  margin-left: 1.25rem;
+}
+
 .ml-auto {
   margin-left: auto;
 }
@@ -933,6 +945,26 @@ body {
 
 .mt-8 {
   margin-top: 2rem;
+}
+
+.mt-\[100px\] {
+  margin-top: 100px;
+}
+
+.mt-\[50px\] {
+  margin-top: 50px;
+}
+
+.mt-\[70px\] {
+  margin-top: 70px;
+}
+
+.mt-\[80px\] {
+  margin-top: 80px;
+}
+
+.mt-\[110px\] {
+  margin-top: 110px;
 }
 
 .block {
@@ -1007,10 +1039,6 @@ body {
   height: 2.25rem;
 }
 
-.h-\[100px\] {
-  height: 100px;
-}
-
 .h-\[150px\] {
   height: 150px;
 }
@@ -1035,8 +1063,12 @@ body {
   height: 100vh;
 }
 
-.h-14 {
-  height: 3.5rem;
+.h-\[100px\] {
+  height: 100px;
+}
+
+.max-h-28 {
+  max-height: 7rem;
 }
 
 .min-h-screen {
@@ -1177,14 +1209,6 @@ body {
 
 .w-full {
   width: 100%;
-}
-
-.w-10 {
-  width: 2.5rem;
-}
-
-.w-14 {
-  width: 3.5rem;
 }
 
 .max-w-\[115px\] {
@@ -1800,6 +1824,11 @@ body {
   line-height: 2.25rem;
 }
 
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
 .text-\[30px\] {
   font-size: 30px;
 }
@@ -1827,16 +1856,6 @@ body {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-
-.text-9xl {
-  font-size: 8rem;
-  line-height: 1;
 }
 
 .font-bold {
@@ -1950,6 +1969,11 @@ body {
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
 .text-red-700 {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
@@ -1958,11 +1982,6 @@ body {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-red-600 {
-  --tw-text-opacity: 1;
-  color: rgb(220 38 38 / var(--tw-text-opacity));
 }
 
 .shadow {
@@ -2208,6 +2227,11 @@ body {
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-orange-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 88 12 / var(--tw-bg-opacity));
+}
+
 .hover\:text-\[\#fe825c\]:hover {
   --tw-text-opacity: 1;
   color: rgb(254 130 92 / var(--tw-text-opacity));
@@ -2421,6 +2445,18 @@ body {
   }
 }
 
+@media (min-width: 340px) {
+  .min-\[340px\]\:mt-\[80px\] {
+    margin-top: 80px;
+  }
+}
+
+@media (min-width: 465px) {
+  .min-\[465px\]\:mt-\[50px\] {
+    margin-top: 50px;
+  }
+}
+
 @media (min-width: 640px) {
   .sm\:block {
     display: block;
@@ -2432,10 +2468,6 @@ body {
 
   .sm\:h-10 {
     height: 2.5rem;
-  }
-
-  .sm\:h-14 {
-    height: 3.5rem;
   }
 
   .sm\:w-1\/2 {
@@ -2472,14 +2504,6 @@ body {
 
   .sm\:w-\[90\%\] {
     width: 90%;
-  }
-
-  .sm\:w-10 {
-    width: 2.5rem;
-  }
-
-  .sm\:w-14 {
-    width: 3.5rem;
   }
 
   .sm\:grid-cols-2 {
@@ -2558,16 +2582,6 @@ body {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
-
-  .sm\:text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
-  }
-
-  .sm\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
 }
 
 @media (min-width: 768px) {
@@ -2624,10 +2638,6 @@ body {
     display: flex;
   }
 
-  .md\:h-16 {
-    height: 4rem;
-  }
-
   .md\:w-1\/2 {
     width: 50%;
   }
@@ -2666,10 +2676,6 @@ body {
 
   .md\:w-full {
     width: 100%;
-  }
-
-  .md\:w-16 {
-    width: 4rem;
   }
 
   .md\:max-w-md {
@@ -2716,11 +2722,6 @@ body {
   .md\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
-  }
-
-  .md\:text-4xl {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
   }
 
   .md\:text-base {
@@ -2890,10 +2891,6 @@ body {
 
   .lg\:text-left {
     text-align: left;
-  }
-
-  .lg\:text-center {
-    text-align: center;
   }
 
   .lg\:text-4xl {

@@ -3,36 +3,18 @@ package com.pth.jobapp.ResponseModels;
 import java.util.Date;
 
 public class ApplicationResponse {
-    String firstName;
-    String lastName;
+    String name;
     Date applyDate;
     String title;
     String state;
-
     String applicationId;
 
-    public String getApplicationId() {
-        return applicationId;
+    public String getName() {
+        return name;
     }
 
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getApplyDate() {
@@ -58,4 +40,16 @@ public class ApplicationResponse {
     public void setState(String state) {
         this.state = state;
     }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+
+
+
 }

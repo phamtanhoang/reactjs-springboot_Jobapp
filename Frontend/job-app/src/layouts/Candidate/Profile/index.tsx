@@ -25,10 +25,10 @@ export const Profile = () => {
 
   return (
     <>
-      <section className="text-gray-[#333333] px-6 pt-8">
-        <div className="w-full sm:w-[90%] lg:w-[95%] xl:w-[80%] mx-auto">
+      <section className="text-gray-[#333333] px-6 pt-8 ">
+        <div className="w-full sm:w-[90%] lg:w-[95%] xl:w-[80%] mx-auto mt-5">
           <div className="mx-auto  bg-white p-10 rounded shadow-lg">
-            <h1 className="text-2xl font-semibold mb-6 text-center ">
+            <h1 className="text-2xl font-bold mb-10 text-center">
               HỒ SƠ CÁ NHÂN:
             </h1>
             <div className="flex-row lg:flex gap-6 justify-center">

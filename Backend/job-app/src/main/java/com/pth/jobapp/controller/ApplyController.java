@@ -11,11 +11,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@CrossOrigin("http://127.0.0.1:5173/")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/applies")
 public class ApplyController {
@@ -38,8 +41,8 @@ public class ApplyController {
             @RequestHeader("Authorization") String token
     ) {
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
             if (employer != null) {
                 Page<Application> pendingApplications = applicationService.findPendingApplicationsByEmployerName(employer.getName(), pageable);
                 List<ApplicationResponse> responseList = new ArrayList<>();
@@ -50,12 +53,10 @@ public class ApplyController {
                     Optional<Job> jobOptional = jobService.findById(application.getJobId());
 
                     if (candidateOptional.isPresent() && jobOptional.isPresent()) {
-                        Candidate candidate = candidateOptional.get();
                         Job job = jobOptional.get();
 
                         ApplicationResponse response = new ApplicationResponse();
-                        response.setFirstName(candidate.getFirstName());
-                        response.setLastName(candidate.getLastName());
+                        response.setName(application.getName());
                         response.setState(application.getState());
                         response.setTitle(job.getTitle());
                         response.setApplyDate(application.getApplyDate());
@@ -98,9 +99,9 @@ public class ApplyController {
                     Job job = jobOptional.get();
 
 
-                    response.setUsername(employerName);
-                    response.setFirstName(candidate.getFirstName());
-                    response.setLastName(candidate.getLastName());
+                    response.setEmail(application.getEmail());
+                    response.setName(application.getName());
+                    response.setPhoneNumber(application.getPhoneNumber());
                     response.setAvatar(candidate.getAvatar());
                     response.setDateOfBirth(candidate.getDateOfBirth());
                     response.setSex(candidate.getSex());
@@ -110,7 +111,6 @@ public class ApplyController {
                     response.setState(application.getState());
                     response.setTitle(job.getTitle());
                 } else {
-                    // Xử lý trường hợp khi không tìm thấy Candidate hoặc Job
                     System.err.println("Không tìm thấy Candidate hoặc Job cho ứng viên " + application.getCandidateId() + " và công việc " + application.getJobId());
                 }
             }
@@ -118,7 +118,6 @@ public class ApplyController {
             return ResponseEntity.ok(response);
         }
           catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
           }
     }
@@ -148,8 +147,7 @@ public class ApplyController {
                         Job job = jobOptional.get();
 
                         ApplicationResponse response = new ApplicationResponse();
-                        response.setFirstName(candidate.getFirstName());
-                        response.setLastName(candidate.getLastName());
+                        response.setName(application.getName());
                         response.setState(application.getState());
                         response.setTitle(job.getTitle());
                         response.setApplyDate(application.getApplyDate());
@@ -171,15 +169,23 @@ public class ApplyController {
         }
     }
 
-    @PutMapping("/applies/update-state")
+    @PutMapping("/update-state")
     public ResponseEntity<String> updateApplicationState(
             @RequestHeader("Authorization") String token,
 
             @RequestBody UpdateApplicationStateRequest updateRequest
     ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            // Lấy danh sách các quyền truy cập của người dùng và in ra
+            System.out.println("Quyền truy cập của người dùng: " + authentication.getAuthorities());
+        } else {
+            System.out.println("Người dùng chưa đăng nhập.");
+        }
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
                 Optional<Application> application = applicationService.findById(updateRequest.getApplicationId());

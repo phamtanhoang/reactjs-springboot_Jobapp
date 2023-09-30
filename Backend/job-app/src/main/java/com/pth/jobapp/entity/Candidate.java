@@ -40,18 +40,59 @@ public class Candidate {
     @Column(name = "account_id")
     private String accountId;
 
+
+    @Getter
+    @Column(name = "skill")
+    private String skill;
+
+    @Getter
+    @Column(name = "experience")
+    private String experience;
+
     public Candidate() {
 
     };
 
-    public Candidate(String firstName, String lastName, String avatar, Date dateOfBirth, String sex, String accountId) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.avatar = avatar;
-        this.dateOfBirth = dateOfBirth;
-        this.sex = sex;
-        this.accountId = accountId;
+    public String getFirstName() {
+        return firstName;
     }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public String getSkill() {
+        return skill;
+    }
+
+    public void setSkill(String skill) {
+        this.skill = skill;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
 
     public String getId() {
         return id;

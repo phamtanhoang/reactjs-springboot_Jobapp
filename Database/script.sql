@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: jobapp
+-- Host: localhost    Database: jobapp
 -- ------------------------------------------------------
--- Server version	8.0.34
+-- Server version	8.0.31
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,7 +40,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES ('','2023-09-16 04:41:21','active','employer','Instagram@example.com','password5'),('0bff315c-ff62-4226-bea0-e2fd578d50e1','2023-09-20 18:51:00','pending','employer','coangáty3cuasdat@example.com','$2a$10$Cxn4Rmko49SaFqsiKFRT8OSxpRkkfZCy5SiX4u.NaJESXrBP9K4u2'),('1','2023-09-16 04:41:21','active','employer','google@example.com','$2a$12$SVVU/oWmm0gJfZqkyb5uNO9Cja2/DEM0n1iUs7.y4Nn/fV3pqn.a.'),('10','2023-09-16 04:41:21','active','employer','youtube@example.com','password5'),('11','2023-09-16 04:41:21','active','employer','vingroup@example.com','password5'),('12','2023-09-16 04:41:21','active','employer','tiktok@example.com','password5'),('2','2023-09-16 04:41:21','active','employer','microsoft@example.com','password2'),('3','2023-09-16 04:41:21','active','employer','airbnb@example.com','password3'),('4','2023-09-16 04:41:21','active','employer','slack@example.com','password4'),('5','2023-09-16 04:41:21','active','employer','cloudinary@example.com','password5'),('5d58655e-206c-4d3a-af8c-2a1f0006f485','2023-09-20 18:16:13','pending','employer','datdeptrai1232@example.com','$2a$10$Z941qNhBe4PKk8zwHV1jFuhZfy2gzCcsMU6hN0MxQ2DLaRQJBLrbW'),('7','2023-09-16 04:41:21','active','employer','xiaomi@example.com','password5'),('7446b642-8594-4348-8ded-6b9638382c2c','2023-09-21 15:50:10','active','candidate','congádtyA@example.com','$2a$10$05XRdIyCKivHeJ0WV9YtGuLxkpkiP1TgJfGi5KKpK24N30mcyWNtq'),('7eabb99b-a5f0-4596-a15e-a82160f7fb0e','2023-09-20 18:49:58','pending','employer','coangáty3cuadat@example.com','$2a$10$OVABWGMvZ5Ex2bMdBGZrFuLpHw6vsOCUy8bgZA2Dj1kbEX0VdO/Vq'),('8','2023-09-16 04:41:21','active','employer','meta@example.com','password5'),('9','2023-09-16 04:41:21','active','employer','twitter@example.com','password5'),('90fdfd38-c57d-412b-97b8-8c747728fdaf','2023-09-20 14:34:51','pending','employer','datdeptrai@example.com','$2a$10$ir6IR7ZqwlVvIwP1Knvh/.DotJD2/CDH4beMv4eMn5MmDN/p7x3pO'),('a6a3bcee-7e72-4e6d-b8c9-b15f7304e5a8','2023-09-20 18:39:14','pending','employer','congty3cuadat@example.com','$2a$10$sgOm4Ck3fjEIGj/OGQSLbumbGWVucHeeDXH.9w7eZx90nyKzaCKvy'),('d323b89d-b206-4b53-b56b-c63df56be829','2023-09-20 18:22:49','pending','employer','datdeptrai123232@example.com','$2a$10$70DJodrUQ0nZr7yr3Sutwu.kDr9osmBHrpFcsJbfx7qPUkoFAgGB.'),('e70ba29d-65ed-4af2-918b-78ae1330b3d0','2023-09-20 18:54:24','pending','employer','congtyA@example.com','$2a$10$jEmU4Op1rB7u8F2HOzqihOYc6Fi41gMinA47hPvbjziVBOyaFHtvC'),('f04306ac-7652-471c-82b1-3fb6421fe4cb','2023-09-20 18:40:44','pending','employer','coangty3cuadat@example.com','$2a$10$u2FPti0YVgXTjwhLZpYnEe9tu3gtpnuQvyORnwakXUnx.58.4Z2dC');
+INSERT INTO `account` VALUES ('1','2023-09-16 04:41:21','active','employer','google@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('10','2023-09-16 04:41:21','active','employer','youtube@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('11','2023-09-16 04:41:21','active','employer','vingroup@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('12','2023-09-16 04:41:21','active','employer','tiktok@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('2','2023-09-16 04:41:21','active','employer','microsoft@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('3','2023-09-16 04:41:21','active','employer','airbnb@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('4','2023-09-16 04:41:21','active','employer','slack@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('5','2023-09-16 04:41:21','active','employer','cloudinary@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('6','2023-09-16 04:41:21','active','employer','Instagram@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('60ce4695-22da-4333-bafa-19ca43cf6d3a','2023-09-29 07:35:20','active','candidate','candidate1@gmail.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('7','2023-09-16 04:41:21','active','employer','xiaomi@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('8','2023-09-16 04:41:21','active','employer','meta@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('9','2023-09-16 04:41:21','active','employer','twitter@example.com','$2a$10$ObXxK1v9HIVFFB9BAWaaa.DIMsZjLg6bBNCr7D4BuZFNaYHxXpZpS'),('c30050d1-818c-404d-8390-8190a1ef1293','2023-09-29 07:41:18','active','candidate','candidate2@gmail.com','$2a$10$eWbECEqwHaBhsgJdeB7gzeZnwNnKxo/CT2R0HAGjCt/t3ag9hxkvG');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,11 +79,14 @@ DROP TABLE IF EXISTS `application`;
 CREATE TABLE `application` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   `apply_date` date NOT NULL,
-  `CV` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `CV` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
   `letter` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
   `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `job_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `phone_number` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
+  `name` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
+  `email` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
   `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `job_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -94,7 +97,7 @@ CREATE TABLE `application` (
 
 LOCK TABLES `application` WRITE;
 /*!40000 ALTER TABLE `application` DISABLE KEYS */;
-INSERT INTO `application` VALUES ('009b7e05-6a94-4cdc-9cfc-ee846f379533','2023-09-21','1234',NULL,'pending','1','e6694938-8dec-4832-84cb-2259507ef9d1'),('2dc85d71-cbe1-47ff-906b-79d85a879870','2023-09-21','1234',NULL,'pending','1','e6694938-8dec-4832-84cb-2259507ef9d1'),('b0fcd5cd-e480-4354-83bd-6f06f59b4a0c','2023-09-21','1234',NULL,'pending','2','e6694938-8dec-4832-84cb-2259507ef9d1');
+INSERT INTO `application` VALUES ('94d0be68-b05f-490f-ba04-814478979335','2023-09-30','f06fd6d3-b7ad-4477-af8a-1e483201993b.pdf','<p>Dear Hiring Department at Mona Media,</p><p><br></p><p>I came across your company through the jobs website, and I am extremely enthusiastic about the Frontend Developer (Reactjs) at Mona Media. I am eager to embrace new challenges and further enhance my skills within the dynamic work environment your company offers. Based on my current knowledge and experiences, I believe I can make a meaningful contribution to your projects and team. I would like to extend my sincere appreciation to the Hiring Department at Mona Media for dedicating valuable time to reviewing this application. I am eagerly anticipating the possibility of an interview to elaborate on my skills and experiences in greater detail, as well as to gain a deeper understanding of the requirements for the Frontend Developer (Reactjs) role within your organization.</p><p>More information details about my background and qualifications are attached to my CV.</p><p><br></p><p>Sincerely,</p><p>Pham Tan Hoang</p>','pending','0362400302','Phạm Tấn Hoàng','phamtanhoang3202@gmail.com','acb5af56-ebae-4ef1-9751-8bb05502ead7','1');
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,6 +143,8 @@ CREATE TABLE `candidate` (
   `date_of_birth` date DEFAULT NULL,
   `sex` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
   `account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci DEFAULT NULL,
+  `skill` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
+  `experience` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -150,7 +155,7 @@ CREATE TABLE `candidate` (
 
 LOCK TABLES `candidate` WRITE;
 /*!40000 ALTER TABLE `candidate` DISABLE KEYS */;
-INSERT INTO `candidate` VALUES ('e6694938-8dec-4832-84cb-2259507ef9d1','dat','test','banner','2002-07-10','nam','7446b642-8594-4348-8ded-6b9638382c2c');
+INSERT INTO `candidate` VALUES ('7fc7ce26-b3e9-415f-a548-789e8e34cf31','Lê','Đẹt','','2005-02-15','Nữ','c30050d1-818c-404d-8390-8190a1ef1293',NULL,NULL),('acb5af56-ebae-4ef1-9751-8bb05502ead7','Phạm Tấn','Hoàng','http://res.cloudinary.com/dcpatkvcu/image/upload/v1696091453/DoAnNganh/avatar/hlfyt8v2tzmglb1d2xko.png','2002-03-02','Nam','60ce4695-22da-4333-bafa-19ca43cf6d3a','<h3><strong>Back-end:</strong></h3><ul><li><em>Spring Framework</em></li><li><em>.Net Framework</em></li></ul><h3><strong>Front-end:</strong></h3><ul><li><em>Reactjs</em></li><li><em>TailwindCSS</em></li></ul>','<ol><li>Làm việc tại OU từ 2020 - now (Fullstack developer)</li></ol>');
 /*!40000 ALTER TABLE `candidate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,36 +237,8 @@ CREATE TABLE `employer` (
 
 LOCK TABLES `employer` WRITE;
 /*!40000 ALTER TABLE `employer` DISABLE KEYS */;
-INSERT INTO `employer` VALUES ('1','Công ty công nghệ đa quốc gia Google','268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam','Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên về các dịch vụ và sản phẩm liên quan đến Internet, bao gồm các công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán đám mây, phần mềm và phần cứng.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694701182/DoAnNganh/Google_oecx0q.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/download_1_vbevow.jpg','1'),('10','Doanh nghiệp Youtube','245/20b, Nguyễn Công Hoan, Hoà An, Liên Chiểu, Đà Nẵng, Việt Nam','YouTube là một nền tảng chia sẻ video trực tuyến của Mỹ có trụ sở chính tại San Bruno, California. Nền tảng này được tạo ra vào tháng 2 năm 2005 bởi ba nhân viên cũ của PayPal — Chad Hurley, Steve Chen và Jawed Karim. ','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Icon_Youtube_Logo_Png_Clipart_5305994_-_PinClipart_preview_rev_1_n9ibgk.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/download_1_vbevow.jpg','10'),('11','Tập đoàn VinGroup','178 Lê Thanh Nghị, Hoà Cường Bắc, Hải Châu, Đà Nẵng, Việt Nam','Tập đoàn Vingroup là một tập đoàn đa ngành của Việt Nam. Vingroup được thành lập vào ngày 8 tháng 8 năm 1993, với tiền thân là công ty Technocom chuyên về sản xuất mỳ ăn liền tại Ukraina bởi một nhóm các du học sinh người Việt Nam, những người này sau đó quay trở lại đầu tư đa ngành tại quê hương.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031300/DoAnNganh/hd_preview_rev_1_zocxc8.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/download_qj21cf.jpg','11'),('12','Doanh nghiệp Tiktok','192 Hoài Thanh, Bắc Mỹ An, Ngũ Hành Sơn, Đà Nẵng, Việt Nam','TikTok là nền tảng video âm nhạc và mạng xã hội của Trung Quốc được ra mắt vào năm 2017, dành cho các thị trường bên ngoài Trung Quốc. bởi Trương Nhất Minh, người sáng lập của ByteDance','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/TikTok_Logo_Video_Tik_Tok_Sign_Symbol_Musically_preview_rev_1_ubknkg.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/Steelcase__Learning_and_Innovation_Center_in_Munich___STYLEPARK_f7qegg.jpg','12'),('1b6952d2-807b-4a92-a70e-13bac4abd13e','dat','test','ok','oke','banner','0bff315c-ff62-4226-bea0-e2fd578d50e1'),('2','Tập đoàn đa quốc gia Microsoft','390 Hoàng Văn Thụ, Phường 4, Tân Bình, Thành phố Hồ Chí Minh, Việt Nam','Microsoft là một tập đoàn đa quốc gia của Hoa Kỳ đặt trụ sở chính tại Redmond, Washington; chuyên phát triển, sản xuất, kinh doanh bản quyền phần mềm và hỗ trợ trên diện rộng các sản phẩm và dịch vụ liên quan đến máy tính','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694704601/DoAnNganh/Microsoft_wdzszl.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/Steelcase__Learning_and_Innovation_Center_in_Munich___STYLEPARK_f7qegg.jpg','2'),('3','Công ty Airbnb','47 Nguyễn Huy Lượng, Phường 7, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Airbnb, là một thị trường cộng đồng cho việc đặt và cho thuê phòng, căn hộ, có trụ sở tại Silicon Valley, California được thành lập trong năm 2008, tương tự như một hệ thống đặt hàng trực tuyến.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694704044/DoAnNganh/Airbnb_dy33tc.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/_Businesspeople_At_Meeting_Desk__by_Stocksy_Contributor__Lumina__qctwhq.jpg','3'),('4','Công ty phần mềm Slack','475A Đ. Điện Biên Phủ, Phường 25, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Slack Technologies, LLC là một công ty phần mềm của Mỹ được thành lập vào năm 2009 tại Vancouver, British Columbia, được biết đến với nền tảng giao tiếp độc quyền Slack.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694701182/DoAnNganh/Slack_lqee4s.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/download_qj21cf.jpg','4'),('5','Công ty công nghệ Cloudinary','720A Đ. Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Cloudinary là một công ty công nghệ SaaS có trụ sở chính tại Santa Clara, California, với các văn phòng tại Israel, Anh, Ba Lan và Singapore. Công ty cung cấp dịch vụ quản lý hình ảnh và video dựa trên đám mây.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694704601/DoAnNganh/Cloudinary_qv3qsn.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/How_to_Succeed_at_Sandler_Rule_15__The_Best_Presentation_You_Will_Ever_Give_the_Prospect_Will_Never_See_-_Sandler_brqpty.png','5'),('6','Doanh nghiệp Instagram','27 Đ. Cổ Linh, Long Biên, Hà Nội, Việt Nam','Instagram là một dịch vụ mạng xã hội chia sẻ hình ảnh và video của Mỹ được tạo ra bởi Kevin Systrom và Mike Krieger. ','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Instagram_application_icon_Logo_Computer_Icons_Social_media_insta_transparent_background_PNG_clipart_preview_rev_1_wohb6c.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030120/DoAnNganh/How_to_Help_Your_Content_Team_to_Have_Better_Ideas_nixdbd.png','6'),('7','Tập đoàn Xiaomi','3250 Tân Minh, Sóc Sơn, Hà Nội, Việt Nam','Xiaomi Inc. là một Tập đoàn sản xuất hàng điện tử Trung Quốc có trụ sở tại Thâm Quyến. Xiaomi là nhà sản xuất điện thoại thông minh lớn thứ 2 thế giới; trong quí 3 năm 2021, Xiaomi đã chiếm gần 17% thị trường điện thoại thông minh thế giới.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Xiaomi_Logo_Mi___01_-_PNG_Logo_Vector_Downloads_SVG_EPS_g755yt.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030120/DoAnNganh/Project_Manager_l%C3%A0_g%C3%AC__cxkwho.jpg','7'),('8','Công ty truyền thông xã hội và công nghệ Meta','Số 24 - NH1 , Núi Hiểu, Quang Châu, Việt Yên, Bắc Giang, Việt Nam','Meta là một công ty truyền thông xã hội và công nghệ Mỹ có trụ sở tại Menlo Park, California. Meta cung cấp các sản phẩm và dịch vụ khác. Nó đã mua lại Instagram, WhatsApp và Oculus và phát triển độc lập các ứng dụng Facebook Messenger, Threads, Facebook Watch và Facebook Portal. Nó còn có 9,99% cổ phần trên Jio Platforms.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Facebook_PNG_%C3%8Dcone_Logo_Transparente_Sem_Fundo_preview_rev_1_ascfuk.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694959037/DoAnNganh/image_wfa9xo.png','8'),('9','Doanh nghiệp Twitter','Đường Kim Chung, Kim Chung, Đông Anh, Hà Nội, Việt Nam','Twitter, là một phương tiện truyền thông mạng xã hội và dịch vụ mạng xã hội trực tuyến được điều hành bởi X Corp., công ty kế thừa của Twitter, Inc. X cho phép người sử dụng đọc, nhắn và cập nhật các mẩu tin nhỏ gọi là tweets, một dạng tiểu blog.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Twitter_Logo_White_Background_PNG_Image_With_Transparent_Background_png_-_Free_PNG_Images_preview_rev_1_ecww3c.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/_Businesspeople_At_Meeting_Desk__by_Stocksy_Contributor__Lumina__qctwhq.jpg','9'),('be28f9c0-57f5-4e84-bf90-5172b13b80ff','dat','test','ok','oke','banner','e70ba29d-65ed-4af2-918b-78ae1330b3d0'),('dd29a0f4-b744-4756-a9ac-c3d41e1834a6','dat','test','ok','oke','banner','f04306ac-7652-471c-82b1-3fb6421fe4cb');
+INSERT INTO `employer` VALUES ('1','Công ty công nghệ đa quốc gia Google','268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam','Google LLC là một công ty công nghệ đa quốc gia của Mỹ, chuyên về các dịch vụ và sản phẩm liên quan đến Internet, bao gồm các công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán đám mây, phần mềm và phần cứng.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694701182/DoAnNganh/Google_oecx0q.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/download_1_vbevow.jpg','1'),('10','Doanh nghiệp Youtube','245/20b, Nguyễn Công Hoan, Hoà An, Liên Chiểu, Đà Nẵng, Việt Nam','YouTube là một nền tảng chia sẻ video trực tuyến của Mỹ có trụ sở chính tại San Bruno, California. Nền tảng này được tạo ra vào tháng 2 năm 2005 bởi ba nhân viên cũ của PayPal — Chad Hurley, Steve Chen và Jawed Karim. ','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Icon_Youtube_Logo_Png_Clipart_5305994_-_PinClipart_preview_rev_1_n9ibgk.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/download_1_vbevow.jpg','10'),('11','Tập đoàn VinGroup','178 Lê Thanh Nghị, Hoà Cường Bắc, Hải Châu, Đà Nẵng, Việt Nam','Tập đoàn Vingroup là một tập đoàn đa ngành của Việt Nam. Vingroup được thành lập vào ngày 8 tháng 8 năm 1993, với tiền thân là công ty Technocom chuyên về sản xuất mỳ ăn liền tại Ukraina bởi một nhóm các du học sinh người Việt Nam, những người này sau đó quay trở lại đầu tư đa ngành tại quê hương.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031300/DoAnNganh/hd_preview_rev_1_zocxc8.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/download_qj21cf.jpg','11'),('12','Doanh nghiệp Tiktok','192 Hoài Thanh, Bắc Mỹ An, Ngũ Hành Sơn, Đà Nẵng, Việt Nam','TikTok là nền tảng video âm nhạc và mạng xã hội của Trung Quốc được ra mắt vào năm 2017, dành cho các thị trường bên ngoài Trung Quốc. bởi Trương Nhất Minh, người sáng lập của ByteDance','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/TikTok_Logo_Video_Tik_Tok_Sign_Symbol_Musically_preview_rev_1_ubknkg.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/Steelcase__Learning_and_Innovation_Center_in_Munich___STYLEPARK_f7qegg.jpg','12'),('2','Tập đoàn đa quốc gia Microsoft','390 Hoàng Văn Thụ, Phường 4, Tân Bình, Thành phố Hồ Chí Minh, Việt Nam','Microsoft là một tập đoàn đa quốc gia của Hoa Kỳ đặt trụ sở chính tại Redmond, Washington; chuyên phát triển, sản xuất, kinh doanh bản quyền phần mềm và hỗ trợ trên diện rộng các sản phẩm và dịch vụ liên quan đến máy tính','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694704601/DoAnNganh/Microsoft_wdzszl.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/Steelcase__Learning_and_Innovation_Center_in_Munich___STYLEPARK_f7qegg.jpg','2'),('3','Công ty Airbnb','47 Nguyễn Huy Lượng, Phường 7, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Airbnb, là một thị trường cộng đồng cho việc đặt và cho thuê phòng, căn hộ, có trụ sở tại Silicon Valley, California được thành lập trong năm 2008, tương tự như một hệ thống đặt hàng trực tuyến.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694704044/DoAnNganh/Airbnb_dy33tc.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/_Businesspeople_At_Meeting_Desk__by_Stocksy_Contributor__Lumina__qctwhq.jpg','3'),('4','Công ty phần mềm Slack','475A Đ. Điện Biên Phủ, Phường 25, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Slack Technologies, LLC là một công ty phần mềm của Mỹ được thành lập vào năm 2009 tại Vancouver, British Columbia, được biết đến với nền tảng giao tiếp độc quyền Slack.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694701182/DoAnNganh/Slack_lqee4s.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/download_qj21cf.jpg','4'),('5','Công ty công nghệ Cloudinary','720A Đ. Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam','Cloudinary là một công ty công nghệ SaaS có trụ sở chính tại Santa Clara, California, với các văn phòng tại Israel, Anh, Ba Lan và Singapore. Công ty cung cấp dịch vụ quản lý hình ảnh và video dựa trên đám mây.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694704601/DoAnNganh/Cloudinary_qv3qsn.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030121/DoAnNganh/How_to_Succeed_at_Sandler_Rule_15__The_Best_Presentation_You_Will_Ever_Give_the_Prospect_Will_Never_See_-_Sandler_brqpty.png','5'),('6','Doanh nghiệp Instagram','27 Đ. Cổ Linh, Long Biên, Hà Nội, Việt Nam','Instagram là một dịch vụ mạng xã hội chia sẻ hình ảnh và video của Mỹ được tạo ra bởi Kevin Systrom và Mike Krieger. ','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Instagram_application_icon_Logo_Computer_Icons_Social_media_insta_transparent_background_PNG_clipart_preview_rev_1_wohb6c.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030120/DoAnNganh/How_to_Help_Your_Content_Team_to_Have_Better_Ideas_nixdbd.png','6'),('7','Tập đoàn Xiaomi','3250 Tân Minh, Sóc Sơn, Hà Nội, Việt Nam','Xiaomi Inc. là một Tập đoàn sản xuất hàng điện tử Trung Quốc có trụ sở tại Thâm Quyến. Xiaomi là nhà sản xuất điện thoại thông minh lớn thứ 2 thế giới; trong quí 3 năm 2021, Xiaomi đã chiếm gần 17% thị trường điện thoại thông minh thế giới.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Xiaomi_Logo_Mi___01_-_PNG_Logo_Vector_Downloads_SVG_EPS_g755yt.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030120/DoAnNganh/Project_Manager_l%C3%A0_g%C3%AC__cxkwho.jpg','7'),('8','Công ty truyền thông xã hội và công nghệ Meta','Số 24 - NH1 , Núi Hiểu, Quang Châu, Việt Yên, Bắc Giang, Việt Nam','Meta là một công ty truyền thông xã hội và công nghệ Mỹ có trụ sở tại Menlo Park, California. Meta cung cấp các sản phẩm và dịch vụ khác. Nó đã mua lại Instagram, WhatsApp và Oculus và phát triển độc lập các ứng dụng Facebook Messenger, Threads, Facebook Watch và Facebook Portal. Nó còn có 9,99% cổ phần trên Jio Platforms.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Facebook_PNG_%C3%8Dcone_Logo_Transparente_Sem_Fundo_preview_rev_1_ascfuk.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1694959037/DoAnNganh/image_wfa9xo.png','8'),('9','Doanh nghiệp Twitter','Đường Kim Chung, Kim Chung, Đông Anh, Hà Nội, Việt Nam','Twitter, là một phương tiện truyền thông mạng xã hội và dịch vụ mạng xã hội trực tuyến được điều hành bởi X Corp., công ty kế thừa của Twitter, Inc. X cho phép người sử dụng đọc, nhắn và cập nhật các mẩu tin nhỏ gọi là tweets, một dạng tiểu blog.','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Twitter_Logo_White_Background_PNG_Image_With_Transparent_Background_png_-_Free_PNG_Images_preview_rev_1_ecww3c.png','https://res.cloudinary.com/dcpatkvcu/image/upload/v1695030122/DoAnNganh/_Businesspeople_At_Meeting_Desk__by_Stocksy_Contributor__Lumina__qctwhq.jpg','9');
 /*!40000 ALTER TABLE `employer` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `experience`
---
-
-DROP TABLE IF EXISTS `experience`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `experience` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `company_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `from_date` date NOT NULL,
-  `to_date` date NOT NULL,
-  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `company_name_UNIQUE` (`company_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `experience`
---
-
-LOCK TABLES `experience` WRITE;
-/*!40000 ALTER TABLE `experience` DISABLE KEYS */;
-/*!40000 ALTER TABLE `experience` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -272,8 +249,8 @@ DROP TABLE IF EXISTS `favorite`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `favorite` (
-  `candidate_id` int NOT NULL,
-  `job_id` varchar(45) COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `candidate_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
+  `job_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
   PRIMARY KEY (`candidate_id`,`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -321,31 +298,6 @@ INSERT INTO `job` VALUES ('1','Lập trình viên','Viết mã cho ứng dụng 
 UNLOCK TABLES;
 
 --
--- Table structure for table `skill`
---
-
-DROP TABLE IF EXISTS `skill`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `skill` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  `candidate_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vi_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vi_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `skill`
---
-
-LOCK TABLES `skill` WRITE;
-/*!40000 ALTER TABLE `skill` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skill` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `vip`
 --
 
@@ -367,7 +319,7 @@ CREATE TABLE `vip` (
 
 LOCK TABLES `vip` WRITE;
 /*!40000 ALTER TABLE `vip` DISABLE KEYS */;
-INSERT INTO `vip` VALUES ('1','2023-09-10','2023-12-10','1'),('2','2023-09-12','2023-12-12','2'),('3','2023-09-15','2023-12-15','3'),('4','2023-09-18','2023-12-18','6'),('5','2023-09-20','2023-12-19','12');
+INSERT INTO `vip` VALUES ('1','2023-09-10','2023-12-10','1'),('2','2023-09-12','2023-12-12','2'),('3','2023-09-15','2023-12-15','3'),('4','2023-09-18','2023-12-18','6'),('5','2023-09-20','2023-12-19','12'),('6','2023-09-20','2023-12-19','4'),('7','2023-09-20','2023-12-19','5'),('8','2023-09-20','2023-12-19','7');
 /*!40000 ALTER TABLE `vip` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -380,4 +332,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-22  0:49:45
+-- Dump completed on 2023-10-01  0:42:35

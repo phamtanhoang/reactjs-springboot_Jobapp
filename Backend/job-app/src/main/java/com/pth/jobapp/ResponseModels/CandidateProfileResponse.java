@@ -9,7 +9,8 @@ public class CandidateProfileResponse {
     String avatar;
     Date dateOfBirth;
     String sex;
-
+    String skill;
+    String experience;
     public String getUsername() {
         return username;
     }
@@ -58,5 +59,19 @@ public class CandidateProfileResponse {
         this.sex = sex;
     }
 
+    public String getSkill() {
+        return this.skill;
+    }
 
+    public void setSkill(String skill) {
+        this.skill = skill;
+    }
+
+    public String getExperience() {
+        return this.experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
 }

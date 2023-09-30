@@ -130,7 +130,7 @@ const NavBar = () => {
                   </p>
                 </button>
                 <div
-                  className={`top-9 -right-8 absolute my-4 text-base list-none  bg-[#fffefe] divide-y divide-gray-200 rounded-lg shadow-2xl z-[999999] ${
+                  className={`top-9 -right-8 absolute my-4 text-base list-none  bg-[#fffefe] divide-y divide-gray-200 rounded-lg shadow-2xl z-[999] ${
                     !openInfo ? "hidden" : ""
                   }`}
                   id="user-dropdown"

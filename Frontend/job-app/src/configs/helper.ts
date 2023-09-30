@@ -91,6 +91,16 @@ export const urlAPI = {
 
   registerCandidate: "/auth/candidate/addNewCandidate",
 
+  updateCandidate: "/candidates/update",
+
+  updateCandidateAvatar: "/candidates/updateImage",
+
+  updateCandidateSkill: "/candidates/updateSkill",
+
+  updateCandidateExp: "/candidates/updateExperience",
+
+  candidateApply: "/candidates/apply",
+
   loginEmployer: "/auth/employer/login",
 
   registerEmployer: "/auth/employer/register",

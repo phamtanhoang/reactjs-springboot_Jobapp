@@ -3,6 +3,9 @@ import { useState } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { BsFillPencilFill } from "react-icons/bs";
 import { CandidateResponseModel } from "../../../../../models/CandidateResponseModel";
+import { candidatesAPI } from "../../../../../services";
+import Swal from "sweetalert2";
+import { Spinner } from "../../../../../components";
 
 const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
   props
@@ -15,6 +18,16 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [sex, setSex] = useState("Nam");
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="flex-grow">
+        <Spinner />
+      </div>
+    );
+  }
+
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -24,21 +37,99 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
     }
   };
 
-  const handleDateChange = (e: any) => {
-    const inputDate = e.target.value;
-    const dateObj = new Date(inputDate);
+  const submitAvatar = () => {
+    const token = localStorage.getItem("candidateToken") || "";
+    if (token) {
+      if (selectedFile) {
+        Swal.fire({
+          title: "Xác nhận đổi ảnh đại diện?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Đồng ý",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setIsLoading(true);
+            const data = new FormData();
 
-    if (!isNaN(dateObj.getTime())) {
-      // Kiểm tra xem giá trị ngày hợp lệ
-      const formattedDate = dateObj
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, "/");
-      setDateOfBirth(formattedDate);
-    } else {
-      // Nếu giá trị ngày không hợp lệ, đặt lại thành rỗng
-      setDateOfBirth("");
+            data.append("file", selectedFile);
+            data.append("upload_preset", "jobapp");
+            data.append("cloud_name", "dcpatkvcu");
+
+            fetch("https://api.cloudinary.com/v1_1/dcpatkvcu/image/upload", {
+              method: "post",
+              body: data,
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                candidatesAPI
+                  .updateAvatar(data.url, token)
+                  .then(() => {
+                    Swal.fire(
+                      "Thành công!",
+                      "Thay đổi ảnh đại diện thành công!",
+                      "success"
+                    );
+                    window.location.reload();
+                  })
+                  .catch(() => {
+                    Swal.fire(
+                      "Thất bại!",
+                      "Thay đổi ảnh đại diện thất bại!",
+                      "error"
+                    );
+                  });
+              })
+              .catch((error: any) => {
+                console.log(error);
+              })
+              .finally(() => {
+                setIsLoading(false);
+              });
+          }
+        });
+      } else {
+        Swal.fire("Thất bại!", "Vui chọn ảnh", "error");
+      }
     }
+  };
+
+  const updateHandle = () => {
+    const token = localStorage.getItem("candidateToken") || "";
+    if (token) {
+      if (firstName && lastName && dateOfBirth && sex) {
+        Swal.fire({
+          title: "Xác nhận chỉnh sửa?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Đồng ý",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            candidatesAPI
+              .updateCandidate(firstName, lastName, dateOfBirth, sex, token)
+              .then(() => {
+                Swal.fire("Thành công!", "Chỉnh sửa thành công!", "success");
+                window.location.reload();
+              })
+              .catch(() => {
+                Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
+              });
+          }
+        });
+      } else {
+        Swal.fire("Thất bại!", "Vui lòng nhập đầy đủ thông tin", "error");
+      }
+    }
+  };
+  const closedBox = () => {
+    setfirstName("");
+    setLastName("");
+    setDateOfBirth("");
+    setSex("Nam");
+    setShowBox(false);
   };
   return (
     <>
@@ -46,19 +137,19 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
         <div className="relative container md:w-1/2 lg:w-auto">
           {selectedFile ? (
             <img
-              className="w-40 h-40 rounded-full ring-4 ring-blue-500 mx-auto"
+              className="w-40 h-40 rounded-full ring-4 ring-orangetext mx-auto"
               src={URL.createObjectURL(selectedFile)}
               alt="Ảnh đã chọn"
             />
           ) : (
             <img
               src={
-                props.candidateRes
-                  ? props.candidateRes.avatar
+                props.candidateRes?.avatar
+                  ? props.candidateRes?.avatar
                   : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
               }
               alt="Ảnh cá nhân"
-              className="w-40 h-40 rounded-full ring-4 ring-blue-500 mx-auto"
+              className="w-40 h-40 rounded-full ring-4 ring-orangetext mx-auto"
             />
           )}
           <input
@@ -73,10 +164,10 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
               onClick={() => {
                 const fileInput = document.getElementById("fileInput");
                 if (fileInput) {
-                  fileInput.click(); // Khi nút được nhấn, mở hộp thoại chọn tệp
+                  fileInput.click();
                 }
               }}
-              className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600"
+              className="px-4 py-2 bg-orangetext text-white rounded cursor-pointer hover:bg-[#fe825c]"
             >
               Chọn Ảnh
             </button>
@@ -93,9 +184,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                   <AiOutlineClose />
                 </button>
                 <button
-                  onClick={() => {
-                    console.log("Tệp đã được xác nhận:", selectedFile);
-                  }}
+                  onClick={submitAvatar}
                   className=" bg-white ring-2 ring-blue-600 text-blue-500 rounded-full cursor-pointer hover:bg-blue-600 hover:text-white text-2xl"
                 >
                   <AiOutlineCheck />
@@ -116,7 +205,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             <div className="flex">
               <p className="w-[50%] xl:w-[40%]">Ngày sinh:</p>
               <p className="font-medium">
-                {props.candidateRes
+                {props.candidateRes?.dateOfBirth
                   ? new Date(
                       props.candidateRes.dateOfBirth
                     ).toLocaleDateString()
@@ -134,7 +223,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
           </div>
           <div className="ml-2">
             <button
-              className="hover:text-blue-600"
+              className="hover:text-orangetext"
               onClick={() => setShowBox(!showBox)}
             >
               <BsFillPencilFill />
@@ -143,7 +232,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
         </div>
       </div>
       {showBox && localStorage.getItem("candidateToken") ? (
-        <div className="fixed inset-0 flex items-center justify-center z-[999999999] bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded shadow-lg w-[75%] sm:w-[60%] md:w-1/2 xl:w-1/3 text-sm">
             <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
               Cập nhật thông tin
@@ -157,7 +246,6 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   type="text"
                   onChange={(e) => setfirstName(e.target.value)}
-                  value={props.candidateRes?.firstName}
                 />
               </div>
               <div className="md:ml-4 md:w-1/2 w-full">
@@ -168,7 +256,6 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   type="text"
                   onChange={(e) => setLastName(e.target.value)}
-                  value={props.candidateRes?.lastName}
                 />
               </div>
             </div>
@@ -179,10 +266,11 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                 </label>
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
-                  type="Date"
-                  onChange={handleDateChange}
+                  type="date"
+                  onChange={(e) => {
+                    setDateOfBirth(e.target.value);
+                  }}
                   max={new Date().toISOString().split("T")[0]}
-                  value={props.candidateRes?.dateOfBirth}
                 />
               </div>
               <div className="md:ml-4 md:w-1/2 w-full">
@@ -192,7 +280,6 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                 <select
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   onChange={(e) => setSex(e.target.value)}
-                  value={props.candidateRes?.sex}
                 >
                   <option>Nam</option>
                   <option>Nữ</option>
@@ -201,7 +288,11 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
               </div>
             </div>
             <label className="font-semibold text-sm block text-gray-700">
-              Email <span className="text-red-500 font-normal">(không thể thay đổi)</span>:
+              Email{" "}
+              <span className="text-red-500 font-normal">
+                (không thể thay đổi)
+              </span>
+              :
             </label>
             <input
               type="email"
@@ -213,11 +304,14 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             <div className="mb-3 flex gap-5 justify-end">
               <button
                 className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
-                onClick={() => setShowBox(!showBox)}
+                onClick={closedBox}
               >
                 Hủy bỏ
               </button>
-              <button className="bg-blue-600 text-white px-4 py-2 mt-4 rounded">
+              <button
+                className="bg-blue-600 text-white px-4 py-2 mt-4 rounded"
+                onClick={updateHandle}
+              >
                 Cập nhật
               </button>
             </div>

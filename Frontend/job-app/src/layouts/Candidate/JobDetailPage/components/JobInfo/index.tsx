@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { JobModel } from "../../../../../models/JobModel";
-import { employersAPI } from "../../../../../services";
+import { candidatesAPI, employersAPI } from "../../../../../services";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import Swal from "sweetalert2";
+import ReactQuill from "react-quill";
 
 export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
   const [showBox, setShowBox] = useState(false);
   const [isJobSaved, setIsJobSaved] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [letter, setLetter] = useState("");
+  const [cvFile, setCVFile] = useState<File | null>(null);
 
   useEffect(() => {
     const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
@@ -19,6 +26,10 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
       setIsJobSaved(true);
     }
   }, [props.job]);
+
+  const handleLetterChange = (content: string) => {
+    setLetter(content);
+  };
 
   const handleSaveJob = () => {
     if (!isJobSaved) {
@@ -49,7 +60,6 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
       });
     }
   };
-  console.log(isJobSaved);
 
   const calculateDaysRemaining = (toDate: string) => {
     const currentDate = new Date() as any; // Ngày hiện tại
@@ -93,6 +103,48 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
           window.location.href = "/home/login";
         }
       });
+    }
+  };
+
+  const submitApplication = () => {
+    const token = localStorage.getItem("candidateToken") || "";
+    if (token) {
+      if (name && email && phoneNumber && cvFile) {
+        Swal.fire({
+          title: "Xác nhận gửi?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Đồng ý",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            candidatesAPI
+              .candidateApply(
+                props.job?.id,
+                letter,
+                phoneNumber,
+                email,
+                name,
+                cvFile,
+                token
+              )
+              .then(() => {
+                Swal.fire(
+                  "Thành công!",
+                  "Gửi đơn ứng tuyển thành công",
+                  "success"
+                );
+                window.location.reload();
+              })
+              .catch(() => {
+                Swal.fire("Thất bại!", "Gửi đơn ứng tuyển thất bại", "error");
+              });
+          }
+        });
+      } else {
+        Swal.fire("Thất bại!", "Vui lòng nhập đầy đủ thông tin", "error");
+      }
     }
   };
 
@@ -156,7 +208,7 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
         </div>
       </div>
       {showBox && localStorage.getItem("candidateToken") ? (
-        <div className="fixed inset-0 flex items-center justify-center z-[999999999] bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded shadow-lg w-[90%] sm:w-[75%] md:w-3/5 xl:w-1/2 text-sm">
             <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
               Ứng tuyển vị trí{" "}
@@ -174,6 +226,7 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
                 type="text"
                 className="border rounded-lg px-3 py-2 mt-1   w-full"
                 placeholder="Nhập họ và tên..."
+                onChange={(e) => setName(e.target.value)}
               />
             </label>
 
@@ -183,6 +236,7 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
                 type="email"
                 className="border rounded-lg px-3 py-2 mt-1  w-full"
                 placeholder="Nhập Email..."
+                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
 
@@ -192,21 +246,31 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
                 type="phone"
                 className="border rounded-lg px-3 py-2 mt-1  w-full"
                 placeholder="Nhập số điện thoại..."
+                onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </label>
             <label className="block mb-2">
               <span className="">Thư giới thiệu:</span>
-              <textarea
-                name="message"
-                className="border rounded-lg px-3 py-2 mt-1  w-full h-[100px]"
-                placeholder="Nội dung thư..."
-              ></textarea>
+              <ReactQuill
+                theme="snow"
+                value={letter}
+                onChange={handleLetterChange}
+                className="mt-1 h-[100px]"
+              />
             </label>
-            <label className="block mb-3">
+            <label className="block mb-3 mt-[100px]  min-[340px]:mt-[80px] min-[465px]:mt-[50px]">
               <span className="text-gray-700">CV của bạn</span>
               <input
                 type="file"
                 className="border rounded-lg px-3 py-2 mt-1   w-full"
+                accept=".doc,.pdf"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    setCVFile(e.target.files[0]);
+                  } else {
+                    setCVFile(null);
+                  }
+                }}
               />
             </label>
 
@@ -217,7 +281,10 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
               >
                 Hủy bỏ
               </button>
-              <button className="bg-blue-600 text-white px-4 py-2 mt-4 rounded">
+              <button
+                className="bg-blue-600 text-white px-4 py-2 mt-4 rounded"
+                onClick={submitApplication}
+              >
                 Ứng tuyển
               </button>
             </div>

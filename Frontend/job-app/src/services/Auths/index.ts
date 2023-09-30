@@ -28,15 +28,6 @@ const authsAPI = {
       avatar: avatar,
       dateOfBirth: dateOfBirth,
       sex: sex,
-
-      // username: "candidate10@gmail.com",
-      // password: "1234",
-      // firstName: "tan",
-      // lastName: "hoang",
-      // avatar:
-      //   "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695031301/DoAnNganh/Icon_Youtube_Logo_Png_Clipart_5305994_-_PinClipart_preview_rev_1_n9ibgk.png",
-      // dateOfBirth: "2002/02/03",
-      // sex: "Nam",
     };
     return await instance.post(urlAPI.registerCandidate, userData, {
       headers: { "Content-Type": "application/json" },

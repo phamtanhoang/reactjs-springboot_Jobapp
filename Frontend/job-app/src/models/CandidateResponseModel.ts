@@ -5,4 +5,6 @@ export interface CandidateResponseModel {
   avatar: string;
   dateOfBirth: string;
   sex: string;
+  skill: string;
+  experience: string;
 }

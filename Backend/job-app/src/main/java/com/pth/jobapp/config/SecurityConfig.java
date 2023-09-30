@@ -33,6 +33,7 @@ public class SecurityConfig {
     private UserDetailsService userDetailsService;
 
 
+
     // Configuring HttpSecurity
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

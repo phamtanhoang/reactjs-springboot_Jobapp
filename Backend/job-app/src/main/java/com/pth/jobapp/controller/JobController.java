@@ -17,7 +17,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.util.*;
 
-@CrossOrigin("http://127.0.0.1:5173/")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController {
@@ -43,10 +43,10 @@ public class JobController {
         }
     }
 
-    @PutMapping("/update/{jobId}")
-    public ResponseEntity<String> updateJob(@PathVariable String jobId, @RequestBody Job updatedJob) {
+    @PutMapping("/update/")
+    public ResponseEntity<String> updateJob(@RequestBody JobIdRequest jobIdRequest, @RequestBody Job updatedJob) {
         try {
-            Optional<Job> existingJob = jobService.findById(jobId);
+            Optional<Job> existingJob = jobService.findById(jobIdRequest.getJobId());
             if (existingJob.isPresent()) {
                 Job job = existingJob.get();
                 job.setTitle(updatedJob.getTitle());
@@ -67,10 +67,11 @@ public class JobController {
         }
     }
 
-    @DeleteMapping("/delete/{jobId}")
-    public ResponseEntity<String> deleteJob(@PathVariable String jobId) {
+    @DeleteMapping("/delete/")
+    public ResponseEntity<String> deleteJob(
+    @RequestBody JobIdRequest jobId) {
         try {
-            Optional<Job> existingJob = jobService.findById(jobId);
+            Optional<Job> existingJob = jobService.findById(jobId.getJobId());
             if (existingJob.isPresent()) {
                 jobService.delete(existingJob.get());
                 return ResponseEntity.ok("Job deleted successfully");
@@ -195,6 +196,8 @@ public class JobController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
 
 
 }

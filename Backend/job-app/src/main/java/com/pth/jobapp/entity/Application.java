@@ -20,7 +20,7 @@ public class Application {
 
     @Getter
     @Column(name = "CV")
-    private String CV;
+    private String cV;
 
     @Getter
     @Column(name = "letter")
@@ -32,6 +32,12 @@ public class Application {
     @Getter
     @Column(name = "job_id")
     private String jobId;
+    @Column(name="name")
+    private String name;
+    @Column(name="email")
+    private String email;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @Getter
     @Column(name = "candidate_id")
@@ -42,12 +48,13 @@ public class Application {
     public Application() {
     }
 
-    public Application(Date applyDate, String letter, String state, String jobId, String candidateId  ) {
-        this.applyDate = applyDate;
+    public Application(String cV, String letter, String jobId, String name, String email, String phoneNumber) {
+        this.cV = cV;
         this.letter = letter;
-        this.state = state;
         this.jobId = jobId;
-        this.candidateId = candidateId;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getId() {
@@ -99,10 +106,42 @@ public class Application {
     }
 
     public String getCV() {
-        return CV;
+        return cV;
     }
 
     public void setCV(String CV) {
-        this.CV = CV;
+        this.cV = CV;
+    }
+
+    public String getcV() {
+        return cV;
+    }
+
+    public void setcV(String cV) {
+        this.cV = cV;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

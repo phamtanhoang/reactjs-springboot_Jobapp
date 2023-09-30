@@ -4,9 +4,8 @@ import java.util.Date;
 
 public class ApplicationDetailsResponse {
     String title;
-    String username;
-    String firstName;
-    String lastName;
+    String email;
+    String name;
     String avatar;
     Date dateOfBirth;
     String sex;
@@ -14,6 +13,8 @@ public class ApplicationDetailsResponse {
     String CV;
     String letter;
     String state;
+
+    String phoneNumber;
 
     public String getTitle() {
         return title;
@@ -23,29 +24,6 @@ public class ApplicationDetailsResponse {
         this.title = title;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getAvatar() {
         return avatar;
@@ -101,5 +79,29 @@ public class ApplicationDetailsResponse {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
