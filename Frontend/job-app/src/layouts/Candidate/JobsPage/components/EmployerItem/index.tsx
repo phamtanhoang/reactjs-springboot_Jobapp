@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import { jobsAPI } from "../../../../../services";
@@ -7,6 +7,8 @@ const EmployerItem: React.FC<{
   employer: EmployerModel;
 }> = (props) => {
   const [jobCount, setJobCount] = useState(0);
+
+  const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const fetchJobCountByCategory = async () => {
@@ -19,12 +21,26 @@ const EmployerItem: React.FC<{
       }
     };
     fetchJobCountByCategory();
+
+    if (logoRef.current) {
+      const width = logoRef.current.offsetWidth;
+      logoRef.current.style.height = width + "px";
+    }
   }, [props.employer.id]);
 
   return (
     <>
       <div className="w-1/5 items-center ">
-        <img src={props.employer.image?(props.employer.image):("https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg")} alt="avatar" className="w-2/3 " />
+        <img
+          src={
+            props.employer.image
+              ? props.employer.image
+              : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+          }
+          alt="avatar"
+          className="w-2/3 rounded-sm"
+          ref={logoRef}
+        />
       </div>
       <div className="w-4/5">
         <Link

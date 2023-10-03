@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 
 export const EmployerItem: React.FC<{ employer: EmployerModel }> = (props) => {
+  const logoRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (logoRef.current) {
+      const width = logoRef.current.offsetWidth;
+      logoRef.current.style.height = width + "px";
+    }
+  }, [props.employer]);
   return (
     <div className="group w-full h-[150px] max-w-sm bg-white border border-gray-200 rounded-lg hover:shadow-lg hover:shadow-orangetext/30">
       <div className="flex justify-center items-center rounded-t-lg h-[60%]">
@@ -13,6 +21,7 @@ export const EmployerItem: React.FC<{ employer: EmployerModel }> = (props) => {
           }
           className="w-[20%] h-auto"
           alt="employer"
+          ref={logoRef}
         />
       </div>
 

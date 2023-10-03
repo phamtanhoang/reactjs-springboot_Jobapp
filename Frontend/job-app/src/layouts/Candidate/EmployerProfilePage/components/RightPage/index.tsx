@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { ErrorBox, Pagination } from "../../../../../components";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 
 import { JobModel } from "../../../../../models/JobModel";
 import { JobItem } from "../JobItem";
+import { jobsAPI } from "../../../../../services";
 
 export const RightPage: React.FC<{
   employer?: EmployerModel;
@@ -18,35 +20,19 @@ export const RightPage: React.FC<{
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      const baseUrl: string = `http://localhost:8080/api/jobs/search/findByEmployerId?employerId=${
-        props.employer?.id
-      }&page=${currentPage - 1}&size=${itemsPerPage}`;
-
-      const response = await fetch(baseUrl);
-      const responseJson = await response.json();
-      const responseData = responseJson._embedded.jobs;
-      const loadedJobs: JobModel[] = [];
-
-      setTotalAmountOfItems(responseJson.page.totalElements);
-      setTotalPages(responseJson.page.totalPages);
-
-      for (const key in responseData) {
-        loadedJobs.push({
-          id: responseData[key].id,
-          title: responseData[key].title,
-          description: responseData[key].description,
-          salary: responseData[key].salary,
-          fromDate: responseData[key].fromDate,
-          toDate: responseData[key].toDate,
-          address: responseData[key].address,
-          categoryId: responseData[key].categoryId,
-          employerId: responseData[key].employerId,
-          state: responseData[key].state,
-        });
-      }
-
-      setJobs(loadedJobs);
+    const fetchJobs = () => {
+      jobsAPI
+        .getJobsByEmployerId(
+          props.employer?.id || "",
+          currentPage - 1,
+          itemsPerPage
+        )
+        .then((res) => {
+          setJobs(res.data._embedded.jobs);
+          setTotalAmountOfItems(res.data.page.totalElements);
+          setTotalPages(res.data.page.totalPages);
+        })
+        .catch((error: any) => console.log(error));
     };
     fetchJobs();
   }, [currentPage, itemsPerPage, props.employer?.id]);

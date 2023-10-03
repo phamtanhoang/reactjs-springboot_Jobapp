@@ -151,7 +151,7 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
       </div>
       {showBoxSkill && localStorage.getItem("candidateToken") ? (
         <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded shadow-lg w-[75%] sm:w-[60%] md:w-1/2 xl:w-1/3 text-sm">
+          <div className="bg-white p-4 rounded shadow-lg w-[75%] sm:w-[60%] md:w-1/2 xl:w-1/3 text-sm ">
             <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
               Thêm kĩ năng
             </h1>
@@ -159,6 +159,7 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
               theme="snow"
               value={skill}
               onChange={handleSkillChange}
+              className="max-h-[40vh] overflow-y-auto"
             />
             <div className="mb-3 flex gap-5 justify-end">
               <button
@@ -186,7 +187,12 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
               Thêm kinh nghiệm
             </h1>
-            <ReactQuill theme="snow" value={exp} onChange={handleExpChange} />
+            <ReactQuill
+              theme="snow"
+              value={exp}
+              onChange={handleExpChange}
+              className="max-h-[40vh] overflow-y-auto"
+            />
             <div className="mb-3 flex gap-5 justify-end">
               <button
                 className="bg-red-500 text-white px-4 py-2 mt-4 rounded"

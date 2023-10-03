@@ -197,13 +197,17 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
         <div className="mt-5 text-sm sm:text-base font-normal flex container md:w-1/2 lg:w-auto">
           <div className="w-[90%]">
             <div className="flex">
-              <p className="w-[50%] xl:w-[40%]">Họ và Tên:</p>
+              <p className="w-[50%] xl:w-[40%] text-orangetext font-semibold">
+                Họ và Tên:
+              </p>
               <p className="font-medium">
                 {props.candidateRes?.firstName} {props.candidateRes?.lastName}{" "}
               </p>
             </div>
             <div className="flex">
-              <p className="w-[50%] xl:w-[40%]">Ngày sinh:</p>
+              <p className="w-[50%] xl:w-[40%] text-orangetext font-semibold">
+                Ngày sinh:
+              </p>
               <p className="font-medium">
                 {props.candidateRes?.dateOfBirth
                   ? new Date(
@@ -213,11 +217,15 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
               </p>
             </div>
             <div className="flex">
-              <p className="w-[50%] xl:w-[40%]">Email:</p>
+              <p className="w-[50%] xl:w-[40%] text-orangetext font-semibold">
+                Email:
+              </p>
               <p className="font-medium">{props.candidateRes?.username}</p>
             </div>
             <div className="flex">
-              <p className="w-[50%] xl:w-[40%]">Giới tính:</p>
+              <p className="w-[50%] xl:w-[40%] text-orangetext font-semibold">
+                Giới tính:
+              </p>
               <p className="font-medium">{props.candidateRes?.sex}</p>
             </div>
           </div>

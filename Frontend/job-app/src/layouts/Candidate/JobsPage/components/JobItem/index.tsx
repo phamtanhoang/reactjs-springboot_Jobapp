@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import { JobModel } from "../../../../../models/JobModel";
 import { employersAPI } from "../../../../../services";
@@ -12,6 +12,7 @@ const JobItem: React.FC<{
 }> = (props) => {
   const [employer, setEmPloyer] = useState<EmployerModel>();
   const [isJobSaved, setIsJobSaved] = useState(false);
+  const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const fetchEmployer = async () => {
@@ -20,6 +21,11 @@ const JobItem: React.FC<{
       });
     };
     fetchEmployer();
+
+    if (logoRef.current) {
+      const width = logoRef.current.offsetWidth;
+      logoRef.current.style.height = width + "px";
+    }
   }, [props.job.employerId]);
 
   useEffect(() => {
@@ -87,6 +93,7 @@ const JobItem: React.FC<{
           }
           alt="avatar"
           className="w-[90%] object-cover p-1 md:p-4"
+          ref={logoRef}
         />
       </div>
 
@@ -114,7 +121,7 @@ const JobItem: React.FC<{
             </Link>
           </div>
           <div className="mt-1">
-            <p className="text-gray-600 text-sm md:text-base truncate cursor-pointer">
+            <p className="text-gray-600 text-sm md:text-base truncate cursor-default">
               {employer?.name}
             </p>
           </div>

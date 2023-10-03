@@ -2,7 +2,7 @@ package com.pth.jobapp.ResponseModels;
 
 import java.util.Date;
 
-public class EmployerProfileReponse {
+public class EmployerProfileResponse {
     String username;
     String password;
     Date createdAt;

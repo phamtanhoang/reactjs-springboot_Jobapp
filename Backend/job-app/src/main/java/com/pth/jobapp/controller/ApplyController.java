@@ -117,9 +117,9 @@ public class ApplyController {
 
             return ResponseEntity.ok(response);
         }
-          catch (Exception e) {
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-          }
+        }
     }
 
 
@@ -206,6 +206,22 @@ public class ApplyController {
         } catch (Exception e) {
             // Xử lý ngoại lệ và trả về phản hồi phù hợp
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/isApplied")
+    public ResponseEntity<?> isApplied(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String jobId
+    ) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
+            Candidate candidate = candidateService.findCandidateByAccountUsername(email).get();
+            Application isApplied = applicationService.findByJobIdAndCandidateId(jobId, candidate.getId());
+            return ResponseEntity.ok(isApplied);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to check application status: " + e.getMessage());
         }
     }
 

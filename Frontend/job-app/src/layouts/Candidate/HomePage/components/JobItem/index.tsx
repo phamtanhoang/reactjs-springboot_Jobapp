@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AiFillHeart } from "react-icons/ai";
 import { JobModel } from "../../../../../models/JobModel";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { employersAPI } from "../../../../../services";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import Swal from "sweetalert2";
@@ -10,6 +10,8 @@ export const JobItem: React.FC<{ job?: JobModel }> = (props) => {
   const [employer, setEmployer] = useState<EmployerModel>();
   const [isJobSaved, setIsJobSaved] = useState(false);
 
+  const logoRef = useRef<HTMLImageElement>(null);
+
   useEffect(() => {
     const getEmployer = () => {
       employersAPI.getEmployerById(props.job?.employerId).then((res) => {
@@ -17,6 +19,11 @@ export const JobItem: React.FC<{ job?: JobModel }> = (props) => {
       });
     };
     getEmployer();
+    
+    if (logoRef.current) {
+      const width = logoRef.current.offsetWidth;
+      logoRef.current.style.height = width + "px";
+    }
   }, [props.job?.employerId]);
 
   useEffect(() => {
@@ -71,7 +78,8 @@ export const JobItem: React.FC<{ job?: JobModel }> = (props) => {
                 : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
             }
             alt="logo-company"
-            className="w-2/3"
+            ref={logoRef}
+            className="w-2/3 rounded-lg"
           />
         </div>
         <div className="w-3/4 ml-2 grow">

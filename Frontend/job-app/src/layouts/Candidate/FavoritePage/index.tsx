@@ -39,11 +39,12 @@ export const FavoritePage = () => {
     getEmployers();
   }, [currentEmployerPage, employersPerPage]);
 
-  //Get Job in session
+  // Get Job in session
   const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
   useEffect(() => {
+    
     setJobs(savedJobs);
-  }, [savedJobs]);
+  }, []);
 
   if (isLoading) {
     return (

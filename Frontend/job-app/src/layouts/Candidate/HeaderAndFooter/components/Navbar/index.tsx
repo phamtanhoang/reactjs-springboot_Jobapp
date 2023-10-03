@@ -153,12 +153,12 @@ const NavBar = () => {
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to="/home/favorite"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
                       >
                         Công việc đã lưu
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <a

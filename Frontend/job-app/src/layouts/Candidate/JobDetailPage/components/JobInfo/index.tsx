@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { JobModel } from "../../../../../models/JobModel";
-import { candidatesAPI, employersAPI } from "../../../../../services";
+import {
+  applicationsAPI,
+  candidatesAPI,
+  employersAPI,
+} from "../../../../../services";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
+import { ApplicationModel } from "../../../../../models/Application";
+import { Link } from "react-router-dom";
 
 export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
   const [showBox, setShowBox] = useState(false);
@@ -15,6 +21,8 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [letter, setLetter] = useState("");
   const [cvFile, setCVFile] = useState<File | null>(null);
+  const [isApply, setIsApply] = useState<ApplicationModel>();
+  const token = localStorage.getItem("candidateToken") || "";
 
   useEffect(() => {
     const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
@@ -25,7 +33,18 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
     if (isSaved) {
       setIsJobSaved(true);
     }
-  }, [props.job]);
+
+    const checkCandidateApplyJob = () => {
+      if (props.job?.id && token)
+        applicationsAPI
+          .getCandidateApplyJob(props.job?.id, token)
+          .then((res) => {
+            setIsApply(res.data);
+          })
+          .catch((error: any) => console.log(error));
+    };
+    checkCandidateApplyJob();
+  }, [props.job, token]);
 
   const handleLetterChange = (content: string) => {
     setLetter(content);
@@ -169,9 +188,12 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
             </p>
           </div>
           <div className="md:mt-2">
-            <p className="text-gray-600 text-sm md:text-base truncate cursor-pointer">
+            <Link
+              to={`/home/employer/${employer?.id}`}
+              className="text-gray-600 text-sm md:text-base truncate cursor-pointer"
+            >
               {employer?.name}
-            </p>
+            </Link>
           </div>
 
           {dayRemaining > 0 ? (
@@ -182,12 +204,24 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
                 </span>
               </div>
               <div className="flex w-full mt-3 gap-1 sm:gap-3">
-                <button
-                  className="bg-orangetext hover:bg-[#fe825c] text-white font-semibold py-2 px-2 sm:px-4 rounded w-[65%] sm:w-[70%] text-sm md:text-base"
-                  onClick={ApplyJobHandle}
-                >
-                  Ứng tuyển ngay
-                </button>
+                {isApply ? (
+                  <div className="bg-orange-300 text-center text-white py-2 px-2 sm:px-4 rounded w-[65%] sm:w-[70%] text-sm md:text-base">
+                    <strong className="font-semibold">Đã ứng tuyển! </strong>
+                    <span className="block sm:inline">
+                      {isApply.applyDate
+                        ? new Date(isApply.applyDate).toLocaleDateString()
+                        : ""}
+                    </span>
+                  </div>
+                ) : (
+                  <button
+                    className="bg-orangetext hover:bg-[#fe825c] text-white font-semibold py-2 px-2 sm:px-4 rounded w-[65%] sm:w-[70%] text-sm md:text-base"
+                    onClick={ApplyJobHandle}
+                  >
+                    Ứng tuyển ngay
+                  </button>
+                )}
+
                 <button
                   className="bg-transparent text-orangetext hover:text-[#fe825c] font-semibold py-2 px-2 sm:px-4 border border-orangetext hover:border-[#fe825c] rounded w-[35%] sm:w-[30%] text-sm md:text-base"
                   onClick={handleSaveJob}
@@ -207,7 +241,7 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
           )}
         </div>
       </div>
-      {showBox && localStorage.getItem("candidateToken") ? (
+      {showBox && localStorage.getItem("candidateToken") && (
         <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded shadow-lg w-[90%] sm:w-[75%] md:w-3/5 xl:w-1/2 text-sm">
             <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
@@ -255,10 +289,10 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
                 theme="snow"
                 value={letter}
                 onChange={handleLetterChange}
-                className="mt-1 h-[100px]"
+                className="mt-1 max-h-[20vh] overflow-y-auto"
               />
             </label>
-            <label className="block mb-3 mt-[100px]  min-[340px]:mt-[80px] min-[465px]:mt-[50px]">
+            <label className="block mb-3">
               <span className="text-gray-700">CV của bạn</span>
               <input
                 type="file"
@@ -290,8 +324,6 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
             </div>
           </div>
         </div>
-      ) : (
-        <></>
       )}
     </>
   );

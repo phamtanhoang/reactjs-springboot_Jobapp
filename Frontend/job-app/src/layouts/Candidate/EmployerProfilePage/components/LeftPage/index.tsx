@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import { AccountModel } from "../../../../../models/AccountModel";
 import { accountsAPI } from "../../../../../services";
@@ -7,6 +7,9 @@ export const LeftPage: React.FC<{
   employer?: EmployerModel;
 }> = (props) => {
   const [account, setAccount] = useState<AccountModel>();
+
+  const bannerRef = useRef<HTMLImageElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const getAccountById = () => {
@@ -17,6 +20,16 @@ export const LeftPage: React.FC<{
       }
     };
     getAccountById();
+
+    if (bannerRef.current) {
+      const width = bannerRef.current.offsetWidth;
+      bannerRef.current.style.height = width / 2 + "px";
+    }
+
+    if (logoRef.current) {
+      const width = logoRef.current.offsetWidth;
+      logoRef.current.style.height = width + "px";
+    }
   }, [props.employer?.accountId]);
 
   return (
@@ -24,17 +37,18 @@ export const LeftPage: React.FC<{
       <div className="w-full bg-white">
         <div className="overflow-hidden">
           <img
-            className="w-full"
+            className="w-full h-[]"
             src={
               props.employer?.banner
                 ? props.employer?.banner
                 : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695882546/light-gray-color-solid-background-1920x1080_kvwkxg.png"
             }
+            ref={bannerRef}
             alt="banner"
           />
         </div>
         <div className="-mt-[11%] flex w-[95%] mx-auto">
-          <div className="rounded-xl  sm:flex bg-white shadow-lg">
+          <div className="rounded-xl  sm:flex bg-white shadow-lg w-full">
             <div className="w-1/4 p-2 sm:p-5 mx-auto flex items-center">
               <img
                 className="w-full rounded-xl p-2 border-2 "
@@ -59,7 +73,7 @@ export const LeftPage: React.FC<{
               </div>
               <div className="mt-2">
                 <a href="#" className="text-xs md:text-sm">
-                  Email: {account?.email}
+                  Email: {account?.username}
                 </a>
               </div>
             </div>

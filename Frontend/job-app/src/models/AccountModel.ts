@@ -3,6 +3,6 @@ export interface AccountModel {
   createdAt: string;
   state: string;
   role: string;
-  email: string;
+  username: string;
   password: string;
 }

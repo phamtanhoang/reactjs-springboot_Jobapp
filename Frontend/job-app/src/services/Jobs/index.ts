@@ -16,8 +16,14 @@ const jobsAPI = {
     );
   },
 
-  async getJobsByEmployerId(id: string, itemsPerPage?: number) {
-    return await instance.get(urlAPI.getJobsByCategoryId(id, itemsPerPage));
+  async getJobsByEmployerId(
+    id: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    return await instance.get(
+      urlAPI.getJobsByEmployerId(id, currentPage, itemsPerPage)
+    );
   },
 
   async getJobsByTitleContainingAndAddress(

@@ -54,10 +54,12 @@ export const urlAPI = {
     return `/jobs/search/findByCategoryId?categoryId=${id}${sizeParameter}`;
   },
 
-  getJobsByEmployerId: (id: string, itemsPerPage?: number) => {
-    const sizeParameter =
-      itemsPerPage !== undefined ? `&size=${itemsPerPage}` : "";
-    return `/jobs/search/findByEmployerId?employerId=${id}${sizeParameter}`;
+  getJobsByEmployerId: (
+    id: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) => {
+    return `/jobs/search/findByEmployerId?employerId=${id}&page=${currentPage}&size=${itemsPerPage}`;
   },
 
   getVipJobs: (currentPage: number, itemsPerPage: number) => {
@@ -98,6 +100,8 @@ export const urlAPI = {
   updateCandidateSkill: "/candidates/updateSkill",
 
   updateCandidateExp: "/candidates/updateExperience",
+
+  getCandidateApplyJob: (id: string) => `/applies/isApplied?jobId=${id}`,
 
   candidateApply: "/candidates/apply",
 
