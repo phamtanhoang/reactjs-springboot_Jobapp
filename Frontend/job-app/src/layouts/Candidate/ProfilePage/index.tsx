@@ -7,7 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import { LeftPage } from "./components";
 import { RightPage } from "./components";
 
-export const Profile = () => {
+export const ProfilePage = () => {
   const [candidateRes, setCandidateRes] = useState<CandidateResponseModel>();
 
   useEffect(() => {

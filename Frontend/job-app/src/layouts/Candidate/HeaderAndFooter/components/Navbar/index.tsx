@@ -145,19 +145,11 @@ const NavBar = () => {
                   </div>
                   <ul className="py-2 w-[200px]">
                     <li>
-                      <a
-                        href="/home/profile"
+                      <Link
+                        to="/home/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
                       >
                         Quản lý hồ sơ
-                      </a>
-                    </li>
-                    <li>
-                      <Link
-                        to="/home/favorite"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
-                      >
-                        Công việc đã lưu
                       </Link>
                     </li>
                     <li>
@@ -167,6 +159,14 @@ const NavBar = () => {
                       >
                         Công việc đã ứng tuyển
                       </a>
+                    </li>
+                    <li>
+                      <Link
+                        to="/home/changePassword"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
+                      >
+                        Đổi mật khẩu
+                      </Link>
                     </li>
                     <li>
                       <a

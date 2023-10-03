@@ -19,6 +19,11 @@ export const FavoritePage = () => {
   const [totalAmountOfEmployers, setTotalAmountOfEmployers] = useState(0);
   const [totalEmployerPages, setTotalEmployerPages] = useState(0);
 
+  const [currentJobPage, setCurrentJobPage] = useState(1);
+  const [jobsPerPage] = useState(6);
+  const [totalAmountOfJobs, setTotalAmountOfJobs] = useState(0);
+  const [totalJobPages, setTotalJobPages] = useState(0);
+
   //Get EmployerVIP
   useEffect(() => {
     const getEmployers = () => {
@@ -39,12 +44,25 @@ export const FavoritePage = () => {
     getEmployers();
   }, [currentEmployerPage, employersPerPage]);
 
-  // Get Job in session
-  const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
+  // Get Job in local
   useEffect(() => {
-    
-    setJobs(savedJobs);
-  }, []);
+    const getJobs = () => {
+      const savedJobsString = localStorage.getItem("savedJobs") || "[]";
+      const savedJobs = JSON.parse(savedJobsString);
+
+      // Tính toán các giá trị liên quan đến phân trang công việc
+      const startIndex = (currentJobPage - 1) * jobsPerPage;
+      const endIndex = startIndex + jobsPerPage;
+
+      const jobsToDisplay = savedJobs.slice(startIndex, endIndex);
+
+      setJobs(jobsToDisplay);
+      setTotalAmountOfJobs(savedJobs.length);
+      setTotalJobPages(Math.ceil(savedJobs.length / jobsPerPage));
+    };
+
+    getJobs();
+  }, [currentJobPage, jobs, jobsPerPage]);
 
   if (isLoading) {
     return (
@@ -65,6 +83,10 @@ export const FavoritePage = () => {
   const paginateEmployer = (pageNumber: number) =>
     setCurrentEmployerPage(pageNumber);
 
+  const paginateJobs = (pageNumber: number) => {
+    setCurrentJobPage(pageNumber);
+  };
+
   return (
     <>
       <section className="text-gray-700">
@@ -72,15 +94,30 @@ export const FavoritePage = () => {
           <div className="flex justify-between w-full md:w-[95%] lg:w-full xl:w-[85%] mx-auto">
             <div className="w-full lg:w-8/12">
               <div className="w-full flex-row sm:flex text-center lg:justify-between ">
-                <h1 className="text-lg sm:text-xl font-bold md:text-2xl mb-5 uppercase">
+                <h1 className="text-lg sm:text-xl font-bold md:text-2xl  uppercase">
                   Công việc đã lưu
                 </h1>
               </div>
-              {jobs.length > 0 ? (
+              {totalAmountOfJobs > 0 ? (
                 <>
-                  {jobs.map((job) => (
-                    <JobItem key={job.id} job={job} />
-                  ))}
+                  <ul className="">
+                    {jobs.map((job) => (
+                      <JobItem key={job.id} job={job} />
+                    ))}
+                  </ul>
+                  <div className="flex justify-center sm:justify-between mt-8">
+                    <div className="font-medium hidden sm:block">
+                      <p>Hiện tối đa {jobsPerPage} công việc trên 1 trang:</p>
+                    </div>
+                    {totalJobPages > 0 && (
+                      <Pagination
+                        currentPage={currentJobPage}
+                        totalPages={totalJobPages}
+                        paginate={paginateJobs}
+                        type={true}
+                      />
+                    )}
+                  </div>
                 </>
               ) : (
                 <>
@@ -90,7 +127,7 @@ export const FavoritePage = () => {
             </div>
             <div className="-mx-8 w-4/12 hidden lg:block">
               <div className="px-8">
-                <h1 className="mb-4 mt-2 text-xl font-bold">
+                <h1 className="mb-5 text-xl font-bold">
                   Một số nhà tuyển dụng nổi bật:
                 </h1>
                 <div className="flex flex-col bg-white max-w-sm px-8 py-2 mx-auto rounded-lg shadow-lg">

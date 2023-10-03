@@ -9,13 +9,13 @@ const EmployerItem: React.FC<{
   const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    if (logoRef.current) {
-      const width = logoRef.current.offsetWidth;
-      logoRef.current.style.height = width + "px";
-    }
     if (bannerRef.current) {
       const width = bannerRef.current.offsetWidth;
       bannerRef.current.style.height = width / 2 + "px";
+    }
+    if (logoRef.current) {
+      const width = logoRef.current.offsetWidth;
+      logoRef.current.style.height = width + "px";
     }
   }, []);
 
@@ -23,7 +23,7 @@ const EmployerItem: React.FC<{
     <div className="group bg-white border-gray-200 border-2 rounded-lg hover:border-orangetext hover:bg-[#f4f5f5] group hover:shadow-orange-100 hover:shadow-lg">
       <div className="rounded-tl-lg rounded-tr-lg">
         <img
-          className="rounded-tl-xl rounded-tr-xl"
+          className="rounded-tl-xl rounded-tr-xl w-full"
           src={
             props.employer?.banner
               ? props.employer?.banner

@@ -1035,6 +1035,14 @@ body {
   height: 100vh;
 }
 
+.h-\[23\%\] {
+  height: 23%;
+}
+
+.h-1\/2 {
+  height: 50%;
+}
+
 .max-h-\[20vh\] {
   max-height: 20vh;
 }

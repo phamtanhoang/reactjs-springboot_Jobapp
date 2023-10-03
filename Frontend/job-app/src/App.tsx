@@ -5,16 +5,17 @@ import { JobsPage } from "./layouts/Candidate/JobsPage";
 import { JobProfilePage } from "./layouts/Candidate/JobDetailPage";
 import { EmployersPage } from "./layouts/Candidate/EmployersPage";
 import { EmployerProfilePage } from "./layouts/Candidate/EmployerProfilePage";
-import { Login } from "./layouts/Candidate/Login";
-import { Register } from "./layouts/Candidate/Register";
 import { Layout } from "./layouts/Employer/Layout";
 import { HomePageEmployer } from "./layouts/Employer/HomePageEmployer";
 import { LoginEmployer } from "./layouts/Employer/Login";
 import { RegisterEmployer } from "./layouts/Employer/Register";
-import { Profile } from "./layouts/Candidate/Profile";
 import { FavoritePage } from "./layouts/Candidate/FavoritePage";
+import { ProfilePage } from "./layouts/Candidate/ProfilePage";
+import { LoginPage } from "./layouts/Candidate/LoginPage";
+import { RegisterPage } from "./layouts/Candidate/RegisterPage";
+import { ChangePasswordPage } from "./layouts/Candidate/ChangePasswordPage";
 
-function App() {
+const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
   const employerToken = localStorage.getItem("employerToken");
   return (
@@ -39,14 +40,22 @@ function App() {
                   path="/home/register"
                   element={<Navigate to="/home" />}
                 />
-                <Route path="/home/profile" element={<Profile />} />
+                <Route path="/home/profile" element={<ProfilePage />} />
+                <Route
+                  path="/home/changePassword"
+                  element={<ChangePasswordPage />}
+                />
               </>
             ) : (
               <>
-                <Route path="/home/login" element={<Login />} />
-                <Route path="/home/register" element={<Register />} />
+                <Route path="/home/login" element={<LoginPage />} />
+                <Route path="/home/register" element={<RegisterPage />} />
                 <Route
                   path="/home/profile"
+                  element={<Navigate to="/home/login" />}
+                />
+                <Route
+                  path="/home/changePassword"
                   element={<Navigate to="/home/login" />}
                 />
               </>
@@ -88,6 +97,6 @@ function App() {
       </BrowserRouter>
     </>
   );
-}
+};
 
 export default App;

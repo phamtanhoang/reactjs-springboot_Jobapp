@@ -29,7 +29,7 @@ const JobItem: React.FC<{
   }, [props.job.employerId]);
 
   useEffect(() => {
-    const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
+    const savedJobs = JSON.parse(localStorage.getItem("savedJobs") || "[]");
     const isSaved = savedJobs.some(
       (savedJob: any) => savedJob.id === props.job?.id
     );
@@ -41,9 +41,9 @@ const JobItem: React.FC<{
 
   const handleSaveJob = () => {
     if (!isJobSaved) {
-      const savedJobs = JSON.parse(sessionStorage.getItem("savedJobs") || "[]");
+      const savedJobs = JSON.parse(localStorage.getItem("savedJobs") || "[]");
       savedJobs.push(props.job);
-      sessionStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+      localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
       setIsJobSaved(true);
       Swal.fire("Thành công!", "Lưu công việc thành công", "success");
     } else {
@@ -57,12 +57,12 @@ const JobItem: React.FC<{
       }).then((result) => {
         if (result.isConfirmed) {
           const savedJobs = JSON.parse(
-            sessionStorage.getItem("savedJobs") || "[]"
+            localStorage.getItem("savedJobs") || "[]"
           );
           const updatedSavedJobs = savedJobs.filter(
             (savedJob: any) => savedJob.id !== props.job?.id
           );
-          sessionStorage.setItem("savedJobs", JSON.stringify(updatedSavedJobs));
+          localStorage.setItem("savedJobs", JSON.stringify(updatedSavedJobs));
           setIsJobSaved(false);
         }
       });

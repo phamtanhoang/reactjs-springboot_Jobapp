@@ -5,7 +5,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { accountsAPI } from "../../../services";
 
-export const Register = () => {
+export const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

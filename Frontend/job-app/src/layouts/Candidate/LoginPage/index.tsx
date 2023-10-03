@@ -4,7 +4,7 @@ import authsAPI from "../../../services/Auths";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-export const Login = () => {
+export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
