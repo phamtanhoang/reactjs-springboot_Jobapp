@@ -110,4 +110,6 @@ export const urlAPI = {
   registerEmployer: "/auth/employer/register",
 
   logout: "/auth/logout",
+
+  changePassword: "/auth/changePassword",
 };

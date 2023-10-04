@@ -10,7 +10,8 @@ export const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     if (email && password) {
       authsAPI
         .loginCandidate(email, password)
@@ -29,20 +30,23 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
+    <div className=" bg-gray-100 flex flex-col justify-center sm:py-12">
       <div className="py-10 px-5 sm:px-0 mx-auto md:w-full md:max-w-md">
         <h1 className="font-bold text-center text-2xl mb-5">
           Đăng nhập tài khoản
         </h1>
         <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
-          <div className="px-5 pt-7 pb-5">
+          <form onSubmit={handleSubmit} className="px-5 pt-7 pb-5">
             <label className="font-semibold text-sm text-gray-600 pb-1 block">
               Email:
             </label>
             <input
               type="email"
               className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
+              value={email}
+              required
+              placeholder="Nhập email..."
             />
             <label className="font-semibold text-sm text-gray-600 pb-1 block">
               Mật khẩu:
@@ -51,11 +55,13 @@ export const LoginPage = () => {
               type="password"
               className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
               onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+              placeholder="Nhập mật khẩu..."
             />
             <button
-              type="button"
+              type="submit"
               className="transition duration-200 bg-orangetext hover:bg-[#fe825c] text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block mb-3"
-              onClick={handleSubmit}
             >
               <span className="inline-block mr-2">Đăng nhập</span>
             </button>
@@ -65,13 +71,13 @@ export const LoginPage = () => {
             >
               Tôi chưa có tài khoản!!!
             </Link>
-          </div>
+          </form>
 
           <div className="py-5">
             <div className="text-center whitespace-nowrap">
               <Link
                 to="/employer/login"
-                className="transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset"
+                className="transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset"
               >
                 <span className="inline-block ml-1">
                   Đăng nhập dành cho nhà tuyển dụng

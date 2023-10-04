@@ -182,33 +182,27 @@ public class AccountController {
     }
 
     @PutMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String tokenHeader, @RequestBody ChangePasswordRequest changePasswordRequest) {
-        try {
-            String token = tokenHeader.substring(7);
-            String username = jwtService.extractUsername(token); // Trích xuất tên người dùng từ token
-            Account account = accountService.findByUsername(username);
+    public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String tokenHeader, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        String token = tokenHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        Account account = accountService.findByUsername(username);
 
-            if (account != null) {
-                // Kiểm tra xác nhận mật khẩu
-                if (changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
-                    // Thay đổi mật khẩu và lưu vào cơ sở dữ liệu
-                    account.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
-                    accountService.save(account);
-                    return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
-                } else {
-                    return ResponseEntity.badRequest().body("Xác nhận mật khẩu không khớp");
-                }
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.badRequest().body("Tài khoản không tồn tại");
-        } catch (Exception e) {
-            // Handle other exceptions and return an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thay đổi mật khẩu thất bại");
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tài khoản không tồn tại"); // Mã lỗi 1: Tài khoản không tồn tại
         }
-    }
 
+        if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), account.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu hiện tại không đúng"); // Mã lỗi 2: Mật khẩu hiện tại không đúng
+        }
+
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Xác nhận mật khẩu không khớp"); // Mã lỗi 3: Xác nhận mật khẩu không khớp
+        }
+
+        account.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        accountService.save(account);
+        return ResponseEntity.ok("Thay đổi mật khẩu thành công!!!");
+    }
 
     @PostMapping("/logout")
     public ResponseEntity<String> performLogout(HttpServletRequest request, HttpServletResponse response) throws UsernameNotFoundException {

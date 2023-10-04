@@ -6,6 +6,7 @@ import { CandidateResponseModel } from "../../../../../models/CandidateResponseM
 import { candidatesAPI } from "../../../../../services";
 import Swal from "sweetalert2";
 import { Spinner } from "../../../../../components";
+import authsAPI from "../../../../../services/Auths";
 
 const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
   props
@@ -51,38 +52,25 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
         }).then((result) => {
           if (result.isConfirmed) {
             setIsLoading(true);
-            const data = new FormData();
-
-            data.append("file", selectedFile);
-            data.append("upload_preset", "jobapp");
-            data.append("cloud_name", "dcpatkvcu");
-
-            fetch("https://api.cloudinary.com/v1_1/dcpatkvcu/image/upload", {
-              method: "post",
-              body: data,
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                candidatesAPI
-                  .updateAvatar(data.url, token)
-                  .then(() => {
-                    Swal.fire(
-                      "Thành công!",
-                      "Thay đổi ảnh đại diện thành công!",
-                      "success"
-                    );
+            candidatesAPI
+              .updateAvatar(selectedFile, token)
+              .then(() => {
+                Swal.fire(
+                  "Thành công!",
+                  "Thay đổi ảnh đại diện thành công",
+                  "success"
+                ).then((result) => {
+                  if (result.isConfirmed) {
                     window.location.reload();
-                  })
-                  .catch(() => {
-                    Swal.fire(
-                      "Thất bại!",
-                      "Thay đổi ảnh đại diện thất bại!",
-                      "error"
-                    );
-                  });
+                  }
+                });
               })
-              .catch((error: any) => {
-                console.log(error);
+              .catch(() => {
+                Swal.fire(
+                  "Thất bại!",
+                  "Thay đổi ảnh đại diện thất bại",
+                  "error"
+                );
               })
               .finally(() => {
                 setIsLoading(false);
@@ -245,7 +233,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   type="text"
-                  onChange={(e) => setfirstName(e.target.value)}
+                  onChange={(e) => setfirstName(e.target.value.trim())}
                 />
               </div>
               <div className="md:ml-4 md:w-1/2 w-full">
@@ -255,7 +243,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   type="text"
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={(e) => setLastName(e.target.value.trim())}
                 />
               </div>
             </div>

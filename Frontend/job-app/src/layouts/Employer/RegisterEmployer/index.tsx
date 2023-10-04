@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import Swal from "sweetalert2";
 import authsAPI from "../../../services/Auths";
@@ -14,7 +15,8 @@ export const RegisterEmployer = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     if (
       email &&
       password &&
@@ -69,7 +71,7 @@ export const RegisterEmployer = () => {
           </div>
 
           <div className="mb-12 md:mb-0 w-10/12 md:w-8/12 lg:w-5/12 xl:w-5/12">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
                 <p className="mx-4 mb-0 text-center font-semibold text-xl md:text-2xl">
                   Đăng kí nhà tuyển dụng
@@ -85,8 +87,10 @@ export const RegisterEmployer = () => {
                     <input
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => setName(e.target.value.trim())}
                       placeholder="Nhập tên nhà tuyển dụng..."
+                      value={name}
+                      required
                     />
                   </div>
                   <div className="w-full md:w-1/2 px-3 mb-2">
@@ -96,8 +100,10 @@ export const RegisterEmployer = () => {
                     <input
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
-                      onChange={(e) => setAddress(e.target.value)}
+                      onChange={(e) => setAddress(e.target.value.trim())}
                       placeholder="Nhập địa chỉ..."
+                      value={address}
+                      required
                     />
                   </div>
                 </div>
@@ -108,8 +114,10 @@ export const RegisterEmployer = () => {
                   </label>
                   <textarea
                     className="border rounded-lg px-3 py-4 mt-1  w-full"
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value.trim())}
                     placeholder="Nhập mô tả..."
+                    value={description}
+                    required
                   />
                 </div>
 
@@ -119,8 +127,10 @@ export const RegisterEmployer = () => {
                 <input
                   type="email"
                   className="border rounded-lg px-3 py-2 mt-1 w-full mb-2"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.trim())}
                   placeholder="Nhập Email..."
+                  value={email}
+                  required
                 />
 
                 <label className="font-semibold text-sm text-gray-600 block">
@@ -131,6 +141,8 @@ export const RegisterEmployer = () => {
                   className="border rounded-lg px-3 py-2 mt-1  w-full mb-2"
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Nhập mật khẩu..."
+                  value={password}
+                  required
                 />
                 <label className="font-semibold text-sm text-gray-600 block">
                   Nhập lại mật khẩu:
@@ -140,16 +152,17 @@ export const RegisterEmployer = () => {
                   className="border rounded-lg px-3 py-2 mt-1   w-full"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Nhập lại mật khẩu..."
+                  value={confirmPassword}
+                  required
                 />
               </div>
 
               <div className="text-center mt-5">
                 <button
-                  type="button"
+                  type="submit"
                   className="inline-block rounded bg-blue-400 hover:bg-blue-500 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   data-te-ripple-init
                   data-te-ripple-color="light"
-                  onClick={handleSubmit}
                 >
                   Đăng kí
                 </button>

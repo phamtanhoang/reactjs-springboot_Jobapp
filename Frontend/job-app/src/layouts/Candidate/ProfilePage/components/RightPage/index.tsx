@@ -149,7 +149,7 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
           </div>
         </div>
       </div>
-      {showBoxSkill && localStorage.getItem("candidateToken") ? (
+      {showBoxSkill && localStorage.getItem("candidateToken") && (
         <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded shadow-lg w-[75%] sm:w-[60%] md:w-1/2 xl:w-1/3 text-sm ">
             <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
@@ -177,11 +177,9 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             </div>
           </div>
         </div>
-      ) : (
-        <></>
       )}
 
-      {showBoxExp && localStorage.getItem("candidateToken") ? (
+      {showBoxExp && localStorage.getItem("candidateToken") && (
         <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded shadow-lg w-[75%] sm:w-[60%] md:w-1/2 xl:w-1/3 text-sm">
             <h1 className="text-base md:text-lg font-semibold w-full text-center mb-5">
@@ -209,8 +207,6 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             </div>
           </div>
         </div>
-      ) : (
-        <></>
       )}
     </>
   );

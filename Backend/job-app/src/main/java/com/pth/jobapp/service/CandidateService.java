@@ -5,12 +5,15 @@ import com.pth.jobapp.dao.EmployerRepository;
 import com.pth.jobapp.entity.Account;
 import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.entity.Employer;
+import com.pth.jobapp.util.ImageUploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +23,33 @@ import java.util.Optional;
 public class CandidateService {
     @Autowired
     private CandidateRepository candidateRepository;
-
+    @Autowired
+    private  ImageUploader imageUploader;
     public Candidate save(Candidate candidate) {
         return candidateRepository.save(candidate);
     }
+    public Candidate saveWithImage(Candidate candidate, MultipartFile image) {
+        if (image != null && !image.isEmpty()) {
+            try {
+                byte[] imageBytes = image.getBytes();
+
+                if (candidate.getAvatar() != null) {
+                    String existingImageUrl = candidate.getAvatar();
+                    String updatedImageUrl = imageUploader.updateImage(existingImageUrl, imageBytes);
+                    candidate.setAvatar(updatedImageUrl);
+                } else {
+                    String imgUrl = imageUploader.uploadImage(imageBytes);
+
+                    candidate.setAvatar(imgUrl);
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return candidateRepository.save(candidate);
+    }
+
     public Candidate updateCandidate(Candidate updatedCandidate) {
         Candidate existingCandidate = candidateRepository.findById(updatedCandidate.getId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy ứng viên với ID: " + updatedCandidate.getId()));

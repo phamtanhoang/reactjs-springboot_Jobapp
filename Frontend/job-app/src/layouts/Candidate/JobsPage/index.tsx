@@ -104,7 +104,7 @@ export const JobsPage = () => {
           setIsLoading(false);
         });
     };
-    getEmployers();
+    getEmployers ();
   }, [currentEmployerPage, employersPerPage]);
 
   //Get job

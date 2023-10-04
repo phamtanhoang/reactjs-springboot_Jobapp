@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -66,7 +67,34 @@ public class EmployerController {
         }
     }
 
+    @PutMapping("/updateImage")
+    public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String token, @RequestBody MultipartFile image) {
 
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(email);
+            employerService.saveWithImage(employer,image);
+
+            return ResponseEntity.ok("Candidate image updated successfully");
+        } catch (Exception e) {
+            // Handle the exception and return an appropriate response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
+        }
+    }
+    @PutMapping("/updateBanner")
+    public ResponseEntity<String> updateBanner(@RequestHeader("Authorization") String token, @RequestBody MultipartFile banner) {
+
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(email);
+            employerService.saveWithBanner(employer,banner);
+
+            return ResponseEntity.ok("Candidate image updated successfully");
+        } catch (Exception e) {
+            // Handle the exception and return an appropriate response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
+        }
+    }
 
 
     //get list of apply

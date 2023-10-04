@@ -20,8 +20,7 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
   };
   return (
     <div
-      id="main-nav"
-      className={`w-3/5 sm:w-1/2 md:w-1/3 lg:w-64 fixed md:top-0 md:left-0 h-screen lg:block bg-white border-r z-30  ${
+      className={`w-3/5 sm:w-1/2 md:w-1/3 lg:w-64 fixed md:top-0 md:left-0 h-screen lg:block bg-white lg:bg-gray-100 border-r z-30  ${
         props.isNavBarVisible ? "block" : "hidden "
       }`}
     >

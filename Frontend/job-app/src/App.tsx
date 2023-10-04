@@ -7,17 +7,19 @@ import { EmployersPage } from "./layouts/Candidate/EmployersPage";
 import { EmployerProfilePage } from "./layouts/Candidate/EmployerProfilePage";
 import { Layout } from "./layouts/Employer/Layout";
 import { HomePageEmployer } from "./layouts/Employer/HomePageEmployer";
-import { LoginEmployer } from "./layouts/Employer/Login";
-import { RegisterEmployer } from "./layouts/Employer/Register";
+import { LoginEmployer } from "./layouts/Employer/LoginEmployer";
+import { RegisterEmployer } from "./layouts/Employer/RegisterEmployer";
 import { FavoritePage } from "./layouts/Candidate/FavoritePage";
 import { ProfilePage } from "./layouts/Candidate/ProfilePage";
 import { LoginPage } from "./layouts/Candidate/LoginPage";
 import { RegisterPage } from "./layouts/Candidate/RegisterPage";
-import { ChangePasswordPage } from "./layouts/Candidate/ChangePasswordPage";
+import LoginPageAdmin from "./layouts/Admin/LoginPageAdmin";
+import JobsPageEmployer from "./layouts/Employer/JobsPageEmployer";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
   const employerToken = localStorage.getItem("employerToken");
+  const adminToken = localStorage.getItem("adminToken");
   return (
     <>
       <BrowserRouter>
@@ -41,10 +43,6 @@ const App = () => {
                   element={<Navigate to="/home" />}
                 />
                 <Route path="/home/profile" element={<ProfilePage />} />
-                <Route
-                  path="/home/changePassword"
-                  element={<ChangePasswordPage />}
-                />
               </>
             ) : (
               <>
@@ -52,10 +50,6 @@ const App = () => {
                 <Route path="/home/register" element={<RegisterPage />} />
                 <Route
                   path="/home/profile"
-                  element={<Navigate to="/home/login" />}
-                />
-                <Route
-                  path="/home/changePassword"
                   element={<Navigate to="/home/login" />}
                 />
               </>
@@ -77,6 +71,7 @@ const App = () => {
               />
               <Route path="/" element={<Layout />}>
                 <Route path="/employer/home" element={<HomePageEmployer />} />
+                <Route path="/employer/jobs" element={<JobsPageEmployer />} />
               </Route>
             </>
           ) : (
@@ -93,6 +88,8 @@ const App = () => {
               <Route path="/employer/register" element={<RegisterEmployer />} />
             </>
           )}
+
+          <Route path="/admin/login" element={<LoginPageAdmin />} />
         </Routes>
       </BrowserRouter>
     </>

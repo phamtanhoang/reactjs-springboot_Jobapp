@@ -119,14 +119,13 @@ import java.util.UUID;
     }
 
         @PutMapping("/updateImage")
-        public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String token, @RequestBody ImageUrlRequest imageUrlRequest) {
+        public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String token, @RequestBody MultipartFile image) {
 
             try {
                 String candidateEmail = jwtService.extractUsername(token.substring(7));
-                Optional<Candidate> existingJob = candidateService.findCandidateByAccountUsername(candidateEmail);
-                Candidate updateCandidate= existingJob.get();
-                updateCandidate.setAvatar(imageUrlRequest.getUrl());
-                candidateService.save(updateCandidate);
+                Optional<Candidate> candidate = candidateService.findCandidateByAccountUsername(candidateEmail);
+                Candidate updateCandidate= candidate.get();
+                candidateService.saveWithImage(updateCandidate,image);
 
                 return ResponseEntity.ok("Candidate image updated successfully");
             } catch (Exception e) {

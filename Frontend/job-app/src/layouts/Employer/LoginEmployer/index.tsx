@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import Swal from "sweetalert2";
 import authsAPI from "../../../services/Auths";
@@ -7,7 +8,8 @@ export const LoginEmployer = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     if (email && password) {
       authsAPI
         .loginEmployer(email, password)
@@ -38,7 +40,7 @@ export const LoginEmployer = () => {
           </div>
 
           <div className="mb-12 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
                 <p className="mx-4 mb-0 text-center font-semibold text-xl md:text-2xl">
                   Đăng nhập nhà tuyển dụng
@@ -52,8 +54,10 @@ export const LoginEmployer = () => {
                 <input
                   type="email"
                   className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.trim())}
                   placeholder="Nhập Email..."
+                  value={email}
+                  required
                 />
                 <label className="font-semibold text-base text-gray-600 pb-1 block">
                   Mật khẩu:
@@ -63,15 +67,16 @@ export const LoginEmployer = () => {
                   className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full"
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Nhập mật khẩu..."
+                  value={password}
+                  required
                 />
               </div>
               <div className="text-center ">
                 <button
-                  type="button"
+                  type="submit"
                   className="inline-block rounded bg-blue-400 hover:bg-blue-500 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   data-te-ripple-init
                   data-te-ripple-color="light"
-                  onClick={handleSubmit}
                 >
                   Đăng nhập
                 </button>
@@ -89,7 +94,7 @@ export const LoginEmployer = () => {
                 <Link
                   to={"/home"}
                   type="button"
-                  className="mt-5 inline-block rounded bg-blue-200 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-gray-700 transition duration-150 ease-in-out hover:bg-blue-400 hover:text-white "
+                  className="mt-5 inline-block rounded bg-blue-200 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-gray-500 transition duration-150 ease-in-out hover:bg-blue-400 hover:text-white "
                 >
                   Quay lại trang tìm việc
                 </Link>

@@ -33,7 +33,8 @@ export const RegisterPage = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     if (
       email &&
       password &&
@@ -77,13 +78,13 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center">
+    <div className=" bg-gray-100 flex flex-col justify-center">
       <div className="py-10 px-5 sm:px-0 mx-auto md:w-full md:max-w-md">
         <h1 className="font-bold text-center text-2xl mb-5">
           Đăng kí tài khoản
         </h1>
         <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
-          <div className="px-5 pt-7 pb-5">
+          <form onSubmit={handleSubmit} className="px-5 pt-7 pb-5">
             <div className="md:flex md:justify-between">
               <div className="">
                 <label className="font-semibold text-sm block text-gray-700">
@@ -92,7 +93,10 @@ export const RegisterPage = () => {
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   type="text"
-                  onChange={(e) => setfirstName(e.target.value)}
+                  onChange={(e) => setfirstName(e.target.value.trim())}
+                  value={firstName}
+                  required
+                  placeholder="Nhập họ..."
                 />
               </div>
               <div className="md:ml-2">
@@ -102,7 +106,10 @@ export const RegisterPage = () => {
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   type="text"
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={(e) => setLastName(e.target.value.trim())}
+                  value={lastName}
+                  required
+                  placeholder="Nhập tên..."
                 />
               </div>
             </div>
@@ -116,6 +123,7 @@ export const RegisterPage = () => {
                   type="Date"
                   onChange={handleDateChange}
                   max={new Date().toISOString().split("T")[0]}
+                  required
                 />
               </div>
               <div className="md:ml-4 md:w-1/2 w-full">
@@ -125,6 +133,7 @@ export const RegisterPage = () => {
                 <select
                   className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
                   onChange={(e) => setSex(e.target.value)}
+                  required
                 >
                   <option>Nam</option>
                   <option>Nữ</option>
@@ -138,7 +147,10 @@ export const RegisterPage = () => {
             <input
               type="email"
               className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
+              value={email}
+              required
+              placeholder="Nhập email..."
             />
             <label className="font-semibold text-sm block text-gray-700">
               Mật khẩu:
@@ -147,6 +159,9 @@ export const RegisterPage = () => {
               type="password"
               className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
               onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+              placeholder="Nhập mật khẩu..."
             />
             <label className="font-semibold text-sm block text-gray-700">
               Nhập lại mật khẩu:
@@ -155,11 +170,13 @@ export const RegisterPage = () => {
               type="password"
               className="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full"
               onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
+              required
+              placeholder="Nhập lại mật khẩu..."
             />
             <button
-              type="button"
+              type="submit"
               className="transition duration-200 bg-orangetext hover:bg-[#fe825c] text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block mb-3"
-              onClick={handleSubmit}
             >
               <span className="inline-block mr-2">Đăng kí</span>
             </button>
@@ -169,7 +186,7 @@ export const RegisterPage = () => {
             >
               Tôi đã có tài khoản!!!
             </Link>
-          </div>
+          </form>
 
           <div className="py-5">
             <div className="text-center whitespace-nowrap">

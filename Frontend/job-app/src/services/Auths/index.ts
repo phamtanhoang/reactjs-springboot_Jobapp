@@ -83,5 +83,23 @@ const authsAPI = {
       headers: { "Content-Type": "application/json" },
     });
   },
+
+  async changePassword(
+    currentPassword?: string,
+    newPassword?: string,
+    confirmPassword?: string,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const data = {
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    };
+    return await instance.put(urlAPI.changePassword, data, { headers });
+  },
 };
 export default authsAPI;

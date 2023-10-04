@@ -47,14 +47,18 @@ const candidatesAPI = {
     return await instance.put(urlAPI.updateCandidateExp, data, { headers });
   },
 
-  async updateAvatar(url?: string, token?: string) {
+  async updateAvatar(img?: File, token?: string) {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const data = {
-      url: url,
-    };
-    return await instance.put(urlAPI.updateCandidateAvatar, data, { headers });
+
+    const formData = new FormData();
+    if (img) {
+      formData.append("image", img);
+    }
+    return await instance.put(urlAPI.updateCandidateAvatar, formData, {
+      headers,
+    });
   },
 
   async candidateApply(
@@ -91,7 +95,6 @@ const candidatesAPI = {
       new Blob([JSON.stringify(jsonData)], { type: "application/json" })
     );
 
-    console.log(formData);
     return await instance.post(urlAPI.candidateApply, formData, {
       headers,
     });

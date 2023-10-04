@@ -1,6 +1,7 @@
 package com.pth.jobapp.requestmodels;
 
 public class ChangePasswordRequest   {
+    private String currentPassword;
     private String confirmPassword;
     private String newPassword;
 
@@ -20,6 +21,12 @@ public class ChangePasswordRequest   {
         this.newPassword = newPassword;
     }
 
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
 
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
 }
 
