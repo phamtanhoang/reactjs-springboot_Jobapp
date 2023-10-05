@@ -70,15 +70,15 @@ export const RegisterEmployer = () => {
             />
           </div>
 
-          <div className="mb-12 md:mb-0 w-10/12 md:w-8/12 lg:w-5/12 xl:w-5/12">
+          <div className="mb-12 w-[95%] sm:w-[90%] md:w-8/12 lg:w-5/12 ring-1 ring-neutral-300 rounded-3xl bg-white shadow-2xl items-center">
             <form onSubmit={handleSubmit}>
-              <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
+              <div className="my-7 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
                 <p className="mx-4 mb-0 text-center font-semibold text-xl md:text-2xl">
                   Đăng kí nhà tuyển dụng
                 </p>
               </div>
 
-              <div className="relative text-sm">
+              <div className="relative text-sm px-7">
                 <div className="flex flex-wrap -mx-3">
                   <div className="w-full md:w-1/2 px-3 mb-2">
                     <label className="font-semibold text-sm text-gray-600 block">
@@ -160,14 +160,14 @@ export const RegisterEmployer = () => {
               <div className="text-center mt-5">
                 <button
                   type="submit"
-                  className="inline-block rounded bg-blue-400 hover:bg-blue-500 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                  className="inline-block rounded bg-blue-600 hover:bg-blue-700 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   data-te-ripple-init
                   data-te-ripple-color="light"
                 >
                   Đăng kí
                 </button>
 
-                <p className="mb-0 mt-4 pt-1 text-sm font-semibold">
+                <p className="mt-4 text-sm font-semibold">
                   Tôi đã có tài khoản?
                   <Link
                     to={"/employer/login"}
@@ -179,7 +179,7 @@ export const RegisterEmployer = () => {
                 <Link
                   to={"/home"}
                   type="button"
-                  className="mt-5 inline-block rounded bg-blue-200 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-gray-700 transition duration-150 ease-in-out hover:bg-blue-400 hover:text-white "
+                  className="my-5 inline-block rounded bg-blue-300 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-gray-500 transition duration-150 ease-in-out hover:bg-blue-500 hover:text-white "
                 >
                   Quay lại trang tìm việc
                 </Link>

@@ -49,5 +49,20 @@ const jobsAPI = {
   async getVipJobs(currentPage: number, itemsPerPage: number) {
     return await instance.get(urlAPI.getVipJobs(currentPage, itemsPerPage));
   },
+
+  async getJobsEmployerToken(
+    token?: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getJobEmployerToken(currentPage, itemsPerPage),
+      { headers }
+    );
+  },
 };
 export default jobsAPI;

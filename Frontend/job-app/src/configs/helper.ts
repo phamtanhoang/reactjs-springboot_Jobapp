@@ -112,4 +112,12 @@ export const urlAPI = {
   logout: "/auth/logout",
 
   changePassword: "/auth/changePassword",
+
+  getJobEmployerToken: (currentPage?: number, itemsPerPage?: number) => {
+    if (currentPage !== undefined || itemsPerPage !== undefined) {
+      return `/jobs/jobs-employer?page=${currentPage}&size=${itemsPerPage}`;
+    } else {
+      return "/jobs/jobs-employer";
+    }
+  },
 };
