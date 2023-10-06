@@ -84,6 +84,10 @@ const App = () => {
                 path="/employer/home"
                 element={<Navigate to="/employer/login" />}
               />
+              <Route
+                path="/employer/jobs"
+                element={<Navigate to="/employer/login" />}
+              />
               <Route path="/employer/login" element={<LoginEmployer />} />
               <Route path="/employer/register" element={<RegisterEmployer />} />
             </>

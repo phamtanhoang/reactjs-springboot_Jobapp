@@ -6,7 +6,6 @@ import { CandidateResponseModel } from "../../../../../models/CandidateResponseM
 import { candidatesAPI } from "../../../../../services";
 import Swal from "sweetalert2";
 import { Spinner } from "../../../../../components";
-import authsAPI from "../../../../../services/Auths";
 
 const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
   props

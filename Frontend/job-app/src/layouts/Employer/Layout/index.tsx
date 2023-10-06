@@ -8,15 +8,12 @@ export const Layout = () => {
   return (
     <>
       <NavBar isNavBarVisible={isNavBarVisible} />
-      <div className="w-full bg-white pl-0 lg:pl-64  relative">
+      <div className="w-fullpl-0 lg:pl-64  relative">
         <Header
           isNavBarVisible={isNavBarVisible}
           setIsNavBarVisible={setIsNavBarVisible}
         />
-        <div className="h-screen">
-          <Outlet />
-        </div>
-
+        <Outlet />
         <Footer />
       </div>
     </>
