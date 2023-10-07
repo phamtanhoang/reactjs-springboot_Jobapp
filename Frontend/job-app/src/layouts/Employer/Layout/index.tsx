@@ -13,8 +13,9 @@ export const Layout = () => {
           isNavBarVisible={isNavBarVisible}
           setIsNavBarVisible={setIsNavBarVisible}
         />
+
         <Outlet />
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   );

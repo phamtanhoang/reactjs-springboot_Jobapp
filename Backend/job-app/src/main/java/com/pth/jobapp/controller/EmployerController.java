@@ -97,12 +97,6 @@ public class EmployerController {
     }
 
 
-    //get list of apply
-
-
-
-
-
 }
 
 

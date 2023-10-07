@@ -1,11 +1,8 @@
-import { NavbarEmployer } from "../../NavBarEmployer";
-import { HeaderAndFooterEmployer } from "../HeaderAndFooterEmployer";
-
 export const HomePageEmployer = () => {
   return (
     <>
       <div className="p-6 bg-gray-100 mb-20">
-        <div id="home">
+        <div>
           <nav aria-label="Breadcrumb" className="text-sm font-semibold mb-6">
             <ol className="list-none p-0 inline-flex">
               <li className="flex items-center text-blue-500">

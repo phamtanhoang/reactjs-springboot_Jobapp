@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { GrFormNext } from "react-icons/gr";
-import { AddJobPage, EditJobPage, TablePage } from "./components";
-import { JobModel } from "../../../models/JobModel";
+import { AddJobPage, TablePage } from "./components";
+import { Link } from "react-router-dom";
 
 const JobsPageEmployer = () => {
   const [showBoxAddJob, setShowBoxAddJob] = useState(false);
-
-  // const [showBoxDetailJob, setShowBoxDetailJob] = useState(false);
 
   return (
     <section className="flex-grow">
@@ -16,16 +14,22 @@ const JobsPageEmployer = () => {
           <div className="mb-4">
             <nav aria-label="Breadcrumb" className="text-sm font-semibold mb-6">
               <ol className="list-none p-0 inline-flex">
-                <li className="flex items-center">
-                  <a href="#" className="text-gray-700">
+              <li className="flex items-center">
+                  <Link
+                    to="/employer"
+                    className="text-gray-600 hover:text-blue-600"
+                  >
                     Home
-                  </a>
-                  <GrFormNext className="text-lg mx-2 text-blue-600" />
+                  </Link>
+                  <GrFormNext className="text-lg mx-2" />
                 </li>
                 <li className="flex items-center">
-                  <a href="#" className="text-gray-600">
+                  <Link
+                    to="/employer/jobs"
+                    className="text-gray-600 hover:text-blue-600"
+                  >
                     Jobs
-                  </a>
+                  </Link>
                 </li>
               </ol>
             </nav>

@@ -6,14 +6,13 @@ import {
   AiFillDelete,
   AiFillEdit,
   AiFillEye,
-  AiFillPauseCircle,
   AiOutlineCheck,
   AiOutlineClose,
   AiOutlineExclamation,
-  AiOutlinePause,
 } from "react-icons/ai";
 import { EditJobPage } from "..";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const TablePage = () => {
@@ -73,29 +72,6 @@ const TablePage = () => {
   const EditJob = (job: JobModel) => {
     setShowBoxEditJob(true);
     setEditJob(job);
-  };
-
-  const PauseJob = (job: JobModel) => {
-    Swal.fire({
-      title: "Do you want to Pause?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // candidatesAPI
-        //   .updateCandidate(firstName, lastName, dateOfBirth, sex, token)
-        //   .then(() => {
-        //     Swal.fire("Thành công!", "Chỉnh sửa thành công!", "success");
-        //     window.location.reload();
-        //   })
-        //   .catch(() => {
-        //     Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
-        //   });
-      }
-    });
   };
 
   const DeleteJob = (job: JobModel) => {
@@ -203,19 +179,14 @@ const TablePage = () => {
                                     Active
                                   </h2>
                                 </div>
-                              ) : job.state == "2" ? (
+                              ) : (
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60 ">
                                   <AiOutlineClose />
                                   <h2 className="text-sm font-normal">
                                     Refused
                                   </h2>
                                 </div>
-                              ) : job.state == "3" ? (
-                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60 ">
-                                  <AiOutlinePause />
-                                  <h2 className="text-sm font-normal">Pause</h2>
-                                </div>
-                              ) : null}
+                              )}
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-600 ">
                               {job.fromDate}
@@ -225,7 +196,10 @@ const TablePage = () => {
                             </td>
                             <td className="px-4 py-4 text-sm whitespace-nowrap">
                               <div className="flex items-center gap-x-6 text-2xl text-gray-600">
-                                <AiFillEye className=" cursor-pointer hover:text-yellow-500" />
+                                <Link to={`/employer/job/${job.id}`}>
+                                  <AiFillEye className=" cursor-pointer hover:text-yellow-500" />
+                                </Link>
+
                                 <AiFillEdit
                                   className=" cursor-pointer hover:text-blue-500"
                                   onClick={() => {
@@ -238,10 +212,7 @@ const TablePage = () => {
                                         );
                                   }}
                                 />
-                                <AiFillPauseCircle
-                                  className=" cursor-pointer hover:text-red-500"
-                                  onClick={() => PauseJob(job)}
-                                />
+
                                 <AiFillDelete
                                   className=" cursor-pointer hover:text-red-500"
                                   onClick={() => DeleteJob(job)}
