@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -49,4 +50,12 @@ public interface JobRepository extends JpaRepository<Job, String> {
     @Query("SELECT j FROM Job j JOIN Application a ON j.id = a.jobId " +
             "WHERE a.id=:applicationId")
     Optional<Job> findJobByApplicationId( @RequestParam(name = "applicationId") String applicationId);
+
+    @Query("SELECT j FROM Job j WHERE (:employerId IS NULL OR j.employerId = :employerId) " +
+            "AND (:title IS NULL OR j.title LIKE %:title%)")
+    Page<Job> findByEmployerIdAndTitleContaining(
+            @Param("employerId") String employerId,
+            @Param("title") String title,
+            Pageable pageable
+    );
 }

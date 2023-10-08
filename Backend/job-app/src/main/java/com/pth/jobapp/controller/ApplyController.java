@@ -35,61 +35,105 @@ public class ApplyController {
     private ApplicationService  applicationService;
     @Autowired
     private JobService jobService;
-    @GetMapping("/pending-applications")
-    public ResponseEntity<List<ApplicationResponse>> PendingApplications(
+
+
+    @GetMapping("/pendingApplications")
+    public ResponseEntity<?> pendingApplications(
             @PageableDefault(page = 0, size = 10) Pageable pageable,
             @RequestHeader("Authorization") String token
     ) {
         try {
             String employerName = jwtService.extractUsername(token.substring(7));
             Employer employer = employerService.findByAccountUsername(employerName);
-            if (employer != null) {
-                Page<Application> pendingApplications = applicationService.findPendingApplicationsByEmployerName(employer.getName(), pageable);
-                List<ApplicationResponse> responseList = new ArrayList<>();
 
-                for (Application application : pendingApplications) {
-                    System.out.println(application.getId());
-                    Optional<Candidate> candidateOptional = candidateService.findById(application.getCandidateId());
-                    Optional<Job> jobOptional = jobService.findById(application.getJobId());
-
-                    if (candidateOptional.isPresent() && jobOptional.isPresent()) {
-                        Job job = jobOptional.get();
-
-                        ApplicationResponse response = new ApplicationResponse();
-                        response.setName(application.getName());
-                        response.setState(application.getState());
-                        response.setTitle(job.getTitle());
-                        response.setApplyDate(application.getApplyDate());
-                        response.setApplicationId(application.getId());
-                        responseList.add(response);
-                    } else {
-                        // Xử lý trường hợp khi không tìm thấy Candidate hoặc Job
-                        System.err.println("Không tìm thấy Candidate hoặc Job cho ứng viên " + application.getCandidateId() + " và công việc " + application.getJobId());
-                    }
-                }
-
-                return ResponseEntity.ok(responseList);
-            } else {
-                return ResponseEntity.notFound().build(); // Employer not found
+            if (employer == null) {
+                return ResponseEntity.badRequest().body("Không tìm thấy người sử dụng");
             }
+
+            Page<Application> pendingApplications = applicationService.findPendingApplicationsByEmployerName(employer.getName(), pageable);
+            List<ApplicationResponse> responseList = new ArrayList<>();
+
+            for (Application application : pendingApplications) {
+                System.out.println(application.getId());
+                Optional<Candidate> candidateOptional = candidateService.findById(application.getCandidateId());
+                Optional<Job> jobOptional = jobService.findById(application.getJobId());
+
+                if (candidateOptional.isPresent() && jobOptional.isPresent()) {
+                    Job job = jobOptional.get();
+
+                    ApplicationResponse response = new ApplicationResponse();
+                    response.setName(application.getName());
+                    response.setState(application.getState());
+                    response.setTitle(job.getTitle());
+                    response.setApplyDate(application.getApplyDate());
+                    response.setApplicationId(application.getId());
+                    responseList.add(response);
+                } else {
+                    return ResponseEntity.badRequest().body("Không tìm thấy ứng viên hoặc công việc tương ứng");
+                }
+            }
+
+            return ResponseEntity.ok(responseList);
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi server vui lòng thử lại");
         }
     }
 
 
-    @GetMapping("/apply-details")
+    @GetMapping("/employerApplications")
+    public ResponseEntity<?> employerApplications(
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestHeader("Authorization") String token
+    ) {
+        try {
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
+
+            if (employer == null) {
+                return ResponseEntity.badRequest().body("Không tìm thấy người sử dụng");
+            }
+
+            Page<Application> pendingApplications = applicationService.findApplicationsByEmployerName(employer.getName(), pageable);
+            List<ApplicationResponse> responseList = new ArrayList<>();
+
+            for (Application application : pendingApplications) {
+                System.out.println(application.getId());
+                Optional<Candidate> candidateOptional = candidateService.findById(application.getCandidateId());
+                Optional<Job> jobOptional = jobService.findById(application.getJobId());
+
+                if (candidateOptional.isPresent() && jobOptional.isPresent()) {
+                    Job job = jobOptional.get();
+
+                    ApplicationResponse response = new ApplicationResponse();
+                    response.setName(application.getName());
+                    response.setState(application.getState());
+                    response.setTitle(job.getTitle());
+                    response.setApplyDate(application.getApplyDate());
+                    response.setApplicationId(application.getId());
+                    responseList.add(response);
+                } else {
+                    return ResponseEntity.badRequest().body("Không tìm thấy ứng viên hoặc công việc tương ứng");
+                }
+            }
+
+            return ResponseEntity.ok(responseList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi server vui lòng thử lại");
+        }
+    }
+
+
+    @GetMapping("/applyDetails")
     public ResponseEntity<ApplicationDetailsResponse> getApplyDetails(
             @RequestHeader("Authorization") String token,
-            @RequestBody ApplicationDetailRequest applicationDetailRequest
+            @RequestBody String applicationId
     ) {
         try {
             String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
             Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
             ApplicationDetailsResponse response = new ApplicationDetailsResponse();
             if (employer != null) {
-                Optional<Application> applicationOptional = applicationService.findById(applicationDetailRequest.getApplicationId());
+                Optional<Application> applicationOptional = applicationService.findById(applicationId);
                 Application application = applicationOptional.get();
                 Optional<Candidate> candidateOptional = candidateService.findById(application.getCandidateId());
                 Optional<Job> jobOptional = jobService.findById(application.getJobId());
@@ -123,66 +167,62 @@ public class ApplyController {
     }
 
 
-    @GetMapping("/applies-job")
-    public ResponseEntity<List<ApplicationResponse>> getAppliesJob(
+    @GetMapping("/appliesJob")
+    public ResponseEntity<?> getAppliesJob(
             @PageableDefault(page = 0, size = 10) Pageable pageable,
             @RequestHeader("Authorization") String token,
-            @RequestBody JobIdRequest jobId
+            @RequestBody String jobId
     ) {
         try {
             String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
             Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
             if (employer != null) {
-                Optional<Job> jobOptional = jobService.findById(jobId.getJobId());
+                Optional<Job> jobOptional = jobService.findById(jobId);
 
-                Page<Application> applications = applicationService.findApplicationsByJobId(jobOptional.get().getId(), pageable);
-                List<ApplicationResponse> responseList = new ArrayList<>();
+                if (jobOptional.isPresent()) {
+                    Page<Application> applications = applicationService.findApplicationsByJobId(jobOptional.get().getId(), pageable);
+                    List<ApplicationResponse> responseList = new ArrayList<>();
 
-                for (Application application : applications) {
-                    System.out.println(application.getId());
-                    Optional<Candidate> candidateOptional = candidateService.findById(application.getCandidateId());
+                    for (Application application : applications) {
+                        System.out.println(application.getId());
+                        Optional<Candidate> candidateOptional = candidateService.findById(application.getCandidateId());
 
-                    if (candidateOptional.isPresent() && jobOptional.isPresent()) {
-                        Candidate candidate = candidateOptional.get();
-                        Job job = jobOptional.get();
+                        if (candidateOptional.isPresent()) {
+                            Job job = jobOptional.get();
 
-                        ApplicationResponse response = new ApplicationResponse();
-                        response.setName(application.getName());
-                        response.setState(application.getState());
-                        response.setTitle(job.getTitle());
-                        response.setApplyDate(application.getApplyDate());
-                        response.setApplicationId(application.getId());
-                        responseList.add(response);
-                    } else {
-                        // Xử lý trường hợp khi không tìm thấy Candidate hoặc Job
-                        System.err.println("Không tìm thấy Candidate hoặc Job cho ứng viên " + application.getCandidateId() + " và công việc " + application.getJobId());
+                            ApplicationResponse response = new ApplicationResponse();
+                            response.setName(application.getName());
+                            response.setState(application.getState());
+                            response.setTitle(job.getTitle());
+                            response.setApplyDate(application.getApplyDate());
+                            response.setApplicationId(application.getId());
+                            responseList.add(response);
+
+                        } else {
+                            return ResponseEntity.badRequest().body("Không tìm thấy ứng viên cho ứng viên " + application.getCandidateId());
+                        }
                     }
-                }
 
-                return ResponseEntity.ok(responseList);
+                    return ResponseEntity.ok(responseList);
+                } else {
+                    return ResponseEntity.badRequest().body("Không tìm thấy công việc");
+                }
             } else {
-                return ResponseEntity.notFound().build(); // Employer not found
+                return ResponseEntity.badRequest().body("Không tìm thấy tên người dùng");
+
             }
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi server vui lòng thử lại");
         }
     }
 
-    @PutMapping("/update-state")
+    @PutMapping("/updateState")
     public ResponseEntity<String> updateApplicationState(
             @RequestHeader("Authorization") String token,
 
             @RequestBody UpdateApplicationStateRequest updateRequest
     ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null) {
-            // Lấy danh sách các quyền truy cập của người dùng và in ra
-            System.out.println("Quyền truy cập của người dùng: " + authentication.getAuthorities());
-        } else {
-            System.out.println("Người dùng chưa đăng nhập.");
-        }
         try {
             String employerName = jwtService.extractUsername(token.substring(7));
             Employer employer = employerService.findByAccountUsername(employerName);
@@ -195,17 +235,16 @@ public class ApplyController {
                     existingApplication.setState(updateRequest.getNewState());
                     applicationService.save(existingApplication);
 
-                    return ResponseEntity.ok("Cập nhật trạng thái đơn xin việc thành công");
+                    return ResponseEntity.ok("Cập nhật thành công");
 
                 }
                 else
-                    return ResponseEntity.ok("Cập nhật trạng thái đơn xin việc không thành công");
+                    return ResponseEntity.badRequest().body("Cập nhật thất bại");
             } else {
-                return ResponseEntity.notFound().build(); // Nhà tuyển dụng không tồn tại
+                return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            // Xử lý ngoại lệ và trả về phản hồi phù hợp
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi server vui lòng thử lại");
         }
     }
 

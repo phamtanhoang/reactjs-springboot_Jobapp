@@ -1,17 +1,15 @@
 package com.pth.jobapp.ResponseModels;
 
-import java.util.Date;
 
 public class EmployerProfileResponse {
     String username;
-    String password;
-    Date createdAt;
     String name;
     String address;
     String description;
     String image;
     String banner;
 
+    String employerId;
     public String getUsername() {
         return username;
     }
@@ -20,21 +18,7 @@ public class EmployerProfileResponse {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getName() {
         return name;
@@ -74,5 +58,13 @@ public class EmployerProfileResponse {
 
     public void setBanner(String banner) {
         this.banner = banner;
+    }
+
+    public String getEmployerId() {
+        return employerId;
+    }
+
+    public void setEmployerId(String employerId) {
+        this.employerId = employerId;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.List;
 
 import java.util.Optional;
 
@@ -14,10 +15,17 @@ public interface ApplicationRepository extends JpaRepository<Application, String
     Application findByJobIdAndCandidateId(String jobId,String candidateId);
     Page <Application> findApplicationsByJobId(String jobId, Pageable pageable);
 
+    List<Application> findApplicationsByJobId(String jobId );
     @Query("SELECT a FROM Application a " +
             "JOIN Job j ON a.jobId = j.id " +
             "JOIN Employer e ON j.employerId = e.id " +
             "WHERE e.name = :employerName " +
             "AND a.state = 'pending'")
     Page<Application> findPendingApplicationsByEmployerName(@Param("employerName") String employerName, Pageable pageable);
+
+    @Query("SELECT a FROM Application a " +
+            "JOIN Job j ON a.jobId = j.id " +
+            "JOIN Employer e ON j.employerId = e.id " +
+            "WHERE e.name = :employerName ")
+    Page<Application> findApplicationsByEmployerName(@Param("employerName") String employerName, Pageable pageable);
 }

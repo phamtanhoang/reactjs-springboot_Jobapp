@@ -113,11 +113,28 @@ export const urlAPI = {
 
   changePassword: "/auth/changePassword",
 
-  getJobEmployerToken: (currentPage?: number, itemsPerPage?: number) => {
-    if (currentPage !== undefined || itemsPerPage !== undefined) {
-      return `/jobs/jobs-employer?page=${currentPage}&size=${itemsPerPage}`;
-    } else {
-      return "/jobs/jobs-employer";
-    }
+  currentEmployer: "/employer/profile",
+
+  getJobsByTitleContainingAndEmployerToken: (
+    title: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => {
+    return `/jobs/search/findByEmployerIdAndTitleContaining?title=${title}&page=${currentPage}&size=${itemsPerPage}`;
   },
+
+  addJobByEmployerToken: "/jobs/create",
+
+  updateJobByEmployerToken: "/jobs/update",
+
+  getApplicationsByEmployerToken: (
+    currentPage: number,
+    itemsPerPage: number
+  ) => {
+    return `/applies/employerApplications?page=${currentPage}&size=${itemsPerPage}`;
+  },
+
+  updateCandidateBanner: "/employer/updateBanner",
+  
+  updateCandidateLogo: "/employer/updateImage",
 };

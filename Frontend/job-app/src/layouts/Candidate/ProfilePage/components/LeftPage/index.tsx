@@ -192,11 +192,8 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             <div className="flex">
               <p className="w-[50%] xl:w-[40%]  font-semibold">Ngày sinh:</p>
               <p className="font-medium">
-                {props.candidateRes?.dateOfBirth
-                  ? new Date(
-                      props.candidateRes.dateOfBirth
-                    ).toLocaleDateString()
-                  : ""}
+                {props.candidateRes?.dateOfBirth &&
+                  new Date(props.candidateRes.dateOfBirth).toLocaleDateString()}
               </p>
             </div>
             <div className="flex">

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const JobsPageEmployer = () => {
   const [showBoxAddJob, setShowBoxAddJob] = useState(false);
+  const [title, setTitle] = useState("");
 
   return (
     <section className="flex-grow">
@@ -14,7 +15,7 @@ const JobsPageEmployer = () => {
           <div className="mb-4">
             <nav aria-label="Breadcrumb" className="text-sm font-semibold mb-6">
               <ol className="list-none p-0 inline-flex">
-              <li className="flex items-center">
+                <li className="flex items-center">
                   <Link
                     to="/employer"
                     className="text-gray-600 hover:text-blue-600"
@@ -46,6 +47,9 @@ const JobsPageEmployer = () => {
                   name="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Search for jobs"
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
                 />
               </div>
             </form>
@@ -63,13 +67,11 @@ const JobsPageEmployer = () => {
         </div>
       </div>
 
-      <TablePage />
+      <TablePage title={title} />
 
       {showBoxAddJob && localStorage.getItem("employerToken") && (
         <AddJobPage setShowBoxAddJob={setShowBoxAddJob} />
       )}
-
-      
     </section>
   );
 };

@@ -15,7 +15,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const TablePage = () => {
+const TablePage: React.FC<{ title: any }> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
@@ -33,15 +33,16 @@ const TablePage = () => {
   useEffect(() => {
     const fetchJobs = () => {
       jobsAPI
-        .getJobsEmployerToken(
-          localStorage.getItem("employerToken") || "",
+        .getJobsByTitleContainingAndEmployerToken(
+          props.title,
           currentPage - 1,
-          jobsPerPage
+          jobsPerPage,
+          localStorage.getItem("employerToken") || ""
         )
         .then((res) => {
-          setJobs(res.data.content);
-          setTotalAmountOfJobs(res.data.totalElements);
-          setTotalPages(res.data.totalPages);
+          setJobs(res.data._embedded.jobs);
+          setTotalAmountOfJobs(res.data.page.totalElements);
+          setTotalPages(res.data.page.totalPages);
         })
         .catch((error: any) => {
           setHttpError(error.message);
@@ -51,7 +52,7 @@ const TablePage = () => {
         });
     };
     fetchJobs();
-  }, [currentPage, jobsPerPage]);
+  }, [currentPage, jobsPerPage, props.title]);
 
   if (isLoading) {
     return (
@@ -163,16 +164,21 @@ const TablePage = () => {
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-600 ">
                               {job.title}
+                              {new Date(job.toDate) < new Date() && (
+                                <span className="text-red-500 ml-2">
+                                  (Expired)
+                                </span>
+                              )}
                             </td>
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              {job.state == "0" ? (
+                              {job.state == "pending" ? (
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-yellow-500 bg-yellow-100/60 ">
                                   <AiOutlineExclamation />
                                   <h2 className="text-sm font-normal">
                                     Pending
                                   </h2>
                                 </div>
-                              ) : job.state == "1" ? (
+                              ) : job.state == "active" ? (
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 ">
                                   <AiOutlineCheck />
                                   <h2 className="text-sm font-normal">
@@ -189,10 +195,12 @@ const TablePage = () => {
                               )}
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-600 ">
-                              {job.fromDate}
+                              {job.fromDate &&
+                                new Date(job.fromDate).toLocaleDateString()}
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-600 ">
-                              {job.toDate}
+                              {job.toDate &&
+                                new Date(job.toDate).toLocaleDateString()}
                             </td>
                             <td className="px-4 py-4 text-sm whitespace-nowrap">
                               <div className="flex items-center gap-x-6 text-2xl text-gray-600">
@@ -203,13 +211,21 @@ const TablePage = () => {
                                 <AiFillEdit
                                   className=" cursor-pointer hover:text-blue-500"
                                   onClick={() => {
-                                    job.state != "2"
-                                      ? EditJob(job)
-                                      : Swal.fire(
-                                          "Notification",
-                                          "Cannot be edited!",
-                                          "info"
-                                        );
+                                    {
+                                      new Date(job.toDate) < new Date()
+                                        ? Swal.fire(
+                                            "Notification",
+                                            "Cannot be edited job Expired!",
+                                            "info"
+                                          )
+                                        : job.state != "refused"
+                                        ? EditJob(job)
+                                        : Swal.fire(
+                                            "Notification",
+                                            "Cannot be edited job refused!",
+                                            "info"
+                                          );
+                                    }
                                   }}
                                 />
 
@@ -226,7 +242,7 @@ const TablePage = () => {
                       <tr>
                         <td colSpan="6">
                           <div className="w-full p-5">
-                            <ErrorBox text="Không có công việc nào" />
+                            <ErrorBox text="There are no jobs!!!" />
                           </div>
                         </td>
                       </tr>
@@ -237,11 +253,13 @@ const TablePage = () => {
             </div>
           </div>
         </div>
-        <PaginationAdmin
-          paginate={paginate}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        />
+        {totalPages > 0 && (
+          <PaginationAdmin
+            paginate={paginate}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
+        )}
       </div>
       {showBoxEditJob && localStorage.getItem("employerToken") && (
         <EditJobPage setShowBoxEditJob={setShowBoxEditJob} job={editJob} />

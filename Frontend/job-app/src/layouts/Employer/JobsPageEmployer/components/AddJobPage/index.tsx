@@ -2,7 +2,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { CategoryModel } from "../../../../../models/CategoryModel";
 import { useEffect, useState } from "react";
-import { categoriesAPI } from "../../../../../services";
+import { categoriesAPI, jobsAPI } from "../../../../../services";
 import { ErrorBox, Spinner } from "../../../../../components";
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
@@ -43,8 +43,6 @@ const AddJobPage: React.FC<{
     };
     fetchCategories();
   }, []);
-
-  //   console.log(title, toDate, cate, salary, address, description);
 
   if (isLoading) {
     return (
@@ -88,139 +86,251 @@ const AddJobPage: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
-          // candidatesAPI
-          //   .updateCandidate(firstName, lastName, dateOfBirth, sex, token)
-          //   .then(() => {
-          //     Swal.fire("Thành công!", "Chỉnh sửa thành công!", "success");
-          //     window.location.reload();
-          //   })
-          //   .catch(() => {
-          //     Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
-          //   });
+          jobsAPI
+            .addJobByEmployerToken(
+              title,
+              toDate,
+              cate,
+              salary,
+              address,
+              description,
+              localStorage.getItem("employerToken") || ""
+            )
+            .then(() => {
+              Swal.fire({
+                title: "Add new job success",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Yes",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              });
+            })
+            .catch(() => {
+              Swal.fire("Error!", "Add new job error!", "error");
+            });
         }
       });
     } else {
-      Swal.fire("Thất bại!", "Vui lòng nhập đầy đủ thông tin!", "error");
+      Swal.fire("Error!", "Please enter complete information!", "error");
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
-      <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full bg-black/50">
-        <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-          <div className="bg-white rounded-lg shadow relative">
-            <div className="flex items-start justify-between p-2 sm:p-5 border-b rounded-t">
-              <h3 className="text-xl font-semibold">Add job</h3>
+      <div className="bg-white rounded-lg shadow relative w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-1/2">
+        <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t">
+          <h3 className="text-xl font-semibold">Add job</h3>
+          <button
+            type="button"
+            className="text-xl text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
+            onClick={() => props.setShowBoxAddJob(false)}
+          >
+            <AiOutlineClose />
+          </button>
+        </div>
+
+        <div className="rounded-lg p-3 md:p-5 overflow-y-auto max-h-[calc(100vh-150px)]">
+          <form onSubmit={handleAddJob}>
+            <div className="grid grid-cols-6 gap-4">
+              <div className="col-span-full">
+                <label className="font-semibold text-sm block text-gray-700">
+                  Title:
+                </label>
+                <input
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  type="text"
+                  onChange={(e) => setTitle(e.target.value.trim())}
+                  placeholder="Please fill in Job title..."
+                  required
+                />
+              </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label className="font-semibold text-sm block text-gray-700">
+                  To Date:
+                </label>
+                <input
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  type="date"
+                  min={new Date().toISOString().split("T")[0]}
+                  onChange={(e) => {
+                    setToDate(e.target.value);
+                  }}
+                  required
+                />
+              </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label className="font-semibold text-sm block text-gray-700">
+                  Category:
+                </label>
+                <select
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  required
+                  onChange={(e) => setCate(e.target.value)}
+                >
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label className="text-sm font-medium text-gray-900 block">
+                  Salary:
+                </label>
+                <input
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  type="text"
+                  onChange={(e) => setSalary(e.target.value.trim())}
+                  placeholder="Please fill in Job salary..."
+                  required
+                />
+              </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label className="text-sm font-medium text-gray-900 block">
+                  Address
+                </label>
+                <input
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  type="text"
+                  onChange={(e) => setAddress(e.target.value.trim())}
+                  placeholder="Please fill in Job address..."
+                  required
+                />
+              </div>
+              <div className="col-span-full">
+                <label className="text-sm font-medium text-gray-900 block mb-1">
+                  Description:
+                </label>
+                <ReactQuill
+                  theme="snow"
+                  onChange={handleDescriptionChange}
+                  className=""
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
               <button
-                type="button"
-                className="text-xl text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
-                onClick={closedBox}
+                className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                type="submit"
               >
-                <AiOutlineClose />
+                Add job
               </button>
             </div>
-
-            <div className="p-2 sm:p-6 space-y-6">
-              <form onSubmit={handleAddJob}>
-                <div className="grid grid-cols-6 gap-4">
-                  <div className="col-span-full">
-                    <label className="font-semibold text-sm block text-gray-700">
-                      Title:
-                    </label>
-                    <input
-                      className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value.trim())}
-                      placeholder="Please fill in Job title..."
-                      required
-                    />
-                  </div>
-                  <div className="col-span-6 sm:col-span-3">
-                    <label className="font-semibold text-sm block text-gray-700">
-                      To Date:
-                    </label>
-                    <input
-                      className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
-                      type="date"
-                      min={new Date().toISOString().split("T")[0]}
-                      value={toDate}
-                      onChange={(e) => {
-                        setToDate(e.target.value);
-                      }}
-                      required
-                    />
-                  </div>
-                  <div className="col-span-6 sm:col-span-3">
-                    <label className="font-semibold text-sm block text-gray-700">
-                      Category:
-                    </label>
-                    <select
-                      className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
-                      required
-                      value={cate}
-                      onChange={(e) => setCate(e.target.value)}
-                    >
-                      {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-span-6 sm:col-span-3">
-                    <label className="text-sm font-medium text-gray-900 block">
-                      Salary:
-                    </label>
-                    <input
-                      className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
-                      type="text"
-                      value={salary}
-                      onChange={(e) => setSalary(e.target.value.trim())}
-                      placeholder="Please fill in Job salary..."
-                      required
-                    />
-                  </div>
-                  <div className="col-span-6 sm:col-span-3">
-                    <label className="text-sm font-medium text-gray-900 block">
-                      Address
-                    </label>
-                    <input
-                      className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
-                      type="text"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value.trim())}
-                      placeholder="Please fill in Job address..."
-                      required
-                    />
-                  </div>
-                  <div className="col-span-full">
-                    <label className="text-sm font-medium text-gray-900 block mb-1">
-                      Description:
-                    </label>
-                    <ReactQuill
-                      theme="snow"
-                      value={description}
-                      onChange={handleDescriptionChange}
-                      className="max-h-[20vh] overflow-y-auto"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-6 flex justify-end">
-                  <button
-                    className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    type="submit"
-                  >
-                    Add job
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
+    // <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
+    //   <div className="bg-white rounded-lg shadow relative w-[95%] sm:w-[85%] md:w-[70%] xl:w-1/2">
+    //     <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t">
+    //       <h3 className="text-xl font-semibold">Add job</h3>
+    //       <button
+    //         type="button"
+    //         className="text-xl text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
+    //         onClick={closedBox}
+    //       >
+    //         <AiOutlineClose />
+    //       </button>
+    //     </div>
+
+    //     <div className="p-2 sm:p-6 space-y-6">
+    //       <form onSubmit={handleAddJob}>
+    //         <div className="grid grid-cols-6 gap-4">
+    //           <div className="col-span-full">
+    //             <label className="font-semibold text-sm block text-gray-700">
+    //               Title:
+    //             </label>
+    //             <input
+    //               className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+    //               type="text"
+    //               onChange={(e) => setTitle(e.target.value.trim())}
+    //               placeholder="Please fill in Job title..."
+    //               required
+    //             />
+    //           </div>
+    //           <div className="col-span-6 sm:col-span-3">
+    //             <label className="font-semibold text-sm block text-gray-700">
+    //               To Date:
+    //             </label>
+    //             <input
+    //               className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+    //               type="date"
+    //               min={new Date().toISOString().split("T")[0]}
+    //               onChange={(e) => {
+    //                 setToDate(e.target.value);
+    //               }}
+    //               required
+    //             />
+    //           </div>
+    //           <div className="col-span-6 sm:col-span-3">
+    //             <label className="font-semibold text-sm block text-gray-700">
+    //               Category:
+    //             </label>
+    //             <select
+    //               className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+    //               required
+    //               onChange={(e) => setCate(e.target.value)}
+    //             >
+    //               {categories.map((category) => (
+    //                 <option key={category.id} value={category.id}>
+    //                   {category.name}
+    //                 </option>
+    //               ))}
+    //             </select>
+    //           </div>
+    //           <div className="col-span-6 sm:col-span-3">
+    //             <label className="text-sm font-medium text-gray-900 block">
+    //               Salary:
+    //             </label>
+    //             <input
+    //               className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+    //               type="text"
+    //               onChange={(e) => setSalary(e.target.value.trim())}
+    //               placeholder="Please fill in Job salary..."
+    //               required
+    //             />
+    //           </div>
+    //           <div className="col-span-6 sm:col-span-3">
+    //             <label className="text-sm font-medium text-gray-900 block">
+    //               Address
+    //             </label>
+    //             <input
+    //               className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+    //               type="text"
+    //               onChange={(e) => setAddress(e.target.value.trim())}
+    //               placeholder="Please fill in Job address..."
+    //               required
+    //             />
+    //           </div>
+    //           <div className="col-span-full">
+    //             <label className="text-sm font-medium text-gray-900 block mb-1">
+    //               Description:
+    //             </label>
+    //             <ReactQuill
+    //               theme="snow"
+    //               onChange={handleDescriptionChange}
+    //               className="max-h-[20vh] overflow-y-auto"
+    //             />
+    //           </div>
+    //         </div>
+
+    //         <div className="mt-6 flex justify-end">
+    //           <button
+    //             className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+    //             type="submit"
+    //           >
+    //             Add job
+    //           </button>
+    //         </div>
+    //       </form>
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 export default AddJobPage;

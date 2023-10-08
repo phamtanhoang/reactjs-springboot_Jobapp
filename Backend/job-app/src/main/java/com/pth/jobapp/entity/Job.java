@@ -4,6 +4,7 @@ package com.pth.jobapp.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -24,10 +25,10 @@ public class Job {
     private String salary;
 
     @Column(name = "fromDate")
-    private String fromDate;
+    private Date fromDate;
 
     @Column(name = "toDate")
-    private String toDate;
+    private Date toDate;
 
     @Column(name = "address")
     private String address;
@@ -43,7 +44,7 @@ public class Job {
 
     public Job(){
     }
-    public Job(String title, String description, String salary, String fromDate, String toDate, String address, String categoryId, String employerId, String state) {
+    public Job(String title, String description, String salary, Date fromDate, Date toDate, String address, String categoryId, String employerId, String state) {
         this.id = String.valueOf(UUID.randomUUID());
         this.title = title;
         this.description = description;
@@ -88,19 +89,19 @@ public class Job {
         this.salary = salary;
     }
 
-    public String getFromDate() {
+    public Date getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(String fromDate) {
+    public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
     }
 
-    public String getToDate() {
+    public Date getToDate() {
         return toDate;
     }
 
-    public void setToDate(String toDate) {
+    public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
 

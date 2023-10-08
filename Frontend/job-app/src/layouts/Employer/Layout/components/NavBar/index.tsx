@@ -47,7 +47,9 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                     className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
                   >
                     <BiSolidDashboard className="text-2xl text-gray-500 group-hover:text-blue-600" />
-                    <span className="ml-3 group-hover:text-blue-600">Dashboard</span>
+                    <span className="ml-3 group-hover:text-blue-600">
+                      Dashboard
+                    </span>
                   </Link>
                 </li>
                 <li>
@@ -56,20 +58,32 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                     className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
                   >
                     <HiDocumentText className="text-2xl text-gray-500 group-hover:text-blue-600" />
-                    <span className="ml-3 group-hover:text-blue-600">All jobs</span>
+                    <span className="ml-3 group-hover:text-blue-600">
+                      All jobs
+                    </span>
                   </Link>
                 </li>
                 <li>
-                  <a className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group">
+                  <Link
+                    to="/employer/applications"
+                    className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                  >
                     <HiClipboardList className="text-2xl text-gray-500 group-hover:text-blue-600" />
-                    <span className="ml-3 group-hover:text-blue-600">Aplication</span>
-                  </a>
+                    <span className="ml-3 group-hover:text-blue-600">
+                      Aplication
+                    </span>
+                  </Link>
                 </li>
                 <li>
-                  <a className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group">
+                  <Link
+                    to="/employer/profile"
+                    className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                  >
                     <HiInformationCircle className="text-2xl text-gray-500 group-hover:text-blue-600" />
-                    <span className="ml-3 group-hover:text-blue-600">Information</span>
-                  </a>
+                    <span className="ml-3 group-hover:text-blue-600">
+                      Information
+                    </span>
+                  </Link>
                 </li>
                 <li>
                   <a
@@ -77,7 +91,9 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                     onClick={LogoutHandle}
                   >
                     <BiLogOut className="text-2xl text-gray-500 group-hover:text-blue-600" />
-                    <span className="ml-3 group-hover:text-blue-600">Log out</span>
+                    <span className="ml-3 group-hover:text-blue-600">
+                      Log out
+                    </span>
                   </a>
                 </li>
               </ul>

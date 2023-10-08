@@ -30,4 +30,12 @@ public class ApplicationService {
     public Page<Application> findPendingApplicationsByEmployerName(String username, Pageable pageable ){
         return applicationRepository.findPendingApplicationsByEmployerName(username,pageable);
     }
+
+    public Page<Application>findApplicationsByEmployerName(String username,Pageable pageable){
+        return applicationRepository.findApplicationsByEmployerName(username,pageable);
+    }
+
+    public void delete(Application application){
+        applicationRepository.delete(application);
+    }
 }

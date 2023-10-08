@@ -1,5 +1,7 @@
 package com.pth.jobapp.controller;
 
+import com.pth.jobapp.ResponseModels.CandidateProfileResponse;
+import com.pth.jobapp.ResponseModels.EmployerProfileResponse;
 import com.pth.jobapp.entity.*;
 import com.pth.jobapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +34,61 @@ public class EmployerController {
     @Autowired
     private AccountService accountService;
 
+
     @GetMapping("/profile")
-    @PreAuthorize("hasAuthority('employer')")
-    public String employerProfile() {
-        return "Welcome to User Profile";
+    public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
+        try {
+            String token = tokenHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+            System.out.println(username);
+
+            Employer employer = employerService.findByAccountUsername(username);
+
+            if (employer != null) {
+                EmployerProfileResponse employerProfileResponse = new EmployerProfileResponse();
+                employerProfileResponse.setUsername(username);
+                employerProfileResponse.setName(employer.getName());
+                employerProfileResponse.setAddress(employer.getAddress());
+                employerProfileResponse.setEmployerId(employer.getId());
+                employerProfileResponse.setBanner(employer.getBanner());
+                employerProfileResponse.setDescription(employer.getDescription());
+                employerProfileResponse.setImage(employer.getImage());
+
+                return ResponseEntity.ok(employerProfileResponse);
+            } else {
+                System.out.println("Người dùng không tồn tại");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
+        }
+    }
+
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateProfile(@RequestHeader("Authorization") String token, @RequestBody Employer employer) {
+
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Employer employer1 = employerService.findByAccountUsername(email);
+            employer1.setAddress(employer.getAddress());
+            employer1.setDescription(employer1.getDescription());
+            employer1.setName(employer.getName());
+            employerService.save(employer1);
+
+            return ResponseEntity.ok("Candidate profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate profile");
+        }
     }
 
 
 
-
-    @GetMapping("/employer/jobs/{jobId}")
+    @GetMapping("/employer/jobs")
     public ResponseEntity<Job> EmployerJobById(
             @RequestHeader("Authorization") String token,
-            @PathVariable String jobId
+            @RequestParam String jobId
     ) {
         try {
             String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
@@ -62,7 +106,6 @@ public class EmployerController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -77,7 +120,6 @@ public class EmployerController {
 
             return ResponseEntity.ok("Candidate image updated successfully");
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
         }
     }
@@ -91,10 +133,14 @@ public class EmployerController {
 
             return ResponseEntity.ok("Candidate image updated successfully");
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
         }
     }
+
+
+
+
+
 
 
 }

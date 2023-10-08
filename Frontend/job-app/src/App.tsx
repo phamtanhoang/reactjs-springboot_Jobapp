@@ -16,6 +16,8 @@ import { RegisterPage } from "./layouts/Candidate/RegisterPage";
 import LoginPageAdmin from "./layouts/Admin/LoginPageAdmin";
 import JobsPageEmployer from "./layouts/Employer/JobsPageEmployer";
 import JobProfilePageEmployer from "./layouts/Employer/JobProfilePageEmployer";
+import ApplicationPageEmployer from "./layouts/Employer/ApplicationPageEmployer";
+import ProfilePageEmployer from "./layouts/Employer/ProfilePageEmployer";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -77,6 +79,14 @@ const App = () => {
                   path="/employer/job/:id"
                   element={<JobProfilePageEmployer />}
                 />
+                <Route
+                  path="/employer/applications"
+                  element={<ApplicationPageEmployer />}
+                />
+                <Route
+                  path="/employer/profile"
+                  element={<ProfilePageEmployer />}
+                />
               </Route>
             </>
           ) : (
@@ -95,6 +105,14 @@ const App = () => {
               />
               <Route
                 path="/employer/job/:id"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/applications"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/profile"
                 element={<Navigate to="/employer/login" />}
               />
               <Route path="/employer/login" element={<LoginEmployer />} />

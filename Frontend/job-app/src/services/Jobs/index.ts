@@ -50,18 +50,80 @@ const jobsAPI = {
     return await instance.get(urlAPI.getVipJobs(currentPage, itemsPerPage));
   },
 
-  async getJobsEmployerToken(
-    token?: string,
-    currentPage?: number,
-    itemsPerPage?: number
+  async getJobsByTitleContainingAndEmployerToken(
+    title: string,
+    currentPage: number,
+    itemsPerPage: number,
+    token?: string
   ) {
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
     return await instance.get(
-      urlAPI.getJobEmployerToken(currentPage, itemsPerPage),
+      urlAPI.getJobsByTitleContainingAndEmployerToken(
+        title,
+        currentPage,
+        itemsPerPage
+      ),
       { headers }
+    );
+  },
+
+  async addJobByEmployerToken(
+    title: string,
+    toDate: string,
+    categoryId: string,
+    salary: string,
+    address: string,
+    description: string,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const data = {
+      title: title,
+      description: description,
+      salary: salary,
+      address: address,
+      toDate: toDate,
+      categoryId: categoryId,
+    };
+    console.log(urlAPI.addJobByEmployerToken, data, headers);
+    return await instance.post(urlAPI.addJobByEmployerToken, data, { headers });
+  },
+
+  async updateJobByEmployerToken(
+    jobId: string,
+    title: string,
+    toDate: string,
+    categoryId: string,
+    salary: string,
+    address: string,
+    description: string,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const data = {
+      title: title,
+      description: description,
+      salary: salary,
+      address: address,
+      toDate: toDate,
+      categoryId: categoryId,
+    };
+
+    return await instance.put(
+      `${urlAPI.updateJobByEmployerToken}/${jobId}`,
+      data,
+      {
+        headers: headers,
+      }
     );
   },
 };

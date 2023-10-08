@@ -25,5 +25,33 @@ const employersAPI = {
       urlAPI.getEmployersByNameContaining(name, currentPage, itemsPerPage)
     );
   },
+
+  async updateLogo(img?: File, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const formData = new FormData();
+    if (img) {
+      formData.append("image", img);
+    }
+    return await instance.put(urlAPI.updateCandidateLogo, formData, {
+      headers,
+    });
+  },
+
+  async updateBanner(img?: File, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const formData = new FormData();
+    if (img) {
+      formData.append("image", img);
+    }
+    return await instance.put(urlAPI.updateCandidateBanner, formData, {
+      headers,
+    });
+  },
 };
 export default employersAPI;

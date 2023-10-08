@@ -51,6 +51,14 @@ const authsAPI = {
     return await instance.post(urlAPI.logout, { headers });
   },
 
+  async currentEmployer(token: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.currentEmployer, { headers });
+  },
+
   async loginEmployer(email: string, password: string) {
     const userData = {
       username: email,
