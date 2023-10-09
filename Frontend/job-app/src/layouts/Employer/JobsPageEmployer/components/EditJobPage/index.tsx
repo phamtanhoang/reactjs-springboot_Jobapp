@@ -86,7 +86,14 @@ const EditJobPage: React.FC<{
 
   const handleEditJob = (e: any) => {
     e.preventDefault();
-    if (title && salary && address && description && toDate && cate) {
+    if (
+      title.trim() &&
+      salary.trim() &&
+      address.trim() &&
+      description.trim() &&
+      toDate.trim() &&
+      cate.trim()
+    ) {
       Swal.fire({
         title: "Do you want to edit?",
         icon: "warning",
@@ -99,12 +106,12 @@ const EditJobPage: React.FC<{
           jobsAPI
             .updateJobByEmployerToken(
               props.job?.id || "",
-              title,
-              toDate,
-              cate,
-              salary,
-              address,
-              description,
+              title.trim(),
+              toDate.trim(),
+              cate.trim(),
+              salary.trim(),
+              address.trim(),
+              description.trim(),
               localStorage.getItem("employerToken") || ""
             )
             .then(() => {
@@ -159,7 +166,7 @@ const EditJobPage: React.FC<{
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   type="text"
                   value={title}
-                  onChange={(e) => setTitle(e.target.value.trim())}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="Please fill in Job title..."
                   required
                 />
@@ -204,7 +211,7 @@ const EditJobPage: React.FC<{
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   type="text"
                   value={salary}
-                  onChange={(e) => setSalary(e.target.value.trim())}
+                  onChange={(e) => setSalary(e.target.value)}
                   placeholder="Please fill in Job salary..."
                   required
                 />
@@ -217,7 +224,7 @@ const EditJobPage: React.FC<{
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   type="text"
                   value={address}
-                  onChange={(e) => setAddress(e.target.value.trim())}
+                  onChange={(e) => setAddress(e.target.value)}
                   placeholder="Please fill in Job address..."
                   required
                 />

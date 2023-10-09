@@ -32,10 +32,13 @@ public class Application {
     @Getter
     @Column(name = "job_id")
     private String jobId;
+
     @Column(name="name")
     private String name;
+
     @Column(name="email")
     private String email;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 

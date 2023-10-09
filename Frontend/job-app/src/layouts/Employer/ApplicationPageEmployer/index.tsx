@@ -56,9 +56,6 @@ const ApplicationPageEmployer = () => {
 
       <TableApplicationsPage title={title} />
 
-      {/* {showBoxAddJob && localStorage.getItem("employerToken") && (
-        <AddJobPage setShowBoxAddJob={setShowBoxAddJob} />
-      )} */}
     </section>
   );
 };

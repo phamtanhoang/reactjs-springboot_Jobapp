@@ -35,7 +35,7 @@ const employersAPI = {
     if (img) {
       formData.append("image", img);
     }
-    return await instance.put(urlAPI.updateCandidateLogo, formData, {
+    return await instance.put(urlAPI.updateEmployerLogo, formData, {
       headers,
     });
   },
@@ -49,7 +49,27 @@ const employersAPI = {
     if (img) {
       formData.append("image", img);
     }
-    return await instance.put(urlAPI.updateCandidateBanner, formData, {
+    return await instance.put(urlAPI.updateEmployerBanner, formData, {
+      headers,
+    });
+  },
+
+  async updateProfile(
+    name: string,
+    address: string,
+    desription: string,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const data = {
+      address: address,
+      name: name,
+      description: desription,
+    };
+    return await instance.put(urlAPI.updateEmployerProfile, data, {
       headers,
     });
   },

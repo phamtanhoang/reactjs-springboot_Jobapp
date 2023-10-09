@@ -85,15 +85,26 @@ const TablePage: React.FC<{ title: any }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
-        // candidatesAPI
-        //   .updateCandidate(firstName, lastName, dateOfBirth, sex, token)
-        //   .then(() => {
-        //     Swal.fire("Thành công!", "Chỉnh sửa thành công!", "success");
-        //     window.location.reload();
-        //   })
-        //   .catch(() => {
-        //     Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
-        //   });
+        jobsAPI
+          .deleteJobByEmployerToken(
+            job.id,
+            localStorage.getItem("employerToken") || ""
+          )
+          .then(() => {
+            Swal.fire({
+              title: "Delete job success",
+              icon: "success",
+              confirmButtonColor: "#3085d6",
+              confirmButtonText: "Yes",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
+          })
+          .catch(() => {
+            Swal.fire("Error!", "Delete job error!", "error");
+          });
       }
     });
   };

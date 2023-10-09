@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,8 @@ public class ApplicationService {
     public Page<Application>findApplicationsByEmployerName(String username,Pageable pageable){
         return applicationRepository.findApplicationsByEmployerName(username,pageable);
     }
+
+    public List<Application> findApplicationsByJobId(String jobId){return applicationRepository.findApplicationsByJobId(jobId);}
 
     public void delete(Application application){
         applicationRepository.delete(application);

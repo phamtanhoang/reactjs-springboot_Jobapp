@@ -125,8 +125,6 @@ export const urlAPI = {
 
   addJobByEmployerToken: "/jobs/create",
 
-  updateJobByEmployerToken: "/jobs/update",
-
   getApplicationsByEmployerToken: (
     currentPage: number,
     itemsPerPage: number
@@ -134,7 +132,15 @@ export const urlAPI = {
     return `/applies/employerApplications?page=${currentPage}&size=${itemsPerPage}`;
   },
 
-  updateCandidateBanner: "/employer/updateBanner",
+  updateEmployerBanner: "/employer/updateBanner",
   
-  updateCandidateLogo: "/employer/updateImage",
+  updateEmployerLogo: "/employer/updateImage",
+
+  updateEmployerProfile: "/employer/update",
+
+  updateJobByEmployerToken: (jobId: string) => `/jobs/update?jobId=${jobId}`,
+
+  deleteJobByEmployerToken: (jobId: string) => `/jobs/delete?jobId=${jobId}`,
+
+  updateApplicationState:"/applies/updateState"
 };

@@ -3,11 +3,27 @@ package com.pth.jobapp.ResponseModels;
 import java.util.Date;
 
 public class ApplicationResponse {
-    String name;
+    String id;
+    String candidateId;
+    String jobId;
+
     Date applyDate;
     String title;
     String state;
-    String applicationId;
+    String username;
+    String name;
+    String image;
+    Date expiredDate;
+
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getName() {
         return name;
@@ -41,15 +57,44 @@ public class ApplicationResponse {
         this.state = state;
     }
 
-    public String getApplicationId() {
-        return applicationId;
+    public String getId() {
+        return id;
     }
 
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
+    public void setId(String id) {
+        this.id = id;
     }
 
 
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
 
+    public String getCandidateId() {
+        return candidateId;
+    }
+
+    public void setCandidateId(String candidateId) {
+        this.candidateId = candidateId;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    public Date setExpiredDate() {
+        return expiredDate;
+    }
+
+    public void setExpiredDate(Date expiredDate) {
+        this.expiredDate = expiredDate;
+    }
 }

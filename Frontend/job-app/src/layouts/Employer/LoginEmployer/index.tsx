@@ -10,9 +10,9 @@ export const LoginEmployer = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (email && password) {
+    if (email.trim() && password.trim()) {
       authsAPI
-        .loginEmployer(email, password)
+        .loginEmployer(email.trim(), password.trim())
         .then((res) => {
           localStorage.setItem("employerToken", res.data);
           localStorage.removeItem("candidateToken");
@@ -54,7 +54,7 @@ export const LoginEmployer = () => {
                 <input
                   type="email"
                   className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full"
-                  onChange={(e) => setEmail(e.target.value.trim())}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Nhập Email..."
                   value={email}
                   required

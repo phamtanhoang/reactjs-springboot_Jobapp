@@ -89,11 +89,11 @@ const ProfilePageEmployer = () => {
               <span className="hidden sm:block">Add cover photo</span>
             </div>
           </div>
-          <div className="-mt-[15%] md:-mt-[12%] flex mx-auto w-1/3 md:w-1/4">
-            <div className="rounded-xl  sm:flex bg-white shadow-lg">
-              <div className="p-2 sm:p-5 mx-auto flex items-center relative">
+          <div className="-mt-[17%] sm:-mt-[14%] md:-mt-[9%] flex mx-auto w-1/3 md:w-1/4">
+            <div className="rounded-xl sm:flex bg-white shadow-lg">
+              <div className="p-2 sm:p-4 mx-auto flex items-center relative">
                 <img
-                  className="w-full rounded-xl p-2 border-2 "
+                  className="w-full border-2"
                   src={
                     employer?.image
                       ? employer?.image
@@ -102,7 +102,7 @@ const ProfilePageEmployer = () => {
                   alt="logo"
                 />
                 <div
-                  className="absolute right-0 top-0 sm:right-2 sm:top-2 cursor-pointer flex p-2 rounded-full bg-[#333333] text-sm sm:text-base text-white"
+                  className="absolute right-0 bottom-0 sm:right-1 sm:bottom-1 cursor-pointer flex p-2 rounded-full bg-[#333333] text-sm sm:text-base text-white"
                   onClick={() => setShowBoxChangeLogo(true)}
                 >
                   <BsFillCameraFill className="text-lg " />

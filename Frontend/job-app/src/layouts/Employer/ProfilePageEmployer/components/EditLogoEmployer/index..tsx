@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { EmployerResponseModel } from "../../../../../models/EmployerResponseModels";
 import authsAPI from "../../../../../services/Auths";
@@ -16,8 +16,6 @@ const EditLogoEmployer: React.FC<{
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const logoRef = useRef<HTMLImageElement>(null);
-
   useEffect(() => {
     const fetchEmployer = () => {
       authsAPI
@@ -33,10 +31,6 @@ const EditLogoEmployer: React.FC<{
         });
     };
     fetchEmployer();
-    if (logoRef.current) {
-      const width = logoRef.current.offsetWidth;
-      logoRef.current.style.height = width + "px";
-    }
   }, []);
 
   if (isLoading) {
@@ -104,7 +98,7 @@ const EditLogoEmployer: React.FC<{
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow relative w-[80%] sm:w-[70%] md:w-[50%] xl:w-[25%]">
+      <div className="bg-white rounded-lg shadow relative">
         <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t">
           <h3 className="text-xl font-semibold">Change Logo</h3>
           <button
@@ -119,10 +113,9 @@ const EditLogoEmployer: React.FC<{
           <form onSubmit={changeLogo}>
             {selectedFile ? (
               <img
-                className="w-full"
+                className="w-[250px] h-[250px] sm:h-[300px] sm:w-[300px] mx-auto"
                 src={URL.createObjectURL(selectedFile)}
                 alt="Ảnh đã chọn"
-                ref={logoRef}
               />
             ) : (
               <img
@@ -132,16 +125,15 @@ const EditLogoEmployer: React.FC<{
                     : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
                 }
                 alt="Ảnh cá nhân"
-                className="w-full"
-                ref={logoRef}
+                className="w-[250px] h-[250px] sm:h-[300px] sm:w-[300px] mx-auto"
               />
             )}
 
-            <div className="flex justify-center mt-5 gap-5">
+            <div className="flex justify-center mt-2 sm:mt-5 gap-5">
               {!selectedFile ? (
                 <>
                   <input
-                    className="block w-[90%] text-base text-gray-900 border border-gray-400 rounded-sm cursor-pointer bg-gray-50"
+                    className="block w-[250px] sm:w-[300px] text-sm sm:text-base text-gray-900 border border-gray-400 rounded-sm cursor-pointer bg-gray-50"
                     type="file"
                     id="fileInput"
                     accept="image/*"

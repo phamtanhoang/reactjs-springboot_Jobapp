@@ -76,7 +76,6 @@ public class EmployerController {
             employer1.setDescription(employer1.getDescription());
             employer1.setName(employer.getName());
             employerService.save(employer1);
-
             return ResponseEntity.ok("Candidate profile updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate profile");

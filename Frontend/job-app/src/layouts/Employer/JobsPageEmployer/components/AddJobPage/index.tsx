@@ -76,7 +76,7 @@ const AddJobPage: React.FC<{
 
   const handleAddJob = (e: any) => {
     e.preventDefault();
-    if (title && salary && address && description && toDate && cate) {
+    if (title.trim() && salary.trim() && address.trim() && description.trim() && toDate.trim() && cate.trim()) {
       Swal.fire({
         title: "Do you want to add?",
         icon: "warning",
@@ -88,12 +88,12 @@ const AddJobPage: React.FC<{
         if (result.isConfirmed) {
           jobsAPI
             .addJobByEmployerToken(
-              title,
-              toDate,
-              cate,
-              salary,
-              address,
-              description,
+              title.trim(),
+              toDate.trim(),
+              cate.trim(),
+              salary.trim(),
+              address.trim(),
+              description.trim(),
               localStorage.getItem("employerToken") || ""
             )
             .then(() => {
@@ -126,7 +126,7 @@ const AddJobPage: React.FC<{
           <button
             type="button"
             className="text-xl text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
-            onClick={() => props.setShowBoxAddJob(false)}
+            onClick={closedBox}
           >
             <AiOutlineClose />
           </button>
@@ -142,7 +142,7 @@ const AddJobPage: React.FC<{
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   type="text"
-                  onChange={(e) => setTitle(e.target.value.trim())}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="Please fill in Job title..."
                   required
                 />
@@ -184,7 +184,7 @@ const AddJobPage: React.FC<{
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   type="text"
-                  onChange={(e) => setSalary(e.target.value.trim())}
+                  onChange={(e) => setSalary(e.target.value)}
                   placeholder="Please fill in Job salary..."
                   required
                 />
@@ -196,7 +196,7 @@ const AddJobPage: React.FC<{
                 <input
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   type="text"
-                  onChange={(e) => setAddress(e.target.value.trim())}
+                  onChange={(e) => setAddress(e.target.value)}
                   placeholder="Please fill in Job address..."
                   required
                 />

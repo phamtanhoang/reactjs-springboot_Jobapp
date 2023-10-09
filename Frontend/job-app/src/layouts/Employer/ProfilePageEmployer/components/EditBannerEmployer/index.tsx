@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from "react";
+import { useEffect,  useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { ErrorBox, Spinner } from "../../../../../components";
 import authsAPI from "../../../../../services/Auths";
@@ -16,8 +16,6 @@ const EditBannerEmployer: React.FC<{
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const bannerRef = useRef<HTMLImageElement>(null);
-
   useEffect(() => {
     const fetchEmployer = () => {
       authsAPI
@@ -33,10 +31,6 @@ const EditBannerEmployer: React.FC<{
         });
     };
     fetchEmployer();
-    if (bannerRef.current) {
-      const width = bannerRef.current.offsetWidth;
-      bannerRef.current.style.height = width / 2 + "px";
-    }
   }, []);
 
   if (isLoading) {
@@ -106,7 +100,7 @@ const EditBannerEmployer: React.FC<{
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow relative w-[95%] sm:w-[85%] md:w-[70%] xl:w-1/2">
+      <div className="bg-white rounded-lg shadow relative ">
         <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t">
           <h3 className="text-xl font-semibold">Change Banner</h3>
           <button
@@ -121,10 +115,9 @@ const EditBannerEmployer: React.FC<{
           <form onSubmit={changeBanner}>
             {selectedFile ? (
               <img
-                className="w-full"
+                className="h-[150px] w-[300px] sm:h-[250px] sm:w-[500px] mx-auto"
                 src={URL.createObjectURL(selectedFile)}
                 alt="Ảnh đã chọn"
-                ref={bannerRef}
               />
             ) : (
               <img
@@ -134,16 +127,15 @@ const EditBannerEmployer: React.FC<{
                     : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695882546/light-gray-color-solid-background-1920x1080_kvwkxg.png"
                 }
                 alt="Ảnh cá nhân"
-                className="w-full"
-                ref={bannerRef}
+                className="h-[150px] w-[300px] sm:h-[250px] sm:w-[500px] mx-auto"
               />
             )}
 
-            <div className="flex justify-center mt-5 gap-5">
+            <div className="flex justify-center mt-2 sm:mt-5 gap-5">
               {!selectedFile ? (
                 <>
                   <input
-                    className="block w-[80%] sm:w-[50%] text-base text-gray-900 border border-gray-400 rounded-sm cursor-pointer bg-gray-50"
+                    className="block w-[300px] sm:w-[500px] text-base text-gray-900 border border-gray-400 rounded-sm cursor-pointer bg-gray-50"
                     type="file"
                     id="fileInput"
                     accept="image/*"

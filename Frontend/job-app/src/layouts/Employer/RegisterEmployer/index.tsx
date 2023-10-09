@@ -18,14 +18,14 @@ export const RegisterEmployer = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (
-      email &&
-      password &&
-      name &&
-      address &&
-      description &&
-      confirmPassword
+      email.trim() &&
+      password.trim() &&
+      name.trim() &&
+      address.trim() &&
+      description.trim() &&
+      confirmPassword.trim()
     ) {
-      if (password === confirmPassword) {
+      if (password.trim() === confirmPassword.trim()) {
         accountsAPI
           .getAccountByUserName(email)
           .then(() => {
@@ -34,13 +34,13 @@ export const RegisterEmployer = () => {
           .catch(() => {
             authsAPI
               .registerEmployer(
-                email,
-                password,
-                name,
-                address,
+                email.trim(),
+                password.trim(),
+                name.trim(),
+                address.trim(),
                 "",
                 "",
-                description
+                description.trim()
               )
               .then(() => {
                 Swal.fire("Đăng kí thành công!!! Chờ ban quản trị xác nhận.");
@@ -87,7 +87,7 @@ export const RegisterEmployer = () => {
                     <input
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
-                      onChange={(e) => setName(e.target.value.trim())}
+                      onChange={(e) => setName(e.target.value)}
                       placeholder="Nhập tên nhà tuyển dụng..."
                       value={name}
                       required
@@ -100,7 +100,7 @@ export const RegisterEmployer = () => {
                     <input
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
-                      onChange={(e) => setAddress(e.target.value.trim())}
+                      onChange={(e) => setAddress(e.target.value)}
                       placeholder="Nhập địa chỉ..."
                       value={address}
                       required
@@ -114,7 +114,7 @@ export const RegisterEmployer = () => {
                   </label>
                   <textarea
                     className="border rounded-lg px-3 py-4 mt-1  w-full"
-                    onChange={(e) => setDescription(e.target.value.trim())}
+                    onChange={(e) => setDescription(e.target.value)}
                     placeholder="Nhập mô tả..."
                     value={description}
                     required
@@ -127,7 +127,7 @@ export const RegisterEmployer = () => {
                 <input
                   type="email"
                   className="border rounded-lg px-3 py-2 mt-1 w-full mb-2"
-                  onChange={(e) => setEmail(e.target.value.trim())}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Nhập Email..."
                   value={email}
                   required

@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface ApplicationRepository extends JpaRepository<Application, String> {
     Application findByJobIdAndCandidateId(String jobId,String candidateId);
     Page <Application> findApplicationsByJobId(String jobId, Pageable pageable);
-
     List<Application> findApplicationsByJobId(String jobId );
     @Query("SELECT a FROM Application a " +
             "JOIN Job j ON a.jobId = j.id " +

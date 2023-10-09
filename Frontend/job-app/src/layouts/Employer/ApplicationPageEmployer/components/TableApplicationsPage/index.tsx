@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
-import { applicationsAPI } from "../../../../../services";
+import { applicationsAPI, jobsAPI } from "../../../../../services";
 import { ErrorBox, PaginationAdmin, Spinner } from "../../../../../components";
 import {
   AiFillCheckCircle,
@@ -12,13 +13,17 @@ import {
 import { ApplicationModel } from "../../../../../models/Application";
 import ProfileAccountPage from "../ProfileAccountPage";
 import { ApplicationDetailPage } from "..";
+import { ApplicationResponseModel } from "../../../../../models/ApplicationResponseModel";
+import Swal from "sweetalert2";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const [aplications, setApplications] = useState<ApplicationModel[]>([]);
+  const [aplications, setApplications] = useState<ApplicationResponseModel[]>(
+    []
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
@@ -38,7 +43,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
           localStorage.getItem("employerToken") || ""
         )
         .then((res) => {
-          setApplications(res.data);
+          setApplications(res.data.content);
           setTotalAmountOfItems(res.data.totalElements);
           setTotalPages(res.data.totalPages);
         })
@@ -68,33 +73,49 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
     );
   }
 
-  // const EditJob = (job: JobModel) => {
-  //   setShowBoxEditJob(true);
-  //   setEditJob(job);
-  // };
-
-  // const DeleteJob = (job: JobModel) => {
-  //   Swal.fire({
-  //     title: "Do you want to delete?",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       // candidatesAPI
-  //       //   .updateCandidate(firstName, lastName, dateOfBirth, sex, token)
-  //       //   .then(() => {
-  //       //     Swal.fire("Thành công!", "Chỉnh sửa thành công!", "success");
-  //       //     window.location.reload();
-  //       //   })
-  //       //   .catch(() => {
-  //       //     Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
-  //       //   });
-  //     }
-  //   });
-  // };
+  const updateState = (state: string, applicationId: string) => {
+    if (state.trim() == "approved" || state.trim() == "refused") {
+      Swal.fire({
+        title: `Do you want to ${state} application`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setIsLoading(true);
+          applicationsAPI
+            .updateState(
+              state,
+              applicationId,
+              localStorage.getItem("employerToken") || ""
+            )
+            .then(() => {
+              Swal.fire({
+                title: `${state} application success`,
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Yes",
+              })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.reload();
+                  }
+                })
+                .catch(() => {
+                  Swal.fire("Error!", `${state} application fail`, "error");
+                })
+                .finally(() => {
+                  setIsLoading(false);
+                });
+            });
+        }
+      });
+    } else {
+      Swal.fire("Error!", "Some thing went wrong", "error");
+    }
+  };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -150,90 +171,121 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 ">
-                    {/* {totalAmountOfItems > 0 ? (
-                      <> */}
-                    {aplications.map((application, i) => (
-                      <tr key={i}>
-                        <td className="px-4 py-4 text-sm font-medium text-gray-700 ">
-                          <div className="inline-flex items-center gap-x-3">
-                            <span>#{i}</span>
-                          </div>
-                        </td>
+                    {totalAmountOfItems > 0 ? (
+                      <>
+                        {aplications.map((application, i) => (
+                          <tr key={i}>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-700 ">
+                              <div className="inline-flex items-center gap-x-3">
+                                <span>#{i}</span>
+                              </div>
+                            </td>
 
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          <div className="flex items-center gap-x-2">
-                            <img
-                              className="object-cover w-8 h-8 rounded-full"
-                              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                              alt=""
-                            />
-                            <div>
-                              <h2
-                                className="text-sm font-semibold text-gray-800 dark:text-white hover:text-blue-600 cursor-pointer"
-                                onClick={() => setShowBoxProfileAccount(true)}
-                              >
-                                Arthur Melo
-                              </h2>
-                              <p className="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                authurmelo@example.com
-                              </p>
-                            </div>
-                          </div>
-                        </td>
+                            <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                              <div className="flex items-center gap-x-2">
+                                <img
+                                  className="object-cover w-8 h-8 rounded-full"
+                                  src={
+                                    application.image
+                                      ? application.image
+                                      : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+                                  }
+                                  alt="logo"
+                                />
+                                <div>
+                                  <h2
+                                    className="text-sm font-semibold text-gray-800 dark:text-white hover:text-blue-600 cursor-pointer"
+                                    onClick={() =>
+                                      setShowBoxProfileAccount(true)
+                                    }
+                                  >
+                                    {application.name}
+                                  </h2>
+                                  <p className="text-xs font-normal text-gray-600 dark:text-gray-400">
+                                    {application.username}
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
 
-                        <td className="px-4 py-4 text-sm text-gray-600 ">
-                          {application.applyDate &&
-                            new Date(
-                              application.applyDate
-                            ).toLocaleDateString()}
-                        </td>
+                            <td className="px-4 py-4 text-sm text-gray-600 ">
+                              {application.applyDate &&
+                                new Date(
+                                  application.applyDate
+                                ).toLocaleDateString()}
+                            </td>
 
-                        <td className="px-4 py-4 text-sm text-gray-600 ">
-                          {application.jobId}
-                          {new Date(application.jobId) < new Date() && (
-                            <span className="text-red-500 ml-2">(Expired)</span>
-                          )}
-                        </td>
-                        <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                          {application.state == "pending" ? (
-                            <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-yellow-500 bg-yellow-100/60 ">
-                              <AiOutlineExclamation />
-                              <h2 className="text-sm font-normal">Pending</h2>
-                            </div>
-                          ) : application.state == "active" ? (
-                            <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 ">
-                              <AiOutlineCheck />
-                              <h2 className="text-sm font-normal">Active</h2>
-                            </div>
-                          ) : (
-                            <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60 ">
-                              <AiOutlineClose />
-                              <h2 className="text-sm font-normal">Refused</h2>
-                            </div>
-                          )}
-                        </td>
+                            <td className="px-4 py-4 text-sm text-gray-600 ">
+                              {application.title}
+                            </td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              {application.state == "pending" ? (
+                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-yellow-500 bg-yellow-100/60 ">
+                                  <AiOutlineExclamation />
+                                  <h2 className="text-sm font-normal">
+                                    Pending
+                                  </h2>
+                                </div>
+                              ) : application.state == "approved" ? (
+                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 ">
+                                  <AiOutlineCheck />
+                                  <h2 className="text-sm font-normal">
+                                    Approved
+                                  </h2>
+                                </div>
+                              ) : (
+                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60 ">
+                                  <AiOutlineClose />
+                                  <h2 className="text-sm font-normal">
+                                    Refused
+                                  </h2>
+                                </div>
+                              )}
+                            </td>
 
-                        <td className="px-4 py-4 text-sm whitespace-nowrap">
-                          <div className="flex items-center gap-x-6 text-2xl text-gray-600">
-                            <div
-                              className=" cursor-pointer hover:text-yellow-500"
-                              onClick={() => {
-                                setShowBoxApplicationDetail(true);
-                              }}
-                            >
-                              <AiFillEye />
-                            </div>
-                            <div className="cursor-pointer hover:text-blue-500">
-                              <AiFillCheckCircle />
-                            </div>
-                            <div className="cursor-pointer hover:text-red-500">
-                              <AiFillCloseCircle />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                    {/* </>
+                            <td className="px-4 py-4 text-sm whitespace-nowrap">
+                              <div className="flex items-center gap-x-6 text-2xl text-gray-600">
+                                <div
+                                  className=" cursor-pointer hover:text-yellow-500"
+                                  onClick={() => {
+                                    setShowBoxApplicationDetail(true);
+                                  }}
+                                >
+                                  <AiFillEye />
+                                </div>
+                                <div
+                                  className="cursor-pointer hover:text-blue-500"
+                                  onClick={() => {
+                                    application.state == "pending"
+                                      ? updateState("approved", application.id)
+                                      : Swal.fire(
+                                          "Notification",
+                                          "Approved only while application is pending",
+                                          "info"
+                                        );
+                                  }}
+                                >
+                                  <AiFillCheckCircle />
+                                </div>
+                                <div
+                                  className="cursor-pointer hover:text-red-500"
+                                  onClick={() => {
+                                    application.state == "pending"
+                                      ? updateState("refused", application.id)
+                                      : Swal.fire(
+                                          "Notification",
+                                          "Refused only while application is pending",
+                                          "info"
+                                        );
+                                  }}
+                                >
+                                  <AiFillCloseCircle />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </>
                     ) : (
                       <tr>
                         <td colSpan="6">
@@ -242,7 +294,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
                           </div>
                         </td>
                       </tr>
-                    )} */}
+                    )}
                   </tbody>
                 </table>
               </div>

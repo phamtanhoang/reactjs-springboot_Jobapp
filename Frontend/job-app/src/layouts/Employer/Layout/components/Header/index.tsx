@@ -88,7 +88,7 @@ const Header: React.FC<{ isNavBarVisible: any; setIsNavBarVisible: any }> = (
                   ? employer?.image
                   : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
               }
-              className="w-12 h-12 rounded-full shadow-lg"
+              className="w-10 h-10 rounded-lg ring-2 ring-blue-500"
             />
           </Link>
         </div>

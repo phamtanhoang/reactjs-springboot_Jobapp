@@ -118,13 +118,28 @@ const jobsAPI = {
       categoryId: categoryId,
     };
 
+    console.log(`${urlAPI.updateJobByEmployerToken(jobId)}`);
+    console.log(headers);
+    console.log(data);
+
     return await instance.put(
-      `${urlAPI.updateJobByEmployerToken}/${jobId}`,
+      urlAPI.updateJobByEmployerToken(jobId),
       data,
       {
         headers: headers,
       }
     );
+  },
+
+  async deleteJobByEmployerToken(jobId: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    return await instance.delete(urlAPI.deleteJobByEmployerToken(jobId), {
+      headers: headers,
+    });
   },
 };
 export default jobsAPI;
