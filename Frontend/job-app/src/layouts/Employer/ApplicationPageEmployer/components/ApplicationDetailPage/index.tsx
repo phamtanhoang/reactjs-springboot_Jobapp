@@ -2,105 +2,118 @@
 
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { ApplicationModel } from "../../../../../models/ApplicationModel";
+import { useEffect, useState } from "react";
+import { ErrorBox, Spinner } from "../../../../../components";
+import { applicationsAPI, jobsAPI } from "../../../../../services";
+import { JobModel } from "../../../../../models/JobModel";
+import Swal from "sweetalert2";
 
 const ApplicationDetailPage: React.FC<{
   setShowBoxApplicationDetail: any;
+  applicationID: string;
 }> = (props) => {
-  // useEffect(() => {
-  //   const fetchCategories = () => {
-  //     categoriesAPI
-  //       .getCategories()
-  //       .then((res) => {
-  //         setCategories(res.data._embedded.categories);
-  //         if (res.data._embedded.categories.length > 0) {
-  //           setCate(res.data._embedded.categories[0].id);
-  //         } else {
-  //           setCate("");
-  //         }
-  //       })
-  //       .catch((error: any) => {
-  //         setHttpError(error.message);
-  //       })
-  //       .finally(() => {
-  //         setIsLoading(false);
-  //       });
-  //   };
-  //   fetchCategories();
-  // }, []);
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState(null);
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex-grow">
-  //       <Spinner />
-  //     </div>
-  //   );
-  // }
+  const [application, setApplication] = useState<ApplicationModel>();
+  const [job, setJob] = useState<JobModel>();
 
-  // if (httpError) {
-  //   return (
-  //     <div className="flex-grow w-5/6 sm:w-3/4 mx-auto my-10">
-  //       <ErrorBox text={httpError} />
-  //     </div>
-  //   );
-  // }
+  useEffect(() => {
+    const fetchApplication = () => {
+      applicationsAPI
+        .getApplicationByIDAndEmployerToken(
+          props.applicationID,
+          localStorage.getItem("employerToken") || ""
+        )
+        .then((res) => {
+          setApplication(res.data);
+        })
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
+    fetchApplication();
 
-  // const handleDescriptionChange = (content: string) => {
-  //   setDescription(content);
-  // };
+    const fetchJob = () => {
+      setIsLoading(true);
+      jobsAPI
+        .getJobById(application?.jobId || "")
+        .then((res) => {
+          setJob(res.data);
+        })
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
+    fetchJob();
+  }, [application?.jobId, props.applicationID]);
 
-  // const closedBox = () => {
-  //   setTitle("");
-  //   setToDate("");
-  //   setCate(categories[0].id);
-  //   setSalary("");
-  //   setAddress("");
-  //   setDescription("");
-  //   props.setShowBoxAddJob(false);
-  // };
+  if (isLoading) {
+    return (
+      <div className="flex-grow">
+        <Spinner />
+      </div>
+    );
+  }
 
-  // const handleAddJob = (e: any) => {
-  //   e.preventDefault();
-  //   if (title && salary && address && description && toDate && cate) {
-  //     Swal.fire({
-  //       title: "Do you want to add?",
-  //       icon: "warning",
-  //       showCancelButton: true,
-  //       confirmButtonColor: "#3085d6",
-  //       cancelButtonColor: "#d33",
-  //       confirmButtonText: "Yes",
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         jobsAPI
-  //           .addJobByEmployerToken(
-  //             title,
-  //             toDate,
-  //             cate,
-  //             salary,
-  //             address,
-  //             description,
-  //             localStorage.getItem("employerToken") || ""
-  //           )
-  //           .then(() => {
-  //             Swal.fire({
-  //               title: "Add new job success",
-  //               icon: "success",
-  //               confirmButtonColor: "#3085d6",
-  //               confirmButtonText: "Yes",
-  //             }).then((result) => {
-  //               if (result.isConfirmed) {
-  //                 window.location.reload();
-  //               }
-  //             });
-  //           })
-  //           .catch(() => {
-  //             Swal.fire("Error!", "Add new job error!", "error");
-  //           });
-  //       }
-  //     });
-  //   } else {
-  //     Swal.fire("Error!", "Please enter complete information!", "error");
-  //   }
-  // };
+  if (httpError) {
+    return (
+      <div className="flex-grow w-5/6 sm:w-3/4 mx-auto my-10">
+        <ErrorBox text={httpError} />
+      </div>
+    );
+  }
+
+  const updateState = (state: string, applicationId: string) => {
+    if (state.trim() == "approved" || state.trim() == "refused") {
+      Swal.fire({
+        title: `Do you want to ${state} application`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setIsLoading(true);
+          applicationsAPI
+            .updateState(
+              state,
+              applicationId,
+              localStorage.getItem("employerToken") || ""
+            )
+            .then(() => {
+              Swal.fire({
+                title: `${state} application success`,
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Yes",
+              })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.reload();
+                  }
+                })
+                .catch(() => {
+                  Swal.fire("Error!", `${state} application fail`, "error");
+                })
+                .finally(() => {
+                  setIsLoading(false);
+                });
+            });
+        }
+      });
+    } else {
+      Swal.fire("Error!", "Some thing went wrong", "error");
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
@@ -109,10 +122,10 @@ const ApplicationDetailPage: React.FC<{
           <h3 className="text-lg sm:text-xl font-semibold">
             Candidate application for{" "}
             <Link
-              to={"/employer/job/2"}
-              className="uppercase text-gray-600 hover:text-blue-600"
+              to={`/employer/job/${application?.jobId}`}
+              className="uppercase text-gray-700 hover:text-blue-600"
             >
-              frontend developer
+              {job?.title}
             </Link>
           </h3>
           <button
@@ -129,29 +142,38 @@ const ApplicationDetailPage: React.FC<{
             <div className="min-[450px]:flex gap-5 mt-2">
               <label className="block min-[450px]:w-[60%] mb-5">
                 <span className="font-semibold">Candidate Name: </span>
-                <p className="mt-2">Phạm Tấn Hoàng</p>
+                <p className="mt-2">{application?.name}</p>
               </label>
 
               <label className="block min-[450px]:w-[40%] mb-5">
                 <span className="font-semibold">Apply Date: </span>
-                <p className="mt-2">03/02/2002</p>
+                <p className="mt-2">
+                  {application?.applyDate &&
+                    new Date(application?.applyDate).toLocaleDateString()}
+                </p>
               </label>
             </div>
 
             <div className="min-[450px]:flex gap-5 ">
               <label className="block  min-[450px]:w-[60%] mb-5">
                 <span className="font-semibold">Email: </span>
-                <p className="mt-2">phamtanhoang3202@gmail.com</p>
+                <p className="mt-2">{application?.email}</p>
               </label>
 
               <label className="block min-[450px]:w-[40%] mb-5">
                 <span className="font-semibold">Phone Number: </span>
-                <p className="mt-2">0362400302</p>
+                <p className="mt-2">{application?.phoneNumber}</p>
               </label>
             </div>
 
             <label className="block mb-5">
               <span className="font-semibold">Thư giới thiệu:</span>
+              <div
+                className="mt-2 ring-1 px-3 py-2 rounded-lg ring-gray-300"
+                dangerouslySetInnerHTML={{
+                  __html: application?.letter || "",
+                }}
+              />
             </label>
             <label className="block mb-5">
               <span className="font-semibold">CV: </span>
@@ -164,14 +186,38 @@ const ApplicationDetailPage: React.FC<{
               </a>
             </label>
 
-            <div className="mb-3 flex gap-5 justify-end">
-              <button className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
-                Refused
-              </button>
-              <button className="bg-blue-600 text-white px-4 py-2 mt-4 rounded">
-                Accept
-              </button>
-            </div>
+            {application?.state == "pending" && (
+              <div className="mb-3 flex gap-5 justify-end">
+                <button
+                  className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
+                  onClick={() => {
+                    application.state == "pending"
+                      ? updateState("refused", application.id)
+                      : Swal.fire(
+                          "Notification",
+                          "Refused only while application is pending",
+                          "info"
+                        );
+                  }}
+                >
+                  Refused
+                </button>
+                <button
+                  className="bg-blue-600 text-white px-4 py-2 mt-4 rounded"
+                  onClick={() => {
+                    application?.state == "pending"
+                      ? updateState("approved", application.id)
+                      : Swal.fire(
+                          "Notification",
+                          "Approved only while application is pending",
+                          "info"
+                        );
+                  }}
+                >
+                  Approved
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

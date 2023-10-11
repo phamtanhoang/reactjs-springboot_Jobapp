@@ -122,13 +122,9 @@ const jobsAPI = {
     console.log(headers);
     console.log(data);
 
-    return await instance.put(
-      urlAPI.updateJobByEmployerToken(jobId),
-      data,
-      {
-        headers: headers,
-      }
-    );
+    return await instance.put(urlAPI.updateJobByEmployerToken(jobId), data, {
+      headers: headers,
+    });
   },
 
   async deleteJobByEmployerToken(jobId: string, token?: string) {
@@ -138,6 +134,16 @@ const jobsAPI = {
     };
 
     return await instance.delete(urlAPI.deleteJobByEmployerToken(jobId), {
+      headers: headers,
+    });
+  },
+
+  async getJobByEmployerToken(jobId: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getJobByEmployerToken(jobId), {
       headers: headers,
     });
   },

@@ -15,10 +15,12 @@ import { LoginPage } from "./layouts/Candidate/LoginPage";
 import { RegisterPage } from "./layouts/Candidate/RegisterPage";
 import LoginPageAdmin from "./layouts/Admin/LoginPageAdmin";
 import JobsPageEmployer from "./layouts/Employer/JobsPageEmployer";
-import JobProfilePageEmployer from "./layouts/Employer/JobProfilePageEmployer";
+import JobDetailPageEmployer from "./layouts/Employer/JobProfilePageEmployer";
 import ApplicationPageEmployer from "./layouts/Employer/ApplicationPageEmployer";
 import ProfilePageEmployer from "./layouts/Employer/ProfilePageEmployer";
+import { LayoutAdmin } from "./layouts/Admin/LayoutAdmin";
 import DashboardPage from "./layouts/Admin/Dashboard";
+import JobsPageAdmin from "./layouts/Admin/JobsPageAdmin";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -78,7 +80,7 @@ const App = () => {
                 <Route path="/employer/jobs" element={<JobsPageEmployer />} />
                 <Route
                   path="/employer/job/:id"
-                  element={<JobProfilePageEmployer />}
+                  element={<JobDetailPageEmployer />}
                 />
                 <Route
                   path="/employer/applications"
@@ -121,8 +123,32 @@ const App = () => {
             </>
           )}
 
-          <Route path="/admin/login" element={<LoginPageAdmin />} />
-          <Route path="/admin/home" element={<DashboardPage />} />
+          {!adminToken ? (
+            <>
+              <Route path="/admin" element={<Navigate to="/admin/admin" />} />
+              <Route
+                path="/admin/login"
+                element={<Navigate to="/admin/home" />}
+              />
+              <Route path="/" element={<LayoutAdmin />}>
+                <Route path="/admin/home" element={<DashboardPage />} />
+                <Route path="/admin/jobs" element={<JobsPageAdmin />} />
+              </Route>
+            </>
+          ) : (
+            <>
+              <Route path="/admin" element={<Navigate to="/admin/login" />} />
+              <Route
+                path="/admin/home"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/jobs"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route path="/admin/login" element={<LoginPageAdmin />} />
+            </>
+          )}
         </Routes>
       </BrowserRouter>
     </>

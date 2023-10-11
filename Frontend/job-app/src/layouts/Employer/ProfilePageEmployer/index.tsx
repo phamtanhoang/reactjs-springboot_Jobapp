@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ErrorBox, Spinner } from "../../../components";
 import authsAPI from "../../../services/Auths";
 import { EmployerResponseModel } from "../../../models/EmployerResponseModels";
@@ -15,9 +15,6 @@ const ProfilePageEmployer = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
-
-  const bannerRef = useRef<HTMLImageElement>(null);
-  const logoRef = useRef<HTMLImageElement>(null);
 
   const [showBoxChangeBanner, setShowBoxChangeBanner] = useState(false);
   const [showBoxChangeLogo, setShowBoxChangeLogo] = useState(false);
@@ -38,16 +35,6 @@ const ProfilePageEmployer = () => {
         });
     };
     fetchEmployer();
-
-    if (bannerRef.current) {
-      const width = bannerRef.current.offsetWidth;
-      bannerRef.current.style.height = width / 2 + "px";
-    }
-
-    if (logoRef.current) {
-      const width = logoRef.current.offsetWidth;
-      logoRef.current.style.height = width + "px";
-    }
   }, []);
 
   if (isLoading) {
@@ -68,17 +55,25 @@ const ProfilePageEmployer = () => {
 
   return (
     <>
-      <div className="w-full sm:w-[85%] md:w-[70%] px-4 mx-auto">
+      <div className="w-[360px] min-[400px]:w-[394px] min-[500px]:w-[480px] sm:w-[600px] md:w-[700px] lg:w-[750px] xl:w-[900px] px-4 mx-auto">
+        {showBoxChangeBanner && localStorage.getItem("employerToken") && (
+          <EditBannerEmployer setShowChangeBanner={setShowBoxChangeBanner} />
+        )}
+        {showBoxChangeProfile && localStorage.getItem("employerToken") && (
+          <EditProfileEmployer setShowChangeProfile={setShowBoxChangeProfile} />
+        )}
+        {showBoxChangeLogo && localStorage.getItem("employerToken") && (
+          <EditLogoEmployer setShowChangeLogo={setShowBoxChangeLogo} />
+        )}
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full shadow-xl rounded-lg my-10">
           <div className="overflow-hidden">
             <img
-              className="w-full "
+              className="w-[360px] h-[180px] min-[400px]:w-[394px] min-[400px]:h-[197px] min-[500px]:w-[480px] min-[500px]:h-[240px] sm:w-[600px] sm:h-[300px] md:w-[700px] md:h-[350px] lg:w-[750px] lg:h-[375px] xl:w-[900px] xl:h-[450px]"
               src={
                 employer?.banner
                   ? employer?.banner
                   : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695882546/light-gray-color-solid-background-1920x1080_kvwkxg.png"
               }
-              ref={bannerRef}
               alt="banner"
             />
             <div
@@ -89,11 +84,11 @@ const ProfilePageEmployer = () => {
               <span className="hidden sm:block">Add cover photo</span>
             </div>
           </div>
-          <div className="-mt-[17%] sm:-mt-[14%] md:-mt-[9%] flex mx-auto w-1/3 md:w-1/4">
+          <div className="-mt-[16%] sm:-mt-[14%] md:-mt-[12%]  lg:-mt-[10%] flex mx-auto">
             <div className="rounded-xl sm:flex bg-white shadow-lg">
               <div className="p-2 sm:p-4 mx-auto flex items-center relative">
                 <img
-                  className="w-full border-2"
+                  className="sm:w-[150px] sm:h-[150px] min-[400px]:w-[120px] min-[400px]:h-[120px] w-[100px] h-[100px] border-2"
                   src={
                     employer?.image
                       ? employer?.image
@@ -140,15 +135,6 @@ const ProfilePageEmployer = () => {
           </div>
         </div>
       </div>
-      {showBoxChangeBanner && localStorage.getItem("employerToken") && (
-        <EditBannerEmployer setShowChangeBanner={setShowBoxChangeBanner} />
-      )}
-      {showBoxChangeLogo && localStorage.getItem("employerToken") && (
-        <EditLogoEmployer setShowChangeLogo={setShowBoxChangeLogo} />
-      )}
-      {showBoxChangeProfile && localStorage.getItem("employerToken") && (
-        <EditProfileEmployer setShowChangeProfile={setShowBoxChangeProfile} />
-      )}
     </>
   );
 };

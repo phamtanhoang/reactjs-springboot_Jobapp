@@ -1,18 +1,14 @@
 package com.pth.jobapp.service;
 
 import com.pth.jobapp.dao.EmployerRepository;
-import com.pth.jobapp.entity.Account;
-import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.entity.Employer;
-import com.pth.jobapp.util.ImageUploader;
+import com.pth.jobapp.util.FileUploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,7 +17,7 @@ public class EmployerService {
     @Autowired
     private EmployerRepository employerRepository;
     @Autowired
-    ImageUploader imageUploader;
+    FileUploader imageUploader;
     public Employer save(Employer employer) {
         return employerRepository.save(employer);
     }

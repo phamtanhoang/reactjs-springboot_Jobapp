@@ -1,7 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
+import { JobModel } from "../../../../../models/JobModel";
 import { applicationsAPI } from "../../../../../services";
+import { ApplicationResponseModel } from "../../../../../models/ApplicationResponseModel";
 import { ErrorBox, PaginationAdmin, Spinner } from "../../../../../components";
+import {
+  ApplicationDetailPage,
+  ProfileAccountPage,
+} from "../../../ApplicationPageEmployer/components";
 import {
   AiFillCheckCircle,
   AiFillCloseCircle,
@@ -10,14 +16,10 @@ import {
   AiOutlineClose,
   AiOutlineExclamation,
 } from "react-icons/ai";
-import ProfileAccountPage from "../ProfileAccountPage";
-import { ApplicationDetailPage } from "..";
-import { ApplicationResponseModel } from "../../../../../models/ApplicationResponseModel";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
+const TableApplicationsOfJobPage: React.FC<{ job?: JobModel }> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
@@ -26,7 +28,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
   );
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6);
+  const [itemsPerPage] = useState(5);
   const [totalAmountOfItems, setTotalAmountOfItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -40,8 +42,8 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
   useEffect(() => {
     const fetchApplications = () => {
       applicationsAPI
-        .getApplicationsByEmployerToken(
-          props.title,
+        .getApplicationsByJobIDAndEmplerToken(
+          props.job?.id || "",
           currentPage - 1,
           itemsPerPage,
           localStorage.getItem("employerToken") || ""
@@ -59,7 +61,8 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
         });
     };
     fetchApplications();
-  }, [currentPage, itemsPerPage, props.title]);
+  }, [currentPage, itemsPerPage, props.job?.id]);
+  console.log(aplications);
 
   if (isLoading) {
     return (
@@ -122,10 +125,12 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   return (
     <>
       <div className="px-4 mx-auto pb-6">
+        <div>
+          <p className="text-lg font-medium mb-2">Application List:</p>
+        </div>
         <div className="flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -341,4 +346,4 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
     </>
   );
 };
-export default TableApplicationsPage;
+export default TableApplicationsOfJobPage;

@@ -1,21 +1,14 @@
 package com.pth.jobapp.service;
 
 import com.pth.jobapp.dao.CandidateRepository;
-import com.pth.jobapp.dao.EmployerRepository;
-import com.pth.jobapp.entity.Account;
 import com.pth.jobapp.entity.Candidate;
-import com.pth.jobapp.entity.Employer;
-import com.pth.jobapp.util.ImageUploader;
+import com.pth.jobapp.util.FileUploader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,7 +17,7 @@ public class CandidateService {
     @Autowired
     private CandidateRepository candidateRepository;
     @Autowired
-    private  ImageUploader imageUploader;
+    private FileUploader fileUploader;
     public Candidate save(Candidate candidate) {
         return candidateRepository.save(candidate);
     }
@@ -35,10 +28,10 @@ public class CandidateService {
 
                 if (candidate.getAvatar() != null) {
                     String existingImageUrl = candidate.getAvatar();
-                    String updatedImageUrl = imageUploader.updateImage(existingImageUrl, imageBytes);
+                    String updatedImageUrl = fileUploader.updateImage(existingImageUrl, imageBytes);
                     candidate.setAvatar(updatedImageUrl);
                 } else {
-                    String imgUrl = imageUploader.uploadImage(imageBytes);
+                    String imgUrl = fileUploader.uploadImage(imageBytes);
 
                     candidate.setAvatar(imgUrl);
 
@@ -49,6 +42,7 @@ public class CandidateService {
         }
         return candidateRepository.save(candidate);
     }
+
 
     public Candidate updateCandidate(Candidate updatedCandidate) {
         Candidate existingCandidate = candidateRepository.findById(updatedCandidate.getId())

@@ -169,7 +169,6 @@ public class AccountController {
                     System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
                     return ResponseEntity.ok(token);
                 } else {
-                    // Handle the case where the user is not an employer or not in the active state
                     throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
                 }
             } else {
@@ -207,7 +206,6 @@ public class AccountController {
     @PostMapping("/logout")
     public ResponseEntity<String> performLogout(HttpServletRequest request, HttpServletResponse response) throws UsernameNotFoundException {
         try {
-            // Lấy token từ tiêu đề "Authorization" trong request
             String tokenHeader = request.getHeader("Authorization");
 
             if (tokenHeader != null ) {
@@ -219,7 +217,6 @@ public class AccountController {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (Exception e) {
-            // Xử lý các ngoại lệ và trả về phản hồi phù hợp
             throw new UsernameNotFoundException("Invalid user request!");
         }
     }

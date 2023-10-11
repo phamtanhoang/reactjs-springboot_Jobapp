@@ -99,5 +99,9 @@ const candidatesAPI = {
       headers,
     });
   },
+
+  async getCandidateProfileById(id: string) {
+    return await instance.get(urlAPI.getCandidateProfileById(id));
+  },
 };
 export default candidatesAPI;

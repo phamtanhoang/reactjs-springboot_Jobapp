@@ -8,8 +8,13 @@ import {
   HiInformationCircle,
 } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { AiFillSetting } from "react-icons/ai";
+import { useState } from "react";
+import { ChangePasswordPageEmployer } from "../../../ChangePasswordPageEmployer";
 
 const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
+  const [showBox, setShowBox] = useState(false);
+
   const LogoutHandle = () => {
     Swal.fire({
       title: "Bạn có muốn đăng xuất?",
@@ -27,7 +32,7 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
   };
   return (
     <aside
-      className={`fixed md:top-0 md:left-0 h-screen lg:block bg-white  border-r z-30  ${
+      className={`fixed md:top-0 md:left-0 h-screen lg:block bg-white  border-r z-50  ${
         props.isNavBarVisible ? "block" : "hidden "
       }`}
     >
@@ -74,6 +79,7 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                     </span>
                   </Link>
                 </li>
+                <hr></hr>
                 <li>
                   <Link
                     to="/employer/profile"
@@ -84,6 +90,18 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                       Information
                     </span>
                   </Link>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                    onClick={() => setShowBox(true)}
+                  >
+                    <AiFillSetting className="text-2xl text-gray-500 group-hover:text-blue-600" />
+                    <span className="ml-3 group-hover:text-blue-600">
+                      Change Password
+                    </span>
+                  </a>
                 </li>
                 <li>
                   <a
@@ -107,6 +125,10 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
           </div>
         </div>
       </div>
+
+      {showBox && localStorage.getItem("employerToken") && (
+        <ChangePasswordPageEmployer setShowBox={setShowBox} />
+      )}
     </aside>
   );
 };

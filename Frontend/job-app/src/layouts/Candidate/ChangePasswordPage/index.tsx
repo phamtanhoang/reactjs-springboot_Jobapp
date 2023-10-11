@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import authsAPI from "../../../services/Auths";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -11,13 +11,8 @@ export const ChangePasswordPage: React.FC<{ showBox: any; setShowBox: any }> = (
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [comfirmNewPassword, setComfirmNewPassword] = useState("");
-  const [candidateToken, setCandidateToken] = useState("");
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setCandidateToken(localStorage.getItem("candidateToken") || "");
-  }, [candidateToken]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -27,7 +22,7 @@ export const ChangePasswordPage: React.FC<{ showBox: any; setShowBox: any }> = (
           currentPassword,
           newPassword,
           comfirmNewPassword,
-          candidateToken
+          localStorage.getItem("candidateToken") || ""
         )
         .then((res) => {
           props.setShowBox(false);

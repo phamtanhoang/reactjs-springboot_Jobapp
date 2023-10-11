@@ -41,6 +41,7 @@ public class JobService {
         return jobRepository.findByEmployerIdAndTitleContaining(employerId,title,pageable);
     }
 
+    public Optional<Job>findJobByEmployerIdAndId(String employerId,String id){return jobRepository.findJobByEmployerIdAndId(employerId,id);}
 
     @Scheduled(cron = "0 0 0 * * ?") // Chạy vào lúc 00:00:00 hàng ngày
     public void updateJobStatus() {

@@ -87,6 +87,9 @@ export const urlAPI = {
 
   getCandidateById: (id: string) => `/candidates/${id}`,
 
+  getCandidateProfileById: (id: string) =>
+    `/candidates/candidateProfile?id=${id}`,
+
   loginCandidate: "/auth/candidate/login",
 
   currentCandidate: "/candidates/profile",
@@ -113,7 +116,7 @@ export const urlAPI = {
 
   changePassword: "/auth/changePassword",
 
-  currentEmployer: "/employer/profile",
+  currentEmployer: "/employers/profile",
 
   getJobsByTitleContainingAndEmployerToken: (
     title: string,
@@ -125,22 +128,37 @@ export const urlAPI = {
 
   addJobByEmployerToken: "/jobs/create",
 
+  getApplicationByIDAndEmployerToken: (id: string) => {
+    return `/applies/applicationDetails?applicationId=${id}`;
+  },
+
   getApplicationsByEmployerToken: (
+    title: string,
     currentPage: number,
     itemsPerPage: number
   ) => {
-    return `/applies/employerApplications?page=${currentPage}&size=${itemsPerPage}`;
+    return `/applies/employerApplications?title=${title}&page=${currentPage}&size=${itemsPerPage}`;
   },
 
-  updateEmployerBanner: "/employer/updateBanner",
-  
-  updateEmployerLogo: "/employer/updateImage",
+  updateEmployerBanner: "/employers/updateBanner",
 
-  updateEmployerProfile: "/employer/update",
+  updateEmployerLogo: "/employers/updateImage",
+
+  updateEmployerProfile: "/employers/update",
 
   updateJobByEmployerToken: (jobId: string) => `/jobs/update?jobId=${jobId}`,
 
   deleteJobByEmployerToken: (jobId: string) => `/jobs/delete?jobId=${jobId}`,
 
-  updateApplicationState:"/applies/updateState"
+  updateApplicationState: "/applies/updateState",
+
+  getJobByEmployerToken: (jobId: string) =>
+    `/employers/jobDetails?jobId=${jobId}`,
+
+  getApplicationsByJobIDAndEmplerToken: (
+    jobId: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/applies/applicatonsJob?jobId=${jobId}&page=${currentPage}&size=${itemsPerPage}`,
 };

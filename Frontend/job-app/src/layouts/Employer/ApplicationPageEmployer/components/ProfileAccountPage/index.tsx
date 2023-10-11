@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AiOutlineClose } from "react-icons/ai";
-import ReactQuill from "react-quill";
-import { CategoryModel } from "../../../../../models/CategoryModel";
 import { useEffect, useState } from "react";
-import { categoriesAPI, jobsAPI } from "../../../../../services";
+import { candidatesAPI } from "../../../../../services";
 import { ErrorBox, Spinner } from "../../../../../components";
-import Swal from "sweetalert2";
+import { CandidateResponseModel } from "../../../../../models/CandidateResponseModel";
 
 const ProfileAccountPage: React.FC<{
   setShowBoxProfileAccount: any;
+  accountID: string;
 }> = (props) => {
-  const [categories, setCategories] = useState<CategoryModel[]>([]);
+  const [candidate, setCandidate] = useState<CandidateResponseModel>();
 
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
   useEffect(() => {
-    const fetchCategories = () => {
-      categoriesAPI
-        .getCategories()
+    const fetchCandidate = () => {
+      candidatesAPI
+        .getCandidateProfileById(props.accountID)
         .then((res) => {
-          setCategories(res.data._embedded.categories);
+          setCandidate(res.data);
         })
         .catch((error: any) => {
           setHttpError(error.message);
@@ -29,8 +28,8 @@ const ProfileAccountPage: React.FC<{
           setIsLoading(false);
         });
     };
-    fetchCategories();
-  }, []);
+    fetchCandidate();
+  }, [props.accountID]);
 
   if (isLoading) {
     return (
@@ -67,11 +66,15 @@ const ProfileAccountPage: React.FC<{
             <div className="p-2 sm:w-[35%]">
               <img
                 className="w-32 h-32 rounded-full mx-auto"
-                src="https://www.gravatar.com/avatar/2acfb745ecf9d4dccb3364752d17f65f?s=260&d=mp"
-                alt="John Doe"
+                src={
+                  candidate?.avatar
+                    ? candidate.avatar
+                    : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+                }
+                alt="avatar"
               />
               <h3 className="text-center text-xl text-gray-900 font-medium leading-8 mt-1">
-                Joh Doe
+                {candidate?.firstName} {candidate?.lastName}
               </h3>
             </div>
             <div className="p-2 sm:w-[60%] pt-0 sm:pt-2">
@@ -79,23 +82,24 @@ const ProfileAccountPage: React.FC<{
                 <tbody>
                   <tr>
                     <td className="px-2 py-2 text-gray-500 font-semibold">
-                      Address
+                      Email:
+                    </td>
+                    <td className="px-2 py-2">{candidate?.username}</td>
+                  </tr>
+                  <tr>
+                    <td className="px-2 py-2 text-gray-500 font-semibold">
+                      Date of birth:
                     </td>
                     <td className="px-2 py-2">
-                      Chatakpur-3, Dhangadhi Kailali
+                      {candidate?.dateOfBirth &&
+                        new Date(candidate?.dateOfBirth).toLocaleDateString()}
                     </td>
                   </tr>
                   <tr>
                     <td className="px-2 py-2 text-gray-500 font-semibold">
-                      Phone
+                      Sex:
                     </td>
-                    <td className="px-2 py-2">+977 9955221114</td>
-                  </tr>
-                  <tr>
-                    <td className="px-2 py-2 text-gray-500 font-semibold">
-                      Email
-                    </td>
-                    <td className="px-2 py-2">john@exmaple.com</td>
+                    <td className="px-2 py-2">{candidate?.sex}</td>
                   </tr>
                 </tbody>
               </table>
@@ -106,13 +110,23 @@ const ProfileAccountPage: React.FC<{
               <h2 className="text-gray-500 font-semibold text-base mb-2">
                 Skill
               </h2>
-              <p>hoáihdfpoasdf alsidhfiasdf</p>
+              <div
+                className="mb-2 ml-3"
+                dangerouslySetInnerHTML={{
+                  __html: candidate?.skill || "",
+                }}
+              />
             </div>
             <div>
               <h2 className="text-gray-500 font-semibold text-base my-2">
                 Experience
               </h2>
-              <p>hoáihdfpoasdf alsidhfiasdf</p>
+              <div
+                className="mb-2 ml-3"
+                dangerouslySetInnerHTML={{
+                  __html: candidate?.experience || "",
+                }}
+              />
             </div>
           </div>
         </div>

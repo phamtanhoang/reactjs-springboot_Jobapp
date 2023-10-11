@@ -37,11 +37,6 @@ private String theAllowedOrigins = "*";
         disableHttpMethods(Employer.class, repositoryRestConfiguration, theUnsupportedActions);
         disableHttpMethods(Category.class, repositoryRestConfiguration, theUnsupportedActions);
 
-//        // Thiết lập cấu hình JSON response
-//        repositoryRestConfiguration.setDefaultMediaType(MediaType.APPLICATION_JSON);
-//        repositoryRestConfiguration.useHalAsDefaultJsonMediaType(false);
-
-        /* Configure CORS Mapping */
         corsRegistry.addMapping(repositoryRestConfiguration.getBasePath() + "/**")
                 .allowedOrigins(theAllowedOrigins);
 

@@ -1,18 +1,13 @@
 package com.pth.jobapp.controller;
 
-import com.pth.jobapp.ResponseModels.ApplicationResponse;
-import com.pth.jobapp.ResponseModels.FavoriteJobResponse;
 import com.pth.jobapp.entity.*;
-import com.pth.jobapp.requestmodels.EmployerRegistrationRequest;
 import com.pth.jobapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.util.*;
 
@@ -28,12 +23,9 @@ public class JobController {
     EmployerService employerService;
     @Autowired
     CandidateService candidateService;
-
-    @Autowired
-    ApplicationService applicationService;
-
+    @Autowired ApplicationService applicationService;
     @PostMapping("/create")
-    public ResponseEntity<String> createJob(@RequestHeader("Authorization") String token,  @RequestBody Job job) {
+    public ResponseEntity<String> createJob(@RequestBody Job job,@RequestHeader("Authorization") String token) {
         try {
             String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
             Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method

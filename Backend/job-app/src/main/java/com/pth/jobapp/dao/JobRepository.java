@@ -58,4 +58,6 @@ public interface JobRepository extends JpaRepository<Job, String> {
             @Param("title") String title,
             Pageable pageable
     );
+
+    Optional<Job>findJobByEmployerIdAndId(String employerId,String id);
 }

@@ -47,7 +47,7 @@ const employersAPI = {
 
     const formData = new FormData();
     if (img) {
-      formData.append("image", img);
+      formData.append("banner", img);
     }
     return await instance.put(urlAPI.updateEmployerBanner, formData, {
       headers,

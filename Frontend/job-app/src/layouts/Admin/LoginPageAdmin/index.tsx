@@ -144,7 +144,7 @@ function LoginPageAdmin() {
               </div>
 
               <div className="mt-7">
-                <button className="mb-1.5 block w-full text-center text-white bg-purple-700 hover:bg-purple-900 px-2 py-1.5 rounded-md">
+                <button className="mb-1.5 block w-full text-center text-white bg-purple-500 hover:bg-purple-700 px-2 py-1.5 rounded-md">
                   Sign in
                 </button>
               </div>

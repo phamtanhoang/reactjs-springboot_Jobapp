@@ -2,6 +2,7 @@ package com.pth.jobapp.entity;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,32 +21,39 @@ public class Candidate {
     private String firstName;
 
     @Getter
+    @Setter
     @Column(name = "last_name")
     private String lastName;
 
     @Getter
+    @Setter
     @Column(name = "avatar")
     private String avatar;
 
-    @Getter
+        @Getter
+        @Setter
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
     @Getter
+    @Setter
     @Column(name = "sex")
     private String sex;
 
 
     @Getter
+    @Setter
     @Column(name = "account_id")
     private String accountId;
 
 
     @Getter
+    @Setter
     @Column(name = "skill")
     private String skill;
 
     @Getter
+    @Setter
     @Column(name = "experience")
     private String experience;
 
@@ -53,76 +61,5 @@ public class Candidate {
 
     };
 
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public String getSkill() {
-        return skill;
-    }
-
-    public void setSkill(String skill) {
-        this.skill = skill;
-    }
-
-    public String getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String experience) {
-        this.experience = experience;
-    }
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
 }

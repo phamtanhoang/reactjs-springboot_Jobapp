@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect,  useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { ErrorBox, Spinner } from "../../../../../components";
 import authsAPI from "../../../../../services/Auths";
@@ -35,7 +35,7 @@ const EditBannerEmployer: React.FC<{
 
   if (isLoading) {
     return (
-      <div className="flex-grow">
+      <div className="flex-grow z-2000">
         <Spinner />
       </div>
     );
@@ -57,7 +57,8 @@ const EditBannerEmployer: React.FC<{
     }
   };
 
-  const changeBanner = () => {
+  const changeBanner = (e: any) => {
+    e.preventDefault();
     const token = localStorage.getItem("employerToken") || "";
     if (token) {
       if (selectedFile) {

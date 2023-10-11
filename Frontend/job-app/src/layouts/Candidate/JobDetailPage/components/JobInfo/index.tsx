@@ -9,7 +9,7 @@ import {
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
-import { ApplicationModel } from "../../../../../models/Application";
+import { ApplicationModel } from "../../../../../models/ApplicationModel";
 import { Link } from "react-router-dom";
 
 export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {

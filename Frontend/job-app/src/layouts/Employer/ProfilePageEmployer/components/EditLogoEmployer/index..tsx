@@ -35,7 +35,7 @@ const EditLogoEmployer: React.FC<{
 
   if (isLoading) {
     return (
-      <div className="flex-grow">
+      <div className="flex-grow z-2000">
         <Spinner />
       </div>
     );
@@ -57,7 +57,8 @@ const EditLogoEmployer: React.FC<{
     }
   };
 
-  const changeLogo = () => {
+  const changeLogo = (e: any) => {
+    e.preventDefault();
     const token = localStorage.getItem("employerToken") || "";
     if (token) {
       if (selectedFile) {
