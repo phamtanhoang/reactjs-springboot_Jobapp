@@ -163,4 +163,33 @@ export const urlAPI = {
     `/applies/applicatonsJob?jobId=${jobId}&page=${currentPage}&size=${itemsPerPage}`,
 
   loginAdmin: "/admin/login",
+
+  getCategoriesByNameAndAdminToken: (
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/admin/categories?name=${name}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addCategoryByAdminToken: `/admin/category/create`,
+
+  updateCategoryByAdminToken: (id: string) =>
+    `/admin/category/update?categoryId=${id}`,
+
+  deleteCategoryByAdminToken: (id: string) =>
+    `/admin/job/delete?categoryId=${id}`,
+
+  getJobsByTitleAndAdminToken: (
+    title: string,
+    categoryId: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/admin/jobs?title=${title}&categoryId=${categoryId}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addJobByAdminToken: `/admin/job/create`,
+
+  updateJobByAdminToken: (id: string) => `/admin/job/update?jobId=${id}`,
+
+  deleteJobByAdminToken: (id: string) => `/admin/job/delete?jobId=${id}`,
 };

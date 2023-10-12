@@ -71,7 +71,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
 
   if (httpError) {
     return (
-      <div className="flex-grow w-5/6 sm:w-3/4 mx-auto my-10">
+      <div className="flex-grow px-6 mx-auto">
         <ErrorBox text={httpError} />
       </div>
     );
@@ -305,7 +305,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
                       </>
                     ) : (
                       <tr>
-                        <td colSpan="6">
+                        <td colSpan={6}>
                           <div className="w-full p-5">
                             <ErrorBox text="There are no applications" />
                           </div>

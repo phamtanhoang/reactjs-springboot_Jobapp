@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import authsAPI from "../../../services/Auths";
 import Swal from "sweetalert2";
 

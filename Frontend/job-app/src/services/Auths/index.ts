@@ -83,6 +83,16 @@ const authsAPI = {
     });
   },
 
+  async loginAdmin(username: string, password: string) {
+    const userData = {
+      username: username,
+      password: password,
+    };
+    return await instance.post(urlAPI.loginAdmin, userData, {
+      headers: { "Content-Type": "application/json" },
+    });
+  },
+  
   async changePassword(
     currentPassword?: string,
     newPassword?: string,
@@ -99,16 +109,6 @@ const authsAPI = {
       confirmPassword: confirmPassword,
     };
     return await instance.put(urlAPI.changePassword, data, { headers });
-  },
-
-  async loginAdmin(username: string, password: string) {
-    const userData = {
-      username: username,
-      password: password,
-    };
-    return await instance.post(urlAPI.loginAdmin, userData, {
-      headers: { "Content-Type": "application/json" },
-    });
   },
 
   async logout(token: string) {

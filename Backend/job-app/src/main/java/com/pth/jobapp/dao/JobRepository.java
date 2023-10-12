@@ -23,6 +23,18 @@ public interface JobRepository extends JpaRepository<Job, String> {
             Pageable pageable
     );
 
+    @Query("SELECT j FROM Job j WHERE" +
+            " (:title IS NULL OR j.title LIKE %:title%)" +
+            " AND (:categoryId IS NULL OR :categoryId = '' OR j.categoryId = :categoryId)")
+    Page<Job> findByTitleContainingAndCategoryId(
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "categoryId", required = false) String categoryId,
+            Pageable pageable
+    );
+
+    List<Job> findByCategoryId(
+            @RequestParam(name = "category", required = false) String categoryId);
+
 
     Page<Job> findByCategoryId(
             @RequestParam(name = "category", required = false) String categoryId,

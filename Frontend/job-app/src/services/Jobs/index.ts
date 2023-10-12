@@ -1,5 +1,6 @@
 import { instance } from "../../configs/Apis";
 import { urlAPI } from "../../configs/helper";
+import { JobModel } from "../../models/JobModel";
 
 const jobsAPI = {
   async getJobs(currentPage?: number, itemsPerPage?: number) {
@@ -145,6 +146,60 @@ const jobsAPI = {
     };
     return await instance.get(urlAPI.getJobByEmployerToken(jobId), {
       headers: headers,
+    });
+  },
+
+  async getJobsByTitleAndAdminToken(
+    title: string,
+    categoryId: string,
+    currentPage: number,
+    itemsPerPage: number,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getJobsByTitleAndAdminToken(
+        title,
+        categoryId,
+        currentPage,
+        itemsPerPage
+      ),
+      { headers }
+    );
+  },
+
+  async addJobByAdminToken(job: JobModel, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const data = { job: job };
+    return await instance.post(urlAPI.addJobByAdminToken, data, {
+      headers,
+    });
+  },
+
+  async updateJobByAdminToken(id: string, job: JobModel, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const data = { job: job };
+    return await instance.put(urlAPI.updateJobByAdminToken(id), data, {
+      headers,
+    });
+  },
+
+  async deleteJobByAdminToken(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.delete(urlAPI.deleteJobByAdminToken(id), {
+      headers,
     });
   },
 };

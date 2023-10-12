@@ -41,8 +41,11 @@ public class JobService {
         return jobRepository.findByEmployerIdAndTitleContaining(employerId,title,pageable);
     }
 
+    public Page<Job> findByTitleContainingAndCategoryId(String title, String categoryId, Pageable pageable){return jobRepository.findByTitleContainingAndCategoryId(title,categoryId,pageable);}
     public Optional<Job>findJobByEmployerIdAndId(String employerId,String id){return jobRepository.findJobByEmployerIdAndId(employerId,id);}
 
+
+    public List<Job>findByCategoryId(String categoryId){return  jobRepository.findByCategoryId(categoryId);}
     @Scheduled(cron = "0 0 0 * * ?") // Chạy vào lúc 00:00:00 hàng ngày
     public void updateJobStatus() {
 

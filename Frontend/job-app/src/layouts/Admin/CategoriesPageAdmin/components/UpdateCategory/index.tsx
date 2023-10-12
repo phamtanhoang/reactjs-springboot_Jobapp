@@ -1,23 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import authsAPI from "../../../services/Auths";
-import Swal from "sweetalert2";
 import { AiOutlineClose } from "react-icons/ai";
+import Swal from "sweetalert2";
+import { categoriesAPI } from "../../../../../services";
+import { CategoryModel } from "../../../../../models/CategoryModel";
 
-const ChangePasswordPageAdmin: React.FC<{ setShowBox: any }> = (props) => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [comfirmNewPassword, setComfirmNewPassword] = useState("");
-
+const UpdateCategoryPage: React.FC<{
+  setShowBoxUpdateCategory: any;
+  cate?: CategoryModel;
+}> = (props) => {
+  const [name, setName] = useState(props.cate?.name || "");
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (
-      currentPassword.trim() &&
-      newPassword.trim() &&
-      comfirmNewPassword.trim()
-    ) {
+    if (name.trim()) {
       Swal.fire({
-        title: "Do you want change password?",
+        title: "Do you want update category?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -25,28 +22,26 @@ const ChangePasswordPageAdmin: React.FC<{ setShowBox: any }> = (props) => {
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
-          authsAPI
-            .changePassword(
-              currentPassword.trim(),
-              newPassword.trim(),
-              comfirmNewPassword.trim(),
+          categoriesAPI
+            .updateCategoryByAdminToken(
+              props.cate?.id || "",
+              name.trim(),
               localStorage.getItem("adminToken") || ""
             )
             .then(() => {
               Swal.fire({
-                title: "Please login again!!!",
+                title: "Update category success!",
                 icon: "success",
                 confirmButtonColor: "#3085d6",
                 confirmButtonText: "Yes",
               }).then((result) => {
                 if (result.isConfirmed) {
-                  localStorage.removeItem("adminToken");
                   window.location.reload();
                 }
               });
             })
-            .catch((error: any) => {
-              Swal.fire("Error!", error.response.data, "error");
+            .catch(() => {
+              Swal.fire("Error!", "Update category fail!", "error");
             });
         }
       });
@@ -54,16 +49,15 @@ const ChangePasswordPageAdmin: React.FC<{ setShowBox: any }> = (props) => {
       Swal.fire("Error", "Please enter complete information!", "error");
     }
   };
-
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50 text-black">
       <div className="bg-white rounded-lg shadow relative w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%]">
         <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t ">
-          <h3 className="text-xl font-semibold">Change Password</h3>
+          <h3 className="text-xl font-semibold">Update Category</h3>
           <button
             type="button"
             className="text-xl text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
-            onClick={() => props.setShowBox(false)}
+            onClick={() => props.setShowBoxUpdateCategory(false)}
           >
             <AiOutlineClose />
           </button>
@@ -72,43 +66,22 @@ const ChangePasswordPageAdmin: React.FC<{ setShowBox: any }> = (props) => {
         <div className="rounded-lg p-3 md:p-5 overflow-y-auto max-h-[calc(100vh-150px)]">
           <form onSubmit={handleSubmit}>
             <label className="font-semibold text-sm text-gray-600 pb-1 block">
-              Current Password:
+              Category name:
             </label>
             <input
-              type="password"
-              value={currentPassword}
+              type="text"
+              value={name}
               className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               required
-              placeholder="********"
+              placeholder="Category name..."
             />
-            <label className="font-semibold text-sm text-gray-600 pb-1 block">
-              New Password:
-            </label>
-            <input
-              type="password"
-              value={newPassword}
-              className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-              placeholder="********"
-            />
-            <label className="font-semibold text-sm text-gray-600 pb-1 block">
-              Comfirm New Password:
-            </label>
-            <input
-              type="password"
-              value={comfirmNewPassword}
-              className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-              onChange={(e) => setComfirmNewPassword(e.target.value)}
-              required
-              placeholder="********"
-            />
+
             <button
               type="submit"
               className="transition duration-200 bg-purple-500 hover:bg-purple-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block mb-3"
             >
-              <span className="inline-block mr-2">Change</span>
+              <span className="inline-block mr-2">Update</span>
             </button>
           </form>
         </div>
@@ -116,4 +89,4 @@ const ChangePasswordPageAdmin: React.FC<{ setShowBox: any }> = (props) => {
     </div>
   );
 };
-export default ChangePasswordPageAdmin;
+export default UpdateCategoryPage;

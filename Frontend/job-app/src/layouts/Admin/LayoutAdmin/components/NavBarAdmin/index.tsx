@@ -141,7 +141,7 @@ const NavBarAdmin = () => {
               </span>
             </a>
             {showBox && localStorage.getItem("adminToken") && (
-              <ChangePasswordPageAdmin />
+              <ChangePasswordPageAdmin setShowBox={setShowBox} />
             )}
           </li>
         </ul>

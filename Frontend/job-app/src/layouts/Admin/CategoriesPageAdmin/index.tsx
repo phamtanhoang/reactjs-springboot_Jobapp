@@ -2,9 +2,10 @@ import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { GrFormNext } from "react-icons/gr";
 import { Link } from "react-router-dom";
+import { AddCategory, TablePage } from "./components";
 
 const CategoriesPageAdmin = () => {
-  const [showBoxAddJob, setShowBoxAddJob] = useState(false);
+  const [showBoxAddCategory, setShowBoxAddCategory] = useState(false);
   const [title, setTitle] = useState("");
 
   return (
@@ -28,7 +29,7 @@ const CategoriesPageAdmin = () => {
                     to="/admin/categories"
                     className="text-gray-600 hover:text-purple-600"
                   >
-                    Jobs
+                    Categories
                   </Link>
                 </li>
               </ol>
@@ -44,8 +45,8 @@ const CategoriesPageAdmin = () => {
                 <input
                   type="text"
                   name="category"
-                  className="bg-gray-50 border border-gray-300 text-gray-700 sm:text-sm rounded-lg block w-full p-2.5"
-                  placeholder="Search for jobs"
+                  className="bg-gray-50 border border-gray-300 text-gray-700 sm:text-sm rounded-lg block w-full p-2.5 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
+                  placeholder="Search for category name"
                   onChange={(e) => {
                     setTitle(e.target.value);
                   }}
@@ -55,22 +56,22 @@ const CategoriesPageAdmin = () => {
             <div className="flex items-center sm:justify-end w-full">
               <button
                 type="button"
-                className="text-white bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:ring-blue-200 font-medium inline-flex items-center rounded-lg text-sm px-3 py-2 text-center sm:ml-auto"
-                onClick={() => setShowBoxAddJob(true)}
+                className="text-white bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:ring-purple-200 font-medium inline-flex items-center rounded-lg text-sm px-3 py-2 text-center sm:ml-auto"
+                onClick={() => setShowBoxAddCategory(true)}
               >
                 <AiOutlinePlus className="text-lg mr-2" />
-                Add job
+                Add category
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TablePage title={title} />
+      <TablePage title={title} />
 
-  {showBoxAddJob && localStorage.getItem("employerToken") && (
-    <AddJobPage setShowBoxAddJob={setShowBoxAddJob} />
-  )} */}
+      {showBoxAddCategory && localStorage.getItem("adminToken") && (
+        <AddCategory setShowBoxAddCategory={setShowBoxAddCategory} />
+      )}
     </section>
   );
 };
