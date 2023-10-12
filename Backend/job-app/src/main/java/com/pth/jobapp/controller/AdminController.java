@@ -34,17 +34,11 @@ import java.util.UUID;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/admins")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     @Autowired
-    private AccountInfoService service;
-    @Autowired
     private AccountService accountService;
-    @Autowired
-    private  EmployerService employerService;
-    @Autowired
-    private CandidateService candidateService;
     @Autowired
     private JwtService jwtService;
     @Autowired
@@ -54,15 +48,18 @@ public class AdminController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateAdmin(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<String> adminAuthentication(@RequestBody AuthRequest authRequest) {
         try {
+            System.out.println(authRequest.getPassword());
+
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
             if (authentication.isAuthenticated()) {
                 Account account = accountService.findByUsername(authentication.getName());
 
-                if ("admin".equals(account.getRole())) {
+                if ("admin".equals(account.getRole()) && "active".equals(account.getState())) {
                     String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
+                    System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
 
                     return ResponseEntity.ok(token);
                 } else {
@@ -72,6 +69,7 @@ public class AdminController {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (AuthenticationException e) {
+            System.err.println("Authentication error: " + e.getMessage());
             throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
 
         }

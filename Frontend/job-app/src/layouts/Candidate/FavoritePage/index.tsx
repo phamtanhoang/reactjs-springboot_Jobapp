@@ -6,7 +6,7 @@ import { employersAPI } from "../../../services";
 import { EmployerItem, JobItem } from "../JobsPage/components";
 import { ErrorBox, Pagination, Spinner } from "../../../components";
 
-export const FavoritePage = () => {
+const FavoritePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
@@ -166,3 +166,4 @@ export const FavoritePage = () => {
     </>
   );
 };
+export default FavoritePage;

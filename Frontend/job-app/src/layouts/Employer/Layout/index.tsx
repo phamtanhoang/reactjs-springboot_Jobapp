@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Header, NavBar } from "./components";
 import { useState } from "react";
 
-export const Layout = () => {
+const Layout = () => {
   const [isNavBarVisible, setIsNavBarVisible] = useState(false);
 
   return (
@@ -19,3 +19,4 @@ export const Layout = () => {
     </>
   );
 };
+export default Layout;

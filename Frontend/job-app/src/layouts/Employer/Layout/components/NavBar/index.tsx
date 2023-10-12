@@ -10,19 +10,19 @@ import {
 import { Link } from "react-router-dom";
 import { AiFillSetting } from "react-icons/ai";
 import { useState } from "react";
-import { ChangePasswordPageEmployer } from "../../../ChangePasswordPageEmployer";
+import { ChangePasswordPageEmployer } from "../../..";
 
 const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
   const [showBox, setShowBox] = useState(false);
 
   const LogoutHandle = () => {
     Swal.fire({
-      title: "Bạn có muốn đăng xuất?",
+      title: "Do you want to log out??",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Đồng ý",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem("employerToken");
@@ -32,11 +32,11 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
   };
   return (
     <aside
-      className={`fixed md:top-0 md:left-0 h-screen lg:block bg-white  border-r z-50  ${
+      className={`fixed top-20 lg:top-0 md:left-0 h-screen lg:block bg-white  border-r z-50  ${
         props.isNavBarVisible ? "block" : "hidden "
       }`}
     >
-      <div className="w-full h-20 border-b flex px-4 items-center">
+      <div className="w-full h-20 border-b hidden lg:flex items-center justify-center pr-6 ">
         <p className="font-bold text-3xl text-blue-500 pl-4 text-center">
           JOBS EMP
         </p>
@@ -57,6 +57,7 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                     </span>
                   </Link>
                 </li>
+                <hr></hr>
                 <li>
                   <Link
                     to="/employer/jobs"

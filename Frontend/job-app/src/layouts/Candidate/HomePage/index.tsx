@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Hero, Intruction, Profile, TopEmployers, TopJobs } from "./components";
 
-export const HomePage = () => {
+const HomePage = () => {
   return (
     <>
       <Hero />
@@ -12,3 +12,4 @@ export const HomePage = () => {
     </>
   );
 };
+export default HomePage;

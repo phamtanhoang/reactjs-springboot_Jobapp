@@ -37,8 +37,6 @@ import java.util.UUID;
 @RequestMapping("/api/auth")
 public class AccountController {
 
-//    @Autowired
-//    private HttpSession httpSession;
 
     @Autowired
     private AccountInfoService service;
@@ -133,6 +131,8 @@ public class AccountController {
     @PostMapping("/candidate/login")
     public ResponseEntity<String> authenticateCandidate(@RequestBody AuthRequest authRequest) {
         try {
+            System.out.println(authRequest.getPassword());
+
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
             if (authentication.isAuthenticated()) {
@@ -155,6 +155,8 @@ public class AccountController {
 
         }
     }
+
+
 
 
 

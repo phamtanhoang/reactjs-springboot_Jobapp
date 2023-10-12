@@ -177,22 +177,35 @@ import java.util.UUID;
     }
 
     @GetMapping("/candidateProfile")
-    public ResponseEntity<?> getAccountFromUsername(@RequestParam String id) {
-        Candidate candidate = candidateService.findById(id).get();
-        Account account = accountService.findById(candidate.getAccountId()).get();
-        CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
-        candidateProfileResponse.setUsername(account.getUsername());
-        candidateProfileResponse.setLastName(candidate.getLastName());
-        candidateProfileResponse.setFirstName(candidate.getFirstName());
-        candidateProfileResponse.setSex(candidate.getSex());
-        candidateProfileResponse.setAvatar(candidate.getAvatar());
-        candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
-        candidateProfileResponse.setSkill(candidate.getSkill());
-        candidateProfileResponse.setExperience(candidate.getExperience());
-        System.out.println(candidate);
-        return ResponseEntity.ok(candidateProfileResponse);
+    public ResponseEntity<?> getAccountFromUsername(@RequestHeader("Authorization") String tokenHeader,@RequestParam String id) {
+        try {
+            String token = tokenHeader.substring(7);
+            String email = jwtService.extractUsername(token);
 
+            Employer employer = employerService.findByAccountUsername(email);
 
+            if (employer != null) {
+                Candidate candidate = candidateService.findById(id).get();
+                Account account = accountService.findById(candidate.getAccountId()).get();
+                CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
+                candidateProfileResponse.setUsername(account.getUsername());
+                candidateProfileResponse.setLastName(candidate.getLastName());
+                candidateProfileResponse.setFirstName(candidate.getFirstName());
+                candidateProfileResponse.setSex(candidate.getSex());
+                candidateProfileResponse.setAvatar(candidate.getAvatar());
+                candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
+                candidateProfileResponse.setSkill(candidate.getSkill());
+                candidateProfileResponse.setExperience(candidate.getExperience());
+                System.out.println(candidate);
+                return ResponseEntity.ok(candidateProfileResponse);
+            } else {
+                System.out.println("Người dùng không tồn tại");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
+        }
     }
 }
 

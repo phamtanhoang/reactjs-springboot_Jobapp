@@ -4,9 +4,7 @@ import authsAPI from "../../../services/Auths";
 import Swal from "sweetalert2";
 import { AiOutlineClose } from "react-icons/ai";
 
-const ChangePasswordPageEmployer: React.FC<{ setShowBox?: any }> = (
-  props
-) => {
+const ChangePasswordPageAdmin: React.FC<{ setShowBox?: any }> = (props) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [comfirmNewPassword, setComfirmNewPassword] = useState("");
@@ -28,7 +26,7 @@ const ChangePasswordPageEmployer: React.FC<{ setShowBox?: any }> = (
               currentPassword,
               newPassword,
               comfirmNewPassword,
-              localStorage.getItem("employerToken") || ""
+              localStorage.getItem("adminToken") || ""
             )
             .then(() => {
               Swal.fire({
@@ -38,7 +36,7 @@ const ChangePasswordPageEmployer: React.FC<{ setShowBox?: any }> = (
                 confirmButtonText: "Yes",
               }).then((result) => {
                 if (result.isConfirmed) {
-                  localStorage.removeItem("employerToken");
+                  localStorage.removeItem("adminToken");
                   window.location.reload();
                 }
               });
@@ -54,9 +52,9 @@ const ChangePasswordPageEmployer: React.FC<{ setShowBox?: any }> = (
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50 text-black">
       <div className="bg-white rounded-lg shadow relative w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%]">
-        <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t">
+        <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t ">
           <h3 className="text-xl font-semibold">Change Password</h3>
           <button
             type="button"
@@ -104,7 +102,7 @@ const ChangePasswordPageEmployer: React.FC<{ setShowBox?: any }> = (
             />
             <button
               type="submit"
-              className="transition duration-200 bg-blue-500 hover:bg-blue-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block mb-3"
+              className="transition duration-200 bg-purple-500 hover:bg-purple-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block mb-3"
             >
               <span className="inline-block mr-2">Change</span>
             </button>
@@ -114,4 +112,4 @@ const ChangePasswordPageEmployer: React.FC<{ setShowBox?: any }> = (
     </div>
   );
 };
-export default ChangePasswordPageEmployer
+export default ChangePasswordPageAdmin;

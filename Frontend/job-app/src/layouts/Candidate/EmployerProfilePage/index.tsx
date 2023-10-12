@@ -8,7 +8,7 @@ import { employersAPI } from "../../../services";
 import { LeftPage, RightPage } from "./components";
 import { TopEmployers } from "../HomePage/components";
 
-export const EmployerProfilePage = () => {
+const EmployerProfilePage = () => {
   const [employer, setEmPloyer] = useState<EmployerModel>();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +26,8 @@ export const EmployerProfilePage = () => {
         })
         .catch((error: any) => {
           setHttpError(error.message);
-        }).finally(()=>{
+        })
+        .finally(() => {
           setIsLoading(false);
         });
     };
@@ -59,7 +60,8 @@ export const EmployerProfilePage = () => {
           </div>
         </div>
       </section>
-      <TopEmployers/>
+      <TopEmployers />
     </>
   );
 };
+export default EmployerProfilePage;

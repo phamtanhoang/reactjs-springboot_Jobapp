@@ -161,4 +161,6 @@ export const urlAPI = {
     itemsPerPage: number
   ) =>
     `/applies/applicatonsJob?jobId=${jobId}&page=${currentPage}&size=${itemsPerPage}`,
+
+  loginAdmin: "/admin/login",
 };

@@ -8,7 +8,7 @@ import { EmployerInfo, JobDetail, JobInfo } from "./components";
 import { TopEmployers } from "../HomePage/components";
 import { jobsAPI } from "../../../services";
 
-export const JobProfilePage = () => {
+const JobProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
@@ -69,3 +69,4 @@ export const JobProfilePage = () => {
     </>
   );
 };
+export default JobProfilePage;

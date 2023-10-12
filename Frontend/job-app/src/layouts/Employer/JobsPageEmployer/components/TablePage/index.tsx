@@ -269,6 +269,7 @@ const TablePage: React.FC<{ title: any }> = (props) => {
             paginate={paginate}
             currentPage={currentPage}
             totalPages={totalPages}
+            type={false}
           />
         )}
       </div>

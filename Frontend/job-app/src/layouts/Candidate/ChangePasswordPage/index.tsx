@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AiOutlineClose } from "react-icons/ai";
 
-export const ChangePasswordPage: React.FC<{ showBox: any; setShowBox: any }> = (
+const ChangePasswordPage: React.FC<{ showBox: any; setShowBox: any }> = (
   props
 ) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -100,3 +100,4 @@ export const ChangePasswordPage: React.FC<{ showBox: any; setShowBox: any }> = (
     </div>
   );
 };
+export default ChangePasswordPage;

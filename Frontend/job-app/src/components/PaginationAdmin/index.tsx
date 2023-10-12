@@ -6,6 +6,7 @@ const PaginationAdmin: React.FC<{
   currentPage: number;
   totalPages: number;
   paginate: any;
+  type: boolean;
 }> = (props) => {
   const pageNumbers = [];
 
@@ -36,10 +37,13 @@ const PaginationAdmin: React.FC<{
   }
 
   return (
-    <div className="flex items-center justify-between mt-4">
+    <div className="flex items-center justify-between mt-4 font-medium">
       <a
         href="#"
-        className="flex items-center px-5 py-2 text-sm text-gray-70 hover:text-gray-900 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100"
+        className={
+          "flex items-center px-5 py-2 text-sm text-gray-500 hover:text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 " +
+          (props.type ? "hover:bg-purple-100" : "hover:bg-blue-100")
+        }
         onClick={() => {
           props.currentPage == 1
             ? props.paginate(1)
@@ -55,10 +59,15 @@ const PaginationAdmin: React.FC<{
           <a
             key={i}
             href="#"
-            className={
-              "px-2 py-1 text-base text-blue-500 rounded-md " +
-              (props.currentPage === number && "bg-blue-100/60")
-            }
+            className={`px-2 py-1 text-base rounded-md ${
+              props.type ? "text-purple-500" : "text-blue-500"
+            } ${
+              props.currentPage === number && props.type
+                ? "bg-purple-100/60"
+                : props.currentPage === number && !props.type
+                ? "bg-blue-100/60"
+                : ""
+            }`}
             onClick={() => props.paginate(number)}
           >
             {number}
@@ -68,7 +77,10 @@ const PaginationAdmin: React.FC<{
 
       <a
         href="#"
-        className="flex items-center px-5 py-2 text-sm text-gray-700 hover:text-gray-900 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100"
+        className={
+          "flex items-center px-5 py-2 text-sm text-gray-500 hover:text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 " +
+          (props.type ? "hover:bg-purple-100" : "hover:bg-blue-100")
+        }
         onClick={() => {
           props.currentPage == props.totalPages
             ? props.paginate(props.totalPages)

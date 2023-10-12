@@ -4,7 +4,7 @@ import authsAPI from "../../../services/Auths";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,6 +18,7 @@ export const LoginPage = () => {
         .then((res) => {
           Swal.fire("Thành công!", "Đăng nhập thành công!", "success");
           localStorage.setItem("candidateToken", res.data);
+          localStorage.removeItem("adminToken");
           localStorage.removeItem("employerToken");
           navigate("/");
         })
@@ -90,3 +91,4 @@ export const LoginPage = () => {
     </div>
   );
 };
+export default LoginPage;

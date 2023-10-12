@@ -31,7 +31,7 @@ public class FileUploader {
 
         // Khởi tạo Dropbox Client
         DbxRequestConfig config = DbxRequestConfig.newBuilder("jobappPDF").build();
-        dropboxClient = new DbxClientV2(config, "sl.BnpS2xKPUpPYV6JAj9TmGs6pErwscNQ7v8XzWppJuJus3nLKUur1F2vj24tiA9L-uIaO_1ykbgXrMbDPCj3u4a4F2yzeCf_leMEvhD9I8r3RIP-4Z4rEj4g5Z8NAKju8LIt2V068QIcveOg5Uxn-1rE");
+        dropboxClient = new DbxClientV2(config, "sl.BnuREmX1ksIQGEkX_uKbwiayy_VTkeadskSq5JAcgdELt2O9IYOCfRu4abQ78X76LyPeVZDcMhwPFlY2TbFHkOL2oCqzJqh2A4OYvJRxPORFggja0YNhC4kN7aCVlx7sy7BlmsG6u73rWeu9un-Z5nI");
     }
 
     public String uploadImage(byte[] imageBytes) {

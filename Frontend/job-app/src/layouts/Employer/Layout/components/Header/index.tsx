@@ -48,7 +48,7 @@ const Header: React.FC<{ isNavBarVisible: any; setIsNavBarVisible: any }> = (
   }
 
   return (
-    <div className="sticky top-0 z-40">
+    <div className="sticky top-0 z-[49]">
       <div className="w-full h-20 px-6 bg-white border-b flex items-center justify-between">
         <div className="flex">
           <div className="lg:hidden flex items-center mr-4">
