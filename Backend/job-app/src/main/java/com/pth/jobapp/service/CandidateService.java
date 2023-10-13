@@ -4,6 +4,8 @@ import com.pth.jobapp.dao.CandidateRepository;
 import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.util.FileUploader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,22 +46,13 @@ public class CandidateService {
     }
 
 
-    public Candidate updateCandidate(Candidate updatedCandidate) {
-        Candidate existingCandidate = candidateRepository.findById(updatedCandidate.getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy ứng viên với ID: " + updatedCandidate.getId()));
-
-
-        existingCandidate.setFirstName(updatedCandidate.getFirstName());
-        existingCandidate.setLastName(updatedCandidate.getLastName());
-        existingCandidate.setSex(updatedCandidate.getSex());
-        existingCandidate.setDateOfBirth(updatedCandidate.getDateOfBirth());
-        existingCandidate.setAvatar(updatedCandidate.getAvatar());
-
-        return candidateRepository.save(existingCandidate);
-    }
     public Optional<Candidate> findCandidateByAccountUsername(String username){
         System.out.println(username);
         return candidateRepository.findCandidateByAccountUsername(username);
     }
     public Optional<Candidate> findById(String id){return candidateRepository.findById(id);}
+
+    public Page<Candidate> findCandidatesByKeyword(String keyword, Pageable pageable){return candidateRepository.findCandidatesByKeyword(keyword,pageable);}
+
+    public void deleteById(String candidateId){ candidateRepository.deleteById(candidateId);}
 }

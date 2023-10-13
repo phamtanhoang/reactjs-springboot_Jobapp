@@ -177,7 +177,7 @@ export const urlAPI = {
     `/admin/category/update?categoryId=${id}`,
 
   deleteCategoryByAdminToken: (id: string) =>
-    `/admin/job/delete?categoryId=${id}`,
+    `/admin/category/delete?categoryId=${id}`,
 
   getJobsByTitleAndAdminToken: (
     title: string,
@@ -192,4 +192,6 @@ export const urlAPI = {
   updateJobByAdminToken: (id: string) => `/admin/job/update?jobId=${id}`,
 
   deleteJobByAdminToken: (id: string) => `/admin/job/delete?jobId=${id}`,
+
+  detailsJobByAdminToken: (id: string) => `/admin/job/details?jobId=${id}`,
 };

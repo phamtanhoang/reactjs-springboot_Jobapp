@@ -45,6 +45,8 @@ public interface JobRepository extends JpaRepository<Job, String> {
             @RequestParam(name = "employer", required = false) String employerId,
             Pageable pageable
     );
+    List<Job> findByEmployerId(String employerId
+    );
         @Query("SELECT j FROM Job j JOIN Employer e on j.employerId=e.id " +
                 "WHERE e.id IN (SELECT e.id FROM Employer e JOIN Vip v ON e.id = v.employerId " +
                 "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE())")

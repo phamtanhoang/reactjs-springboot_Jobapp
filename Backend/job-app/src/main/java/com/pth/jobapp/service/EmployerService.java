@@ -4,6 +4,8 @@ import com.pth.jobapp.dao.EmployerRepository;
 import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.util.FileUploader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +26,7 @@ public class EmployerService {
     public Optional<Employer> findById(String id){return  employerRepository.findById(id);}
     public Employer findByAccountUsername(String username){return employerRepository.findByAccountUsername(username);}
 
-
+    public Page<Employer> findByNameContaining(String name, Pageable pageable){return employerRepository.findByNameContaining(name,pageable);}
     public Employer saveWithImage(Employer employer, MultipartFile image) {
         if (image != null && !image.isEmpty()) {
             try {
@@ -67,4 +69,6 @@ public class EmployerService {
         }
         return employerRepository.save(employer);
     }
+
+    public void deleteById(String id){employerRepository.deleteById(id);}
 }

@@ -28,6 +28,9 @@ public class JobService {
     public Page<Job> findByEmployerId(String employerId,Pageable pageable){
         return jobRepository.findByEmployerId(employerId,pageable);
     }
+    public List<Job> findByEmployerId(String employerId){
+        return jobRepository.findByEmployerId(employerId);
+    }
 
     public  Page<Job> findAvailableJobs(Pageable pageable){
         return jobRepository.findAvailableJobs(pageable);

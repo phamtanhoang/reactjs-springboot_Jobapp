@@ -21,6 +21,7 @@ const TablePage: React.FC<{ title: string }> = (props) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const [showBoxUpdateCategory, setShowBoxUpdateCategory] = useState(false);
+  const [previousTitle, setPreviousTitle] = useState("");
 
   useEffect(() => {
     const fetchApplications = () => {
@@ -43,8 +44,14 @@ const TablePage: React.FC<{ title: string }> = (props) => {
           setIsLoading(false);
         });
     };
+
+    if (props.title != previousTitle) {
+      setCurrentPage(1);
+      setPreviousTitle(props.title);
+    }
+
     fetchApplications();
-  }, [currentPage, itemsPerPage, props.title]);
+  }, [currentPage, itemsPerPage, previousTitle, props.title]);
 
   if (isLoading) {
     return (
@@ -104,31 +111,31 @@ const TablePage: React.FC<{ title: string }> = (props) => {
   };
   return (
     <>
-      <div className="px-4 mx-auto pb-6">
+      <div className="px-3 lg:px-6 mx-auto">
         <div className="flex flex-col">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+          <div className="overflow-x-auto">
+            <div className="inline-block min-w-full lign-middle">
               <div className="overflow-hidden border border-gray-200  md:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200 cursor-default">
                   <thead className="bg-gray-50 ">
                     <tr>
                       <th
                         scope="col"
-                        className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-600 "
+                        className="py-3.5 px-4 text-sm font-semibold text-left rtl:text-right text-gray-600 "
                       >
                         S.No
                       </th>
 
                       <th
                         scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
+                        className="px-4 py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-600 "
                       >
                         Category Name
                       </th>
 
                       <th
                         scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
+                        className="px-4 py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-600 "
                       >
                         Actions
                       </th>

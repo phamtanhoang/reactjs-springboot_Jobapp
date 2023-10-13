@@ -8,9 +8,9 @@ public class JobDetailsResponse {
     Date toDate;
     String address;
     String salary;
-    String category;
+    String categoryName;
     String description;
-
+    String employerName;
     String state;
 
     public String getTitle() {
@@ -53,12 +53,12 @@ public class JobDetailsResponse {
         this.salary = salary;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getDescription() {
@@ -75,5 +75,13 @@ public class JobDetailsResponse {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getEmployerName() {
+        return employerName;
+    }
+
+    public void setEmployerName(String employerName) {
+        this.employerName = employerName;
     }
 }

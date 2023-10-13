@@ -1,12 +1,11 @@
-export interface JobModel {
-  id: string;
+export interface JobResponseModel {
   title: string;
   description: string;
   salary: string;
   fromDate: string;
   toDate: string;
   address: string;
-  categoryId: string;
-  employerId: string;
+  categoryName: string;
+  employerName: string;
   state: string;
 }

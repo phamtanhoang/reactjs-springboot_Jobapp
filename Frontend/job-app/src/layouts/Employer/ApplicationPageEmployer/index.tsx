@@ -8,7 +8,7 @@ const ApplicationPageEmployer = () => {
 
   return (
     <section className="flex-grow">
-      <div className="p-6 block sm:flex items-center justify-between">
+      <div className="p-3 md:p-6 block sm:flex items-center justify-between">
         <div className="mb-1 w-full">
           <div className="mb-4">
             <nav aria-label="Breadcrumb" className="text-sm font-semibold mb-6">

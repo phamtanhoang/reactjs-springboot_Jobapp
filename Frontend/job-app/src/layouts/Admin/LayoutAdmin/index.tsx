@@ -6,7 +6,7 @@ const LayoutAdmin = () => {
     <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased  text-black ">
       <HeaderAdmin />
       <NavBarAdmin />
-      <div className="h-full ml-14 mb-10 md:ml-64">
+      <div className="h-full ml-14 md:ml-64">
         <Outlet />
       </div>
     </div>

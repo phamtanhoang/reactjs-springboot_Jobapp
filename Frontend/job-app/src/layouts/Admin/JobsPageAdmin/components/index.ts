@@ -1,5 +1,6 @@
-import AddJob from "./AddJobs";
+import AddJob from "./AddJob";
+import JobDetail from "./JobDetail";
 import TablePage from "./TablePage";
-import UpdateJob from "./UpdateJobs";
+import UpdateJob from "./UpdateJob";
 
-export { AddJob, TablePage, UpdateJob };
+export { AddJob, TablePage, UpdateJob, JobDetail };

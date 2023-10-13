@@ -1,38 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AiOutlineClose } from "react-icons/ai";
-import { CategoryModel } from "../../../../../models/CategoryModel";
 import { useEffect, useState } from "react";
-import { categoriesAPI, jobsAPI } from "../../../../../services";
-import { ErrorBox, Spinner } from "../../../../../components";
+import { AiOutlineClose } from "react-icons/ai";
 import Swal from "sweetalert2";
+import { categoriesAPI, employersAPI, jobsAPI } from "../../../../../services";
+import { CategoryModel } from "../../../../../models/CategoryModel";
+import { EmployerModel } from "../../../../../models/EmployerModel";
+import { ErrorBox, Spinner } from "../../../../../components";
 import ReactQuill from "react-quill";
+import Select from "react-select";
+import { JobModel } from "../../../../../models/JobModel";
+import { formattedDate } from "../../../../../utils";
 
-const AddJobPage: React.FC<{
-  setShowBoxAddJob: any;
+const UpdateJob: React.FC<{
+  setShowBoxUpdate: any;
+  job?: JobModel;
 }> = (props) => {
   const [categories, setCategories] = useState<CategoryModel[]>([]);
+  const [employers, setEmployers] = useState<EmployerModel[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
   const [title, setTitle] = useState("");
+  const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [cate, setCate] = useState("");
   const [salary, setSalary] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
+  const [employerId, setEmployerId] = useState("");
+  const [state, setState] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
 
   useEffect(() => {
+    setTitle(props.job?.title || "");
+    setFromDate(props.job?.fromDate || "");
+    setToDate(props.job?.toDate || "");
+    setCate(props.job?.categoryId || "");
+    setSalary(props.job?.salary || "");
+    setAddress(props.job?.address || "");
+    setDescription(props.job?.description || "");
+    setState(props.job?.state || "");
+    setEmployerId(props.job?.employerId || "");
     const fetchCategories = () => {
       categoriesAPI
         .getCategories()
         .then((res) => {
           setCategories(res.data._embedded.categories);
-          if (res.data._embedded.categories.length > 0) {
-            setCate(res.data._embedded.categories[0].id);
-          } else {
-            setCate("");
-          }
         })
         .catch((error: any) => {
           setHttpError(error.message);
@@ -42,7 +56,33 @@ const AddJobPage: React.FC<{
         });
     };
     fetchCategories();
-  }, []);
+
+    const fetchEmployers = () => {
+      setIsLoading(true);
+      employersAPI
+        .getEmployers()
+        .then((res) => {
+          setEmployers(res.data._embedded.employers);
+        })
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
+    fetchEmployers();
+  }, [
+    props.job?.address,
+    props.job?.categoryId,
+    props.job?.description,
+    props.job?.employerId,
+    props.job?.fromDate,
+    props.job?.salary,
+    props.job?.state,
+    props.job?.title,
+    props.job?.toDate,
+  ]);
 
   if (isLoading) {
     return (
@@ -64,28 +104,23 @@ const AddJobPage: React.FC<{
     setDescription(content);
   };
 
-  const closedBox = () => {
-    setTitle("");
-    setToDate("");
-    setCate(categories[0].id);
-    setSalary("");
-    setAddress("");
-    setDescription("");
-    props.setShowBoxAddJob(false);
+  const handleChange = (selectedOption: any) => {
+    setSelectedOption(selectedOption);
+    setEmployerId(selectedOption.value);
   };
 
-  const handleAddJob = (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     if (
       title.trim() &&
       salary.trim() &&
       address.trim() &&
-      description.trim() &&
       toDate.trim() &&
-      cate.trim()
+      cate.trim() &&
+      employerId.trim()
     ) {
       Swal.fire({
-        title: "Do you want to add?",
+        title: "Do you want to update?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -94,18 +129,22 @@ const AddJobPage: React.FC<{
       }).then((result) => {
         if (result.isConfirmed) {
           jobsAPI
-            .addJobByEmployerToken(
+            .updateJobByAdminToken(
+              props.job?.id || "",
               title.trim(),
+              fromDate.trim(),
               toDate.trim(),
               cate.trim(),
               salary.trim(),
               address.trim(),
               description.trim(),
-              localStorage.getItem("employerToken") || ""
+              employerId.trim(),
+              state.trim(),
+              localStorage.getItem("adminToken") || ""
             )
             .then(() => {
               Swal.fire({
-                title: "Add new job success",
+                title: "Update job success",
                 icon: "success",
                 confirmButtonColor: "#3085d6",
                 confirmButtonText: "Yes",
@@ -116,7 +155,7 @@ const AddJobPage: React.FC<{
               });
             })
             .catch(() => {
-              Swal.fire("Error!", "Add new job error!", "error");
+              Swal.fire("Error!", "Update job fail!", "error");
             });
         }
       });
@@ -125,23 +164,32 @@ const AddJobPage: React.FC<{
     }
   };
 
+  const employerOptions: any = employers.map((employer) => ({
+    value: employer.id,
+    label: employer.name,
+  }));
+  
+  const selectedEmployer = employers.find(
+    (emp) => emp.id == props.job?.employerId
+  );
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow relative w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-1/2">
-        <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t">
-          <h3 className="text-xl font-semibold">Add job</h3>
+    <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50 text-black">
+      <div className="bg-white rounded-lg shadow relative w-[95%] sm:w-[90%] md:w-[80%] lg:w-[60%] xl:w-[50%]">
+        <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t ">
+          <h3 className="text-xl font-semibold">Update Job</h3>
           <button
             type="button"
             className="text-xl text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
-            onClick={closedBox}
+            onClick={() => props.setShowBoxUpdate(false)}
           >
             <AiOutlineClose />
           </button>
         </div>
 
-        <div className="rounded-lg p-3 md:p-5 overflow-y-auto max-h-[calc(100vh-150px)]">
-          <form onSubmit={handleAddJob}>
-            <div className="grid grid-cols-6 gap-4">
+        <div className="rounded-lg p-3 md:p-5 md:py-3 overflow-y-auto max-h-[calc(100vh-150px)]">
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-6 gap-3">
               <div className="col-span-full">
                 <label className="font-semibold text-sm block text-gray-700">
                   Title:
@@ -152,20 +200,20 @@ const AddJobPage: React.FC<{
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Please fill in Job title..."
                   required
+                  value={title}
                 />
               </div>
-              <div className="col-span-6 sm:col-span-3">
+              <div className="col-span-full">
                 <label className="font-semibold text-sm block text-gray-700">
-                  To Date:
+                  Employer:
                 </label>
-                <input
-                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
-                  type="date"
-                  min={new Date().toISOString().split("T")[0]}
-                  onChange={(e) => {
-                    setToDate(e.target.value);
-                  }}
-                  required
+                <Select
+                  value={selectedOption}
+                  onChange={handleChange}
+                  options={employerOptions}
+                  isSearchable
+                  placeholder={selectedEmployer?.name}
+                  className="text-gray-900 block text-sm w-full mt-1"
                 />
               </div>
               <div className="col-span-6 sm:col-span-3">
@@ -175,6 +223,7 @@ const AddJobPage: React.FC<{
                 <select
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   required
+                  value={cate}
                   onChange={(e) => setCate(e.target.value)}
                 >
                   {categories.map((category) => (
@@ -186,6 +235,50 @@ const AddJobPage: React.FC<{
               </div>
               <div className="col-span-6 sm:col-span-3">
                 <label className="font-semibold text-sm block text-gray-700">
+                  State:
+                </label>
+                <select
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  required
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                >
+                  <option value={"pending"}>Pending</option>
+                  <option value={"active"}>Active</option>
+                  <option value={"refused"}>Refused</option>
+                </select>
+              </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label className="font-semibold text-sm block text-gray-700">
+                  From Date:
+                </label>
+                <input
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  type="date"
+                  onChange={(e) => {
+                    setFromDate(e.target.value);
+                  }}
+                  value={formattedDate(fromDate)}
+                  required
+                />
+              </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label className="font-semibold text-sm block text-gray-700">
+                  To Date:
+                </label>
+                <input
+                  className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
+                  type="date"
+                  onChange={(e) => {
+                    setToDate(e.target.value);
+                  }}
+                  value={formattedDate(toDate)}
+                  required
+                />
+              </div>
+
+              <div className="col-span-6 sm:col-span-3">
+                <label className="font-semibold text-sm block text-gray-700">
                   Salary:
                 </label>
                 <input
@@ -193,6 +286,7 @@ const AddJobPage: React.FC<{
                   type="text"
                   onChange={(e) => setSalary(e.target.value)}
                   placeholder="Please fill in Job salary..."
+                  value={salary}
                   required
                 />
               </div>
@@ -205,27 +299,30 @@ const AddJobPage: React.FC<{
                   type="text"
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Please fill in Job address..."
+                  value={address}
                   required
                 />
               </div>
+
               <div className="col-span-full">
-                <label className="font-semibold text-sm block text-gray-700 ">
+                <label className="font-semibold text-sm block text-gray-700">
                   Description:
                 </label>
                 <ReactQuill
                   theme="snow"
+                  value={description}
                   onChange={handleDescriptionChange}
                   className="mt-1"
                 />
               </div>
             </div>
 
-            <div className="mt-6 flex justify-end">
+            <div className="mt-3 flex justify-end">
               <button
                 className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 type="submit"
               >
-                Add job
+                Update
               </button>
             </div>
           </form>
@@ -234,4 +331,4 @@ const AddJobPage: React.FC<{
     </div>
   );
 };
-export default AddJobPage;
+export default UpdateJob;

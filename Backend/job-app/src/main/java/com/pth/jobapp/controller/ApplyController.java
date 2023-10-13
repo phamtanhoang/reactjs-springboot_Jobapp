@@ -223,7 +223,6 @@ public class ApplyController {
             Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
-                System.out.println("đã vào đây" + updateRequest.getApplicationId());
                 Optional<Application> application = applicationService.findById(updateRequest.getApplicationId());
 
                 if (application.isPresent()) {

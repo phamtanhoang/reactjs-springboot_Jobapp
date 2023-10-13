@@ -43,6 +43,7 @@ public class ApplicationService {
          applicationRepository.delete(application);
     }
     public List<Application> findApplicationsByJobId(String jobId){return applicationRepository.findApplicationsByJobId(jobId);}
+    public List<Application> findApplicationsByCandidateId(String candidateId){return applicationRepository.findApplicationsByCandidateId(candidateId);}
     public Page<Application>findApplicationsByEmployerIdAndContainingTitle(String id,Pageable pageable,String title){
         return applicationRepository.findApplicationsByEmployerIdAndContainingTitle(id,pageable,title);
     }

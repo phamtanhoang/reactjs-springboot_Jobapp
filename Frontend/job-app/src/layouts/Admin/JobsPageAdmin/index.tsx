@@ -51,7 +51,7 @@ const JobsPageAdmin = () => {
 
   return (
     <section className="flex-grow">
-      <div className="p-6 block sm:flex items-center justify-between">
+      <div className="p-6 px-3 md:px-6 block sm:flex items-center justify-between">
         <div className="mb-1 w-full">
           <div className="mb-4">
             <nav aria-label="Breadcrumb" className="text-sm font-semibold mb-6">
@@ -103,9 +103,7 @@ const JobsPageAdmin = () => {
                   className="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-2.5 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
                   onChange={(e) => setCategoryId(e.target.value)}
                 >
-                  <option selected value="">
-                    All category
-                  </option>
+                  <option value={""}>All category</option>
 
                   {categories.map((category, i) => (
                     <option value={category.id} key={i}>

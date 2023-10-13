@@ -15,6 +15,7 @@ public interface ApplicationRepository extends JpaRepository<Application, String
     Application findByJobIdAndCandidateId(String jobId,String candidateId);
     Page <Application> findApplicationsByJobId(String jobId, Pageable pageable );
     List<Application> findApplicationsByJobId(String jobId );
+    List<Application> findApplicationsByCandidateId(String candidateId );
     @Query("SELECT a FROM Application a " +
             "JOIN Job j ON a.jobId = j.id " +
             "JOIN Employer e ON j.employerId = e.id " +

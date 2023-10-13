@@ -1,7 +1,6 @@
 package com.pth.jobapp.controller;
 
 import com.pth.jobapp.ResponseModels.EmployerProfileResponse;
-import com.pth.jobapp.ResponseModels.JobDetailsResponse;
 import com.pth.jobapp.entity.*;
 import com.pth.jobapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;

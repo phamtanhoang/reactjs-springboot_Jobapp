@@ -1,17 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { ErrorBox, PaginationAdmin, Spinner } from "../../../../../components";
-import { categoriesAPI, jobsAPI } from "../../../../../services";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { jobsAPI } from "../../../../../services";
+import {
+  AiFillDelete,
+  AiFillEdit,
+  AiFillEye,
+  AiOutlineCheck,
+  AiOutlineClose,
+  AiOutlineExclamation,
+} from "react-icons/ai";
 import Swal from "sweetalert2";
 import { JobModel } from "../../../../../models/JobModel";
+import { JobDetail, UpdateJob } from "..";
 
 const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
   const [jobs, setJobs] = useState<JobModel[]>([]);
-
   const [job, setJob] = useState<JobModel>();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,6 +27,10 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const [showBoxUpdate, setShowBoxUpdate] = useState(false);
+  const [showBoxDetail, setShowBoxDetail] = useState(false);
+
+  const [previousTitle, setPreviousTitle] = useState("");
+  const [previousCategoryId, setPreviousCategoryId] = useState("");
 
   useEffect(() => {
     const fetchJobs = () => {
@@ -43,8 +54,25 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
           setIsLoading(false);
         });
     };
+
+    if (
+      props.title != previousTitle ||
+      props.categoryId != previousCategoryId
+    ) {
+      setCurrentPage(1);
+      setPreviousTitle(props.title);
+      setPreviousCategoryId(props.categoryId);
+    }
+
     fetchJobs();
-  }, [currentPage, itemsPerPage, props.categoryId, props.title]);
+  }, [
+    currentPage,
+    itemsPerPage,
+    previousCategoryId,
+    previousTitle,
+    props.categoryId,
+    props.title,
+  ]);
 
   if (isLoading) {
     return (
@@ -69,6 +97,11 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
     setJob(job);
   };
 
+  const HandleDetail = (job: JobModel) => {
+    setShowBoxDetail(true);
+    setJob(job);
+  };
+
   const HandleDelete = (job: JobModel) => {
     Swal.fire({
       title: "Do you want to delete?",
@@ -79,8 +112,8 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
-        categoriesAPI
-          .deleteCategoryByAdminToken(
+        jobsAPI
+          .deleteJobByAdminToken(
             job.id,
             localStorage.getItem("adminToken") || ""
           )
@@ -104,10 +137,10 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
   };
   return (
     <>
-      <div className="px-4 mx-auto pb-6">
+      <div className="px-3 md:px-6 mx-auto">
         <div className="flex flex-col">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+          <div className="overflow-x-auto">
+            <div className="inline-block min-w-full lign-middle">
               <div className="overflow-hidden border border-gray-200  md:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200 cursor-default">
                   <thead className="bg-gray-50 ">
@@ -123,9 +156,29 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
                         scope="col"
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
                       >
-                        Category Name
+                        Title
                       </th>
 
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
+                      >
+                        State
+                      </th>
+
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
+                      >
+                        From Date
+                      </th>
+
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
+                      >
+                        To Date
+                      </th>
                       <th
                         scope="col"
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
@@ -147,10 +200,51 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
 
                             <td className="px-4 py-4 text-sm text-gray-600 ">
                               {job.title}
+                              {new Date(job.toDate) < new Date() && (
+                                <span className="text-red-500 ml-2">
+                                  (Expired)
+                                </span>
+                              )}
                             </td>
-
+                            <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              {job.state == "pending" ? (
+                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-yellow-500 bg-yellow-100/60 ">
+                                  <AiOutlineExclamation />
+                                  <h2 className="text-sm font-normal">
+                                    Pending
+                                  </h2>
+                                </div>
+                              ) : job.state == "active" ? (
+                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 ">
+                                  <AiOutlineCheck />
+                                  <h2 className="text-sm font-normal">
+                                    Active
+                                  </h2>
+                                </div>
+                              ) : (
+                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60 ">
+                                  <AiOutlineClose />
+                                  <h2 className="text-sm font-normal">
+                                    Refused
+                                  </h2>
+                                </div>
+                              )}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-gray-600 ">
+                              {job.fromDate &&
+                                new Date(job.fromDate).toLocaleDateString()}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-gray-600 ">
+                              {job.toDate &&
+                                new Date(job.toDate).toLocaleDateString()}
+                            </td>
                             <td className="px-4 py-4 text-sm whitespace-nowrap">
                               <div className="flex items-center gap-x-6 text-2xl text-gray-600">
+                                <AiFillEye
+                                  className=" cursor-pointer hover:text-yellow-500"
+                                  onClick={() => HandleDetail(job)}
+                                />
+
                                 <AiFillEdit
                                   className=" cursor-pointer hover:text-blue-500"
                                   onClick={() => HandleUpdate(job)}
@@ -188,12 +282,12 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
           />
         )}
       </div>
-      {/* {showBoxUpdate && localStorage.getItem("adminToken") && (
-        <UpdateCategoryPage
-          setShowBoxUpdate={setShowBoxUpdate}
-          cate={category}
-        />
-      )} */}
+      {showBoxUpdate && localStorage.getItem("adminToken") && (
+        <UpdateJob setShowBoxUpdate={setShowBoxUpdate} job={job} />
+      )}
+      {showBoxDetail && localStorage.getItem("adminToken") && (
+        <JobDetail setShowBoxDetail={setShowBoxDetail} job={job} />
+      )}
     </>
   );
 };

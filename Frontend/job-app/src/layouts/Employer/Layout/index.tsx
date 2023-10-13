@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <NavBar isNavBarVisible={isNavBarVisible} />
-      <div className="w-full pl-0 lg:pl-64  relative">
+      <div className="w-full pl-0 lg:pl-64 relative">
         <Header
           isNavBarVisible={isNavBarVisible}
           setIsNavBarVisible={setIsNavBarVisible}

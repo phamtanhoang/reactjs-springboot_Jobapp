@@ -37,7 +37,7 @@ const PaginationAdmin: React.FC<{
   }
 
   return (
-    <div className="flex items-center justify-between mt-4 font-medium">
+    <div className="flex items-center justify-between my-3 font-medium">
       <a
         href="#"
         className={
