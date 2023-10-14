@@ -1,6 +1,8 @@
 package com.pth.jobapp.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,21 +17,33 @@ import java.util.UUID;
 public class Account {
 
     @Id
+    @Getter
+    @Setter
     @Column(name = "id")
     private String id;
 
+    @Getter
+    @Setter
     @Column(name = "created_at")
     private Date createAt;
 
+    @Getter
+    @Setter
     @Column(name = "state")
     private String state;
 
+    @Getter
+    @Setter
     @Column(name = "role")
     private String role;
 
+    @Getter
+    @Setter
     @Column(name = "username")
     private String username;
 
+    @Getter
+    @Setter
     @Column(name = "password")
     private String password;
 
@@ -46,51 +60,5 @@ public class Account {
         this.password = password;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

@@ -37,8 +37,6 @@ import java.util.UUID;
 @RequestMapping("/api/auth")
 public class AccountController {
 
-//    @Autowired
-//    private HttpSession httpSession;
 
     @Autowired
     private AccountInfoService service;
@@ -64,6 +62,7 @@ public class AccountController {
     public String addNewEmployer(@RequestBody EmployerRegistrationRequest employerRegistrationRequest) {
 
         if (accountService.findByUsername(employerRegistrationRequest.getUsername()) == null) {
+            System.out.println(employerRegistrationRequest.getPassword());
             UUID uuid = UUID.randomUUID();
             Account account= new Account();
             account.setId(uuid.toString());
@@ -78,12 +77,8 @@ public class AccountController {
             employer.setId(id.toString());
             employer.setName(employerRegistrationRequest.getName());
             employer.setAddress(employerRegistrationRequest.getAddress());
-            employer.setBanner(employerRegistrationRequest.getBanner());
-            employer.setImage(employerRegistrationRequest.getImage());
             employer.setDescription(employerRegistrationRequest.getDescription());
             employer.setAccountId(uuid.toString());
-            System.out.println(uuid);
-            // Sử dụng thể hiện của EmployerService đã được Spring quản lý thông qua injection
             employerService.save(employer);
             return "add new employer successfully";
 
@@ -133,6 +128,8 @@ public class AccountController {
     @PostMapping("/candidate/login")
     public ResponseEntity<String> authenticateCandidate(@RequestBody AuthRequest authRequest) {
         try {
+            System.out.println(authRequest.getPassword());
+
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
             if (authentication.isAuthenticated()) {
@@ -158,6 +155,8 @@ public class AccountController {
 
 
 
+
+
     @PostMapping("/employer/login")
     public ResponseEntity<?> authenticateEmployer(@RequestBody AuthRequest authRequest) {
         try {
@@ -169,7 +168,6 @@ public class AccountController {
                     System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
                     return ResponseEntity.ok(token);
                 } else {
-                    // Handle the case where the user is not an employer or not in the active state
                     throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
                 }
             } else {
@@ -207,7 +205,6 @@ public class AccountController {
     @PostMapping("/logout")
     public ResponseEntity<String> performLogout(HttpServletRequest request, HttpServletResponse response) throws UsernameNotFoundException {
         try {
-            // Lấy token từ tiêu đề "Authorization" trong request
             String tokenHeader = request.getHeader("Authorization");
 
             if (tokenHeader != null ) {
@@ -219,7 +216,6 @@ public class AccountController {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (Exception e) {
-            // Xử lý các ngoại lệ và trả về phản hồi phù hợp
             throw new UsernameNotFoundException("Invalid user request!");
         }
     }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -22,6 +23,20 @@ public interface JobRepository extends JpaRepository<Job, String> {
             Pageable pageable
     );
 
+    @Query("SELECT j FROM Job j WHERE" +
+            " (:title IS NULL OR j.title LIKE %:title%)" +
+            " AND (:categoryId IS NULL OR :categoryId = '' OR j.categoryId = :categoryId)")
+    Page<Job> findByTitleContainingAndCategoryId(
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "categoryId", required = false) String categoryId,
+            Pageable pageable
+    );
+
+    @Query("SELECT j FROM Job j WHERE j.categoryId = :categoryId")
+    List<Job> findByCategoryIdWithList(
+            @RequestParam(name = "category", required = false) String categoryId);
+
+
 
     Page<Job> findByCategoryId(
             @RequestParam(name = "category", required = false) String categoryId,
@@ -31,6 +46,9 @@ public interface JobRepository extends JpaRepository<Job, String> {
     Page<Job> findByEmployerId(
             @RequestParam(name = "employer", required = false) String employerId,
             Pageable pageable
+    );
+    @Query("SELECT j FROM Job j WHERE j.employerId = :employerId")
+    List<Job> findByEmployerIdWithList(String employerId
     );
         @Query("SELECT j FROM Job j JOIN Employer e on j.employerId=e.id " +
                 "WHERE e.id IN (SELECT e.id FROM Employer e JOIN Vip v ON e.id = v.employerId " +
@@ -49,4 +67,14 @@ public interface JobRepository extends JpaRepository<Job, String> {
     @Query("SELECT j FROM Job j JOIN Application a ON j.id = a.jobId " +
             "WHERE a.id=:applicationId")
     Optional<Job> findJobByApplicationId( @RequestParam(name = "applicationId") String applicationId);
+
+    @Query("SELECT j FROM Job j WHERE (:employerId IS NULL OR j.employerId = :employerId) " +
+            "AND (:title IS NULL OR j.title LIKE %:title%)")
+    Page<Job> findByEmployerIdAndTitleContaining(
+            @Param("employerId") String employerId,
+            @Param("title") String title,
+            Pageable pageable
+    );
+
+    Optional<Job>findJobByEmployerIdAndId(String employerId,String id);
 }

@@ -28,6 +28,27 @@ public class JobService {
     public Page<Job> findByEmployerId(String employerId,Pageable pageable){
         return jobRepository.findByEmployerId(employerId,pageable);
     }
+    public List<Job> findByEmployerIdWithList(String employerId){
+        return jobRepository.findByEmployerIdWithList(employerId);
+    }
+
+    public  Page<Job> findAvailableJobs(Pageable pageable){
+        return jobRepository.findAvailableJobs(pageable);
+    }
+
+    public Optional<Job> findJobByApplicationId( String applicationId){
+        return jobRepository.findJobByApplicationId(applicationId);
+    };
+
+    public Page<Job>findByEmployerIdAndTitleContaining(String employerId,String title ,Pageable pageable){
+        return jobRepository.findByEmployerIdAndTitleContaining(employerId,title,pageable);
+    }
+
+    public Page<Job> findByTitleContainingAndCategoryId(String title, String categoryId, Pageable pageable){return jobRepository.findByTitleContainingAndCategoryId(title,categoryId,pageable);}
+    public Optional<Job>findJobByEmployerIdAndId(String employerId,String id){return jobRepository.findJobByEmployerIdAndId(employerId,id);}
+
+
+    public List<Job>findByCategoryIdWithList(String categoryId){return  jobRepository.findByCategoryIdWithList(categoryId);}
     @Scheduled(cron = "0 0 0 * * ?") // Chạy vào lúc 00:00:00 hàng ngày
     public void updateJobStatus() {
 
@@ -39,11 +60,4 @@ public class JobService {
         }
     }
 
-    public  Page<Job> findAvailableJobs(Pageable pageable){
-        return jobRepository.findAvailableJobs(pageable);
-    }
-
-    public Optional<Job> findJobByApplicationId( String applicationId){
-        return jobRepository.findJobByApplicationId(applicationId);
-    };
 }

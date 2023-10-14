@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 public interface CategoryRepository extends JpaRepository<Category, String> {
     @Query("SELECT c FROM Category c WHERE" +
             " (:name IS NULL OR c.name LIKE %:name%)")
@@ -14,4 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
             @RequestParam(name = "name", required = false) String name,
             Pageable pageable
     );
+
+    @Override
+    Optional<Category> findById(String s);
 }

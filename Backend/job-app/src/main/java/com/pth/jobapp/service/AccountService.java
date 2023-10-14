@@ -20,4 +20,6 @@ public class AccountService {
     public Account save(Account user) {
         return accountRepository.save(user);
     }
+
+    public void deleteById(String candidateId){accountRepository.deleteById(candidateId);}
 }

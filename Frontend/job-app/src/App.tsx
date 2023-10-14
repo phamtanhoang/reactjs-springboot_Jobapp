@@ -1,20 +1,34 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { HeaderAndFooter } from "./layouts/Candidate/HeaderAndFooter";
-import { HomePage } from "./layouts/Candidate/HomePage";
-import { JobsPage } from "./layouts/Candidate/JobsPage";
-import { JobProfilePage } from "./layouts/Candidate/JobDetailPage";
-import { EmployersPage } from "./layouts/Candidate/EmployersPage";
-import { EmployerProfilePage } from "./layouts/Candidate/EmployerProfilePage";
-import { Layout } from "./layouts/Employer/Layout";
-import { HomePageEmployer } from "./layouts/Employer/HomePageEmployer";
-import { LoginEmployer } from "./layouts/Employer/LoginEmployer";
-import { RegisterEmployer } from "./layouts/Employer/RegisterEmployer";
-import { FavoritePage } from "./layouts/Candidate/FavoritePage";
-import { ProfilePage } from "./layouts/Candidate/ProfilePage";
-import { LoginPage } from "./layouts/Candidate/LoginPage";
-import { RegisterPage } from "./layouts/Candidate/RegisterPage";
-import LoginPageAdmin from "./layouts/Admin/LoginPageAdmin";
-import JobsPageEmployer from "./layouts/Employer/JobsPageEmployer";
+import {
+  EmployerProfilePage,
+  EmployersPage,
+  FavoritePage,
+  HeaderAndFooter,
+  HomePage,
+  JobProfilePage,
+  JobsPage,
+  LoginPage,
+  ProfilePage,
+  RegisterPage,
+} from "./layouts/Candidate";
+import {
+  ApplicationPageEmployer,
+  HomePageEmployer,
+  JobDetailPageEmployer,
+  JobsPageEmployer,
+  Layout,
+  LoginEmployer,
+  ProfilePageEmployer,
+  RegisterEmployer,
+} from "./layouts/Employer";
+import {
+  CategoriesPageAdmin,
+  DashboardPage,
+  JobsPageAdmin,
+  LayoutAdmin,
+  LoginPageAdmin,
+} from "./layouts/Admin";
+import EmployersPageAdmin from "./layouts/Admin/EmployersPageAdmin";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -72,6 +86,18 @@ const App = () => {
               <Route path="/" element={<Layout />}>
                 <Route path="/employer/home" element={<HomePageEmployer />} />
                 <Route path="/employer/jobs" element={<JobsPageEmployer />} />
+                <Route
+                  path="/employer/job/:id"
+                  element={<JobDetailPageEmployer />}
+                />
+                <Route
+                  path="/employer/applications"
+                  element={<ApplicationPageEmployer />}
+                />
+                <Route
+                  path="/employer/profile"
+                  element={<ProfilePageEmployer />}
+                />
               </Route>
             </>
           ) : (
@@ -84,12 +110,62 @@ const App = () => {
                 path="/employer/home"
                 element={<Navigate to="/employer/login" />}
               />
+              <Route
+                path="/employer/jobs"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/job/:id"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/applications"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/profile"
+                element={<Navigate to="/employer/login" />}
+              />
               <Route path="/employer/login" element={<LoginEmployer />} />
               <Route path="/employer/register" element={<RegisterEmployer />} />
             </>
           )}
 
-          <Route path="/admin/login" element={<LoginPageAdmin />} />
+          {adminToken ? (
+            <>
+              <Route path="/admin" element={<Navigate to="/admin/home" />} />
+              <Route
+                path="/admin/login"
+                element={<Navigate to="/admin/home" />}
+              />
+              <Route path="/" element={<LayoutAdmin />}>
+                <Route path="/admin/home" element={<DashboardPage />} />
+                <Route
+                  path="/admin/categories"
+                  element={<CategoriesPageAdmin />}
+                />
+                <Route path="/admin/jobs" element={<JobsPageAdmin />} />
+                <Route path="/admin/employers" element={<EmployersPageAdmin />} />
+              </Route>
+            </>
+          ) : (
+            <>
+              <Route path="/admin" element={<Navigate to="/admin/login" />} />
+              <Route
+                path="/admin/home"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/categories"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/jobs"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route path="/admin/login" element={<LoginPageAdmin />} />
+            </>
+          )}
         </Routes>
       </BrowserRouter>
     </>

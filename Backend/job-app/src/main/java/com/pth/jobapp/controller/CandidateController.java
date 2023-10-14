@@ -1,26 +1,18 @@
 package com.pth.jobapp.controller;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import com.pth.jobapp.entity.Account;
+import com.pth.jobapp.entity.Employer;
+import com.pth.jobapp.service.*;
 import com.pth.jobapp.ResponseModels.CandidateProfileResponse;
 import com.pth.jobapp.entity.Application;
 import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.requestmodels.ExperienceUpdateRequest;
-import com.pth.jobapp.requestmodels.ImageUrlRequest;
 import com.pth.jobapp.requestmodels.SkillUpdateRequest;
-import com.pth.jobapp.service.ApplicationService;
-import com.pth.jobapp.service.CandidateService;
-import com.pth.jobapp.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ResourceUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -41,10 +33,9 @@ import java.util.UUID;
         @Autowired
         private  JwtService jwtService;
     @Autowired
-    private ServletContext servletContext;
+    private EmployerService employerService;
     @Autowired
-    private  ResourceLoader resourceLoader;
-
+    AccountService accountService;
     @PostMapping("/apply")
     public ResponseEntity<String> applyJob(
             @RequestHeader("Authorization") String tokenHeader,
@@ -54,47 +45,33 @@ import java.util.UUID;
         try {
             String candidateEmail = jwtService.extractUsername(tokenHeader.substring(7));
             Candidate candidate = candidateService.findCandidateByAccountUsername(candidateEmail).orElse(null);
-            if(applicationService.findByJobIdAndCandidateId(application.getJobId(),candidate.getId())==null) {
+            if (applicationService.findByJobIdAndCandidateId(application.getJobId(), candidate.getId()) == null) {
                 if (!cVFile.isEmpty()) {
                     if (!cVFile.getContentType().equals("application/pdf")) {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF files are allowed");
                     }
-
-                    byte[] cvBytes = cVFile.getBytes();
-
-                    String projectPath = System.getProperty("user.dir").replace("Backend", "Frontend") + "/src/assets/cv";
-                    String cvFileName = UUID.randomUUID() + ".pdf";
-                    Path cvPath = Paths.get(projectPath, cvFileName);
-
-                    try (OutputStream os = Files.newOutputStream(cvPath)) {
-                        os.write(cvBytes);
-                        System.out.println("Thành công");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("Không thành công");
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save CV file");
-                    }
-
+                    application.setCandidateId(candidate.getId());
                     UUID uuid = UUID.randomUUID();
                     application.setId(uuid.toString());
-                    application.setCandidateId(candidate.getId());
-                    application.setApplyDate(new Date());
-                    application.setState("pending");
-                    application.setCV(cvFileName);
-                    applicationService.save(application);
+                    Application savedApplication = applicationService.saveWithCV(application, cVFile);
+
+                    if (savedApplication != null) {
+                        return ResponseEntity.status(HttpStatus.OK).body("Applied for the job successfully");
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to apply for the job");
+                    }
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CV file is empty");
                 }
-            }
-            else
+            } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Already applied");
-
-            return ResponseEntity.status(HttpStatus.OK).body("Applied for the job successfully");
-        } catch (IOException e) {
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to apply for the job");
         }
     }
+
 
 
     @PutMapping("/update")
@@ -199,6 +176,36 @@ import java.util.UUID;
         }
     }
 
+    @GetMapping("/candidateProfile")
+    public ResponseEntity<?> getAccountFromUsername(@RequestHeader("Authorization") String tokenHeader,@RequestParam String id) {
+        try {
+            String token = tokenHeader.substring(7);
+            String email = jwtService.extractUsername(token);
 
+            Employer employer = employerService.findByAccountUsername(email);
+
+            if (employer != null) {
+                Candidate candidate = candidateService.findById(id).get();
+                Account account = accountService.findById(candidate.getAccountId()).get();
+                CandidateProfileResponse candidateProfileResponse = new CandidateProfileResponse();
+                candidateProfileResponse.setUsername(account.getUsername());
+                candidateProfileResponse.setLastName(candidate.getLastName());
+                candidateProfileResponse.setFirstName(candidate.getFirstName());
+                candidateProfileResponse.setSex(candidate.getSex());
+                candidateProfileResponse.setAvatar(candidate.getAvatar());
+                candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
+                candidateProfileResponse.setSkill(candidate.getSkill());
+                candidateProfileResponse.setExperience(candidate.getExperience());
+                System.out.println(candidate);
+                return ResponseEntity.ok(candidateProfileResponse);
+            } else {
+                System.out.println("Người dùng không tồn tại");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
+        }
+    }
 }
 

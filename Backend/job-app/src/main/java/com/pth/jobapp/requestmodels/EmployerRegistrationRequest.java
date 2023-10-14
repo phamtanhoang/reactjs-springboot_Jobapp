@@ -9,8 +9,7 @@ public class EmployerRegistrationRequest {
     private String name;
     private String address;
     private String description;
-    private String image;
-    private String banner;
+
 
 
     public String getUsername() {
@@ -53,19 +52,5 @@ public class EmployerRegistrationRequest {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
-    }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getBanner() {
-        return banner;
-    }
-
-    public void setBanner(String banner) {
-        this.banner = banner;
-    }
 }

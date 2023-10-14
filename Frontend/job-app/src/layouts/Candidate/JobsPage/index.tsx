@@ -9,7 +9,7 @@ import { CategoryItem, EmployerItem, JobItem } from "./components";
 import { EmployerModel } from "../../../models/EmployerModel";
 import { JobModel } from "../../../models/JobModel";
 
-export const JobsPage = () => {
+const JobsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
@@ -104,7 +104,7 @@ export const JobsPage = () => {
           setIsLoading(false);
         });
     };
-    getEmployers ();
+    getEmployers();
   }, [currentEmployerPage, employersPerPage]);
 
   //Get job
@@ -347,3 +347,4 @@ export const JobsPage = () => {
     </>
   );
 };
+export default JobsPage;

@@ -19,7 +19,10 @@ export const JobDetail: React.FC<{ job?: JobModel }> = (props) => {
               </div>
               <div className="w-[80%] text-xs">
                 <h5 className="text-[#949697] font-light">NGÀY ĐĂNG TUYỂN</h5>
-                <p className="mt-1 text-sm">{props.job?.fromDate}</p>
+                <p className="mt-1 text-sm">
+                  {props.job?.fromDate &&
+                    new Date(props.job?.fromDate).toLocaleDateString()}
+                </p>
               </div>
             </li>
             <li className="flex border-[#949697] border-b-2 py-4">
@@ -28,7 +31,10 @@ export const JobDetail: React.FC<{ job?: JobModel }> = (props) => {
               </div>
               <div className="w-[80%] text-xs">
                 <h5 className="text-[#949697] font-light">NGÀY KẾT THÚC</h5>
-                <p className="mt-1 text-sm">{props.job?.toDate}</p>
+                <p className="mt-1 text-sm">
+                  {props.job?.toDate &&
+                    new Date(props.job?.toDate).toLocaleDateString()}
+                </p>
               </div>
             </li>
             <li className="flex border-[#949697] border-b-2 py-4">

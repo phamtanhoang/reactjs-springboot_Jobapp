@@ -7,7 +7,7 @@ import { EmployerItem } from "./components";
 import { employersAPI } from "../../../services";
 import { TopEmployers } from "../HomePage/components";
 
-export const EmployersPage = () => {
+const EmployersPage = () => {
   const [employers, setEmployers] = useState<EmployerModel[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -141,3 +141,4 @@ export const EmployersPage = () => {
     </>
   );
 };
+export default EmployersPage;

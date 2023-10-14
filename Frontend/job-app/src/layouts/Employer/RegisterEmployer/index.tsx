@@ -5,7 +5,7 @@ import authsAPI from "../../../services/Auths";
 import { Link, useNavigate } from "react-router-dom";
 import { accountsAPI } from "../../../services";
 
-export const RegisterEmployer = () => {
+const RegisterEmployer = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,14 +18,14 @@ export const RegisterEmployer = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (
-      email &&
-      password &&
-      name &&
-      address &&
-      description &&
-      confirmPassword
+      email.trim() &&
+      password.trim() &&
+      name.trim() &&
+      address.trim() &&
+      description.trim() &&
+      confirmPassword.trim()
     ) {
-      if (password === confirmPassword) {
+      if (password.trim() === confirmPassword.trim()) {
         accountsAPI
           .getAccountByUserName(email)
           .then(() => {
@@ -34,27 +34,33 @@ export const RegisterEmployer = () => {
           .catch(() => {
             authsAPI
               .registerEmployer(
-                email,
-                password,
-                name,
-                address,
+                email.trim(),
+                password.trim(),
+                name.trim(),
+                address.trim(),
                 "",
                 "",
-                description
+                description.trim()
               )
               .then(() => {
-                Swal.fire("Đăng kí thành công!!! Chờ ban quản trị xác nhận.");
+                Swal.fire(
+                  "Log in success!!! Waiting for the admin to confirm."
+                );
                 navigate("/employer/login");
               })
               .catch(() => {
-                Swal.fire("Thất bại!", "Đăng kí thất bại!", "error");
+                Swal.fire("Error!", "Register fail!", "error");
               });
           });
       } else {
-        Swal.fire("Thất bại!", "Mật khẩu không khớp!", "error");
+        Swal.fire(
+          "Error!",
+          "Password and comfirm password incorrect!",
+          "error"
+        );
       }
     } else {
-      Swal.fire("Thất bại!", "Vui lòng nhập đầy đủ thông tin!", "error");
+      Swal.fire("Error!", "Please enter complete information!", "error");
     }
   };
 
@@ -66,7 +72,7 @@ export const RegisterEmployer = () => {
             <img
               src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
               className="w-full"
-              alt="Sample image"
+              alt="image"
             />
           </div>
 
@@ -74,7 +80,7 @@ export const RegisterEmployer = () => {
             <form onSubmit={handleSubmit}>
               <div className="my-7 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
                 <p className="mx-4 mb-0 text-center font-semibold text-xl md:text-2xl">
-                  Đăng kí nhà tuyển dụng
+                  Register for Employer
                 </p>
               </div>
 
@@ -82,26 +88,26 @@ export const RegisterEmployer = () => {
                 <div className="flex flex-wrap -mx-3">
                   <div className="w-full md:w-1/2 px-3 mb-2">
                     <label className="font-semibold text-sm text-gray-600 block">
-                      Tên:
+                      Employer name:
                     </label>
                     <input
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
-                      onChange={(e) => setName(e.target.value.trim())}
-                      placeholder="Nhập tên nhà tuyển dụng..."
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Employer name..."
                       value={name}
                       required
                     />
                   </div>
                   <div className="w-full md:w-1/2 px-3 mb-2">
                     <label className="font-semibold text-sm text-gray-600  block">
-                      Địa chỉ:
+                      Address:
                     </label>
                     <input
                       type="text"
                       className="border rounded-lg px-3 py-2 mt-1  w-full"
-                      onChange={(e) => setAddress(e.target.value.trim())}
-                      placeholder="Nhập địa chỉ..."
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="Address..."
                       value={address}
                       required
                     />
@@ -110,12 +116,12 @@ export const RegisterEmployer = () => {
 
                 <div className="mb-2">
                   <label className="font-semibold text-sm text-gray-600 block">
-                    Mô tả:
+                    Description:
                   </label>
                   <textarea
                     className="border rounded-lg px-3 py-4 mt-1  w-full"
-                    onChange={(e) => setDescription(e.target.value.trim())}
-                    placeholder="Nhập mô tả..."
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Decription..."
                     value={description}
                     required
                   />
@@ -127,31 +133,31 @@ export const RegisterEmployer = () => {
                 <input
                   type="email"
                   className="border rounded-lg px-3 py-2 mt-1 w-full mb-2"
-                  onChange={(e) => setEmail(e.target.value.trim())}
-                  placeholder="Nhập Email..."
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email..."
                   value={email}
                   required
                 />
 
                 <label className="font-semibold text-sm text-gray-600 block">
-                  Mật khẩu:
+                  Password:
                 </label>
                 <input
                   type="password"
                   className="border rounded-lg px-3 py-2 mt-1  w-full mb-2"
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Nhập mật khẩu..."
+                  placeholder="********"
                   value={password}
                   required
                 />
                 <label className="font-semibold text-sm text-gray-600 block">
-                  Nhập lại mật khẩu:
+                  Comfirm password:
                 </label>
                 <input
                   type="password"
                   className="border rounded-lg px-3 py-2 mt-1   w-full"
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Nhập lại mật khẩu..."
+                  placeholder="********"
                   value={confirmPassword}
                   required
                 />
@@ -164,16 +170,16 @@ export const RegisterEmployer = () => {
                   data-te-ripple-init
                   data-te-ripple-color="light"
                 >
-                  Đăng kí
+                  Register
                 </button>
 
                 <p className="mt-4 text-sm font-semibold">
-                  Tôi đã có tài khoản?
+                  I already have an account?
                   <Link
                     to={"/employer/login"}
                     className="transition duration-150 ease-in-out ml-2 hover:text-blue-500"
                   >
-                    Đăng nhập
+                    Login
                   </Link>
                 </p>
                 <Link
@@ -181,7 +187,7 @@ export const RegisterEmployer = () => {
                   type="button"
                   className="my-5 inline-block rounded bg-blue-300 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-gray-500 transition duration-150 ease-in-out hover:bg-blue-500 hover:text-white "
                 >
-                  Quay lại trang tìm việc
+                  Go back to the candidate page
                 </Link>
               </div>
             </form>
@@ -191,3 +197,4 @@ export const RegisterEmployer = () => {
     </section>
   );
 };
+export default RegisterEmployer;

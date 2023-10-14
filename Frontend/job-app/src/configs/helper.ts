@@ -87,6 +87,9 @@ export const urlAPI = {
 
   getCandidateById: (id: string) => `/candidates/${id}`,
 
+  getCandidateProfileById: (id: string) =>
+    `/candidates/candidateProfile?id=${id}`,
+
   loginCandidate: "/auth/candidate/login",
 
   currentCandidate: "/candidates/profile",
@@ -113,11 +116,97 @@ export const urlAPI = {
 
   changePassword: "/auth/changePassword",
 
-  getJobEmployerToken: (currentPage?: number, itemsPerPage?: number) => {
-    if (currentPage !== undefined || itemsPerPage !== undefined) {
-      return `/jobs/jobs-employer?page=${currentPage}&size=${itemsPerPage}`;
-    } else {
-      return "/jobs/jobs-employer";
-    }
+  currentEmployer: "/employers/profile",
+
+  getJobsByTitleContainingAndEmployerToken: (
+    title: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => {
+    return `/jobs/search/findByEmployerIdAndTitleContaining?title=${title}&page=${currentPage}&size=${itemsPerPage}`;
   },
+
+  addJobByEmployerToken: "/jobs/create",
+
+  getApplicationByIDAndEmployerToken: (id: string) => {
+    return `/applies/applicationDetails?applicationId=${id}`;
+  },
+
+  getApplicationsByEmployerToken: (
+    title: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => {
+    return `/applies/employerApplications?title=${title}&page=${currentPage}&size=${itemsPerPage}`;
+  },
+
+  updateEmployerBanner: "/employers/updateBanner",
+
+  updateEmployerLogo: "/employers/updateImage",
+
+  updateEmployerProfile: "/employers/update",
+
+  updateJobByEmployerToken: (jobId: string) => `/jobs/update?jobId=${jobId}`,
+
+  deleteJobByEmployerToken: (jobId: string) => `/jobs/delete?jobId=${jobId}`,
+
+  updateApplicationState: "/applies/updateState",
+
+  getJobByEmployerToken: (jobId: string) =>
+    `/employers/jobDetails?jobId=${jobId}`,
+
+  getApplicationsByJobIDAndEmplerToken: (
+    jobId: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/applies/applicatonsJob?jobId=${jobId}&page=${currentPage}&size=${itemsPerPage}`,
+
+  loginAdmin: "/admin/login",
+
+  getCategoriesByNameAndAdminToken: (
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/admin/categories?name=${name}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addCategoryByAdminToken: `/admin/category/create`,
+
+  updateCategoryByAdminToken: (id: string) =>
+    `/admin/category/update?categoryId=${id}`,
+
+  deleteCategoryByAdminToken: (id: string) =>
+    `/admin/category/delete?categoryId=${id}`,
+
+  getJobsByTitleAndAdminToken: (
+    title: string,
+    categoryId: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/admin/jobs?title=${title}&categoryId=${categoryId}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addJobByAdminToken: `/admin/job/create`,
+
+  updateJobByAdminToken: (id: string) => `/admin/job/update?jobId=${id}`,
+
+  deleteJobByAdminToken: (id: string) => `/admin/job/delete?jobId=${id}`,
+
+  detailsJobByAdminToken: (id: string) => `/admin/job/details?jobId=${id}`,
+
+  getEmployersByNameAndAdminToken: (
+      name: string,
+      currentPage: number,
+      itemsPerPage: number
+  ) =>
+      `/admin/employers?name=${name}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addEmployersByAdminToken: `/admin/employer/create`,
+
+  updateEmployerByAdminToken: (id: string) => `/admin/employer/update?employerId=${id}`,
+
+  deleteEmployerByAdminToken: (id: string) => `/admin/employer/delete?employerId=${id}`,
+
+  detailsEmployerByAdminToken: (id: string) => `/admin/employer/details?employerId=${id}`,
 };

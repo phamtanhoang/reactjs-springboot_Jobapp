@@ -6,7 +6,6 @@ import { CandidateResponseModel } from "../../../../../models/CandidateResponseM
 import { candidatesAPI } from "../../../../../services";
 import Swal from "sweetalert2";
 import { Spinner } from "../../../../../components";
-import authsAPI from "../../../../../services/Auths";
 
 const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
   props
@@ -193,11 +192,8 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             <div className="flex">
               <p className="w-[50%] xl:w-[40%]  font-semibold">Ngày sinh:</p>
               <p className="font-medium">
-                {props.candidateRes?.dateOfBirth
-                  ? new Date(
-                      props.candidateRes.dateOfBirth
-                    ).toLocaleDateString()
-                  : ""}
+                {props.candidateRes?.dateOfBirth &&
+                  new Date(props.candidateRes.dateOfBirth).toLocaleDateString()}
               </p>
             </div>
             <div className="flex">

@@ -6,7 +6,7 @@ import { Link, NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
 import authsAPI from "../../../../../services/Auths";
 import { CandidateResponseModel } from "../../../../../models/CandidateResponseModel";
-import { ChangePasswordPage } from "../../../ChangePasswordPage";
+import { ChangePasswordPage } from "../../..";
 
 const NavBar = () => {
   const [sticky, setSticky] = useState(false);
