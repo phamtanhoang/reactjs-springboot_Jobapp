@@ -11,6 +11,18 @@ public class CandidateProfileResponse {
     String sex;
     String skill;
     String experience;
+    String candidateId;
+    String state;
+    String accountId;
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -73,5 +85,21 @@ public class CandidateProfileResponse {
 
     public void setExperience(String experience) {
         this.experience = experience;
+    }
+
+    public String getCandidateId() {
+        return candidateId;
+    }
+
+    public void setCandidateId(String candidateId) {
+        this.candidateId = candidateId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

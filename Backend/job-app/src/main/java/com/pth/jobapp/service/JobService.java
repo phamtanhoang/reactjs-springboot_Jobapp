@@ -28,8 +28,8 @@ public class JobService {
     public Page<Job> findByEmployerId(String employerId,Pageable pageable){
         return jobRepository.findByEmployerId(employerId,pageable);
     }
-    public List<Job> findByEmployerId(String employerId){
-        return jobRepository.findByEmployerId(employerId);
+    public List<Job> findByEmployerIdWithList(String employerId){
+        return jobRepository.findByEmployerIdWithList(employerId);
     }
 
     public  Page<Job> findAvailableJobs(Pageable pageable){
@@ -48,7 +48,7 @@ public class JobService {
     public Optional<Job>findJobByEmployerIdAndId(String employerId,String id){return jobRepository.findJobByEmployerIdAndId(employerId,id);}
 
 
-    public List<Job>findByCategoryId(String categoryId){return  jobRepository.findByCategoryId(categoryId);}
+    public List<Job>findByCategoryIdWithList(String categoryId){return  jobRepository.findByCategoryIdWithList(categoryId);}
     @Scheduled(cron = "0 0 0 * * ?") // Chạy vào lúc 00:00:00 hàng ngày
     public void updateJobStatus() {
 

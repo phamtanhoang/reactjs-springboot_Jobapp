@@ -40,4 +40,11 @@ public interface ApplicationRepository extends JpaRepository<Application, String
             "WHERE j.employerId = :employerId " +
             "AND a.id = :id")
     Optional<Application>findByIdAndEmployerId(String id, String employerId);
+
+    @Query("SELECT a FROM Application a " +
+            "JOIN Candidate c ON c.id = a.candidateId " +
+            "JOIN Account ac ON c.accountId = ac.id " +
+            "WHERE ac.username like  %:email% ")
+
+    Page<Application> findAllByUserNameContaining(@Param("email") String email, Pageable pageable);
 }

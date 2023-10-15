@@ -73,5 +73,101 @@ const employersAPI = {
       headers,
     });
   },
+
+  async getEmployerByNameAndAdminToken(
+    name: string,
+    currentPage: number,
+    itemsPerPage: number,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getEmployersByNameAndAdminToken(name, currentPage, itemsPerPage),
+      { headers }
+    );
+  },
+
+  async addEmployerByAdminToken(
+    username: string,
+    password: string,
+    name: string,
+    address: string,
+    description: string,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    const data = {
+      username: username,
+      password: password,
+      name: name,
+      address: address,
+      description: description,
+    };
+    return await instance.post(urlAPI.addEmployerByAdminToken, data, {
+      headers,
+    });
+  },
+
+  async updateEmployerByAdminToken(
+    id: string,
+    state: string,
+    address: string,
+    description: string,
+    name: string,
+    logo?: File,
+    banner?: File,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const data = {
+      description: description,
+      address: address,
+      state: state,
+      name: name,
+    };
+    const formData = new FormData();
+    if (logo) {
+      formData.append("image", logo);
+    }
+    if (banner) {
+      formData.append("banner", banner);
+    }
+    formData.append(
+      "employer",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+    return await instance.put(urlAPI.updateEmployerByAdminToken(id), formData, {
+      headers,
+    });
+  },
+
+  async deleteEmployerByAdminToken(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.delete(urlAPI.deleteEmployerByAdminToken(id), {
+      headers,
+    });
+  },
+
+  async detailEmployerByAdminToken(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.detailsEmployerByAdminToken(id), {
+      headers,
+    });
+  },
 };
 export default employersAPI;

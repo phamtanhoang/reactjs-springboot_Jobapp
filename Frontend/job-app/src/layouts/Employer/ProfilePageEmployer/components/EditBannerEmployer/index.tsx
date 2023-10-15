@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineCloudUpload } from "react-icons/ai";
 import { ErrorBox, Spinner } from "../../../../../components";
 import authsAPI from "../../../../../services/Auths";
 import { EmployerResponseModel } from "../../../../../models/EmployerResponseModels";
@@ -135,13 +135,22 @@ const EditBannerEmployer: React.FC<{
             <div className="flex justify-center mt-2 sm:mt-5 gap-5">
               {!selectedFile ? (
                 <>
-                  <input
-                    className="block w-[300px] sm:w-[500px] text-base text-gray-900 border border-gray-400 rounded-sm cursor-pointer bg-gray-50"
-                    type="file"
-                    id="fileInput"
-                    accept="image/*"
-                    onChange={handleFileInputChange}
-                  ></input>
+                  <div className="flex w-full items-center justify-center">
+                    <label className="w-full flex flex-col justify-center items-center py-2 bg-white text-blue-500 rounded-lg shadow-lg tracking-wide uppercase border-2 border-blue-500 cursor-pointer hover:bg-blue-500 hover:text-white">
+                      <AiOutlineCloudUpload className="text-3xl" />
+                      <span className="text-base font-medium">
+                        Select a file
+                      </span>
+                      <input
+                        type="file"
+                        className="hidden"
+                        id="fileInput"
+                        accept="image/*"
+                        onChange={handleFileInputChange}
+                      />
+                    </label>
+                  </div>
+                  
                 </>
               ) : (
                 <>

@@ -5,7 +5,7 @@ import { BiSolidCategory, BiSolidMessageAltDetail } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { FaUserEdit, FaUserGraduate, FaUserTie } from "react-icons/fa";
 import { MdCategory, MdContactPage } from "react-icons/md";
-
+import { RiVipDiamondFill } from "react-icons/ri";
 import { useState } from "react";
 import { ChangePasswordPageAdmin } from "../../..";
 
@@ -100,6 +100,19 @@ const NavBarAdmin = () => {
               </span>
               <span className="ml-2 text-base tracking-wide truncate">
                 Candidates
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/admin/vips"
+              className="relative flex flex-row items-center h-11 focus:outline-none  hover:text-purple-600 hover:bg-purple-100 border-x-4 border-transparent hover:border-purple-600 pr-6 rounded-md"
+            >
+              <span className="inline-flex justify-center items-center ml-4">
+                <RiVipDiamondFill className="text-xl" />
+              </span>
+              <span className="ml-2 text-base tracking-wide truncate">
+                Vips
               </span>
             </Link>
           </li>

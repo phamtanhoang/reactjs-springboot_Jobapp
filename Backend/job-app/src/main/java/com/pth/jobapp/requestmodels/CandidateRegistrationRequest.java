@@ -13,7 +13,6 @@ public class CandidateRegistrationRequest
     private String firstName;
     private String lastName;
     private String avatar;
-    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date dateOfBirth;
     private String sex;
 

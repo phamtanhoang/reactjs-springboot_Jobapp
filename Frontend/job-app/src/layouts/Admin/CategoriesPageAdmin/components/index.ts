@@ -1,5 +1,6 @@
-import AddCategory from "./AddCategory";
-import TablePage from "./TablePage";
-import UpdateCategoryPage from "./UpdateCategory";
+import AddCategory from "./Add";
+import TablePage from "./Table";
+import UpdateCategoryPage from "./Update";
+
 
 export { TablePage, AddCategory, UpdateCategoryPage };

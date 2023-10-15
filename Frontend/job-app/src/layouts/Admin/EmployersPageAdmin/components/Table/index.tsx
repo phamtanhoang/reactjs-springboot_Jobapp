@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useEffect, useState } from "react";
+import { EmployerResponseModel } from "../../../../../models/EmployerResponseModels";
+import { employersAPI } from "../../../../../services";
 import { ErrorBox, PaginationAdmin, Spinner } from "../../../../../components";
-import { jobsAPI } from "../../../../../services";
+import Swal from "sweetalert2";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -10,17 +13,14 @@ import {
   AiOutlineClose,
   AiOutlineExclamation,
 } from "react-icons/ai";
-import Swal from "sweetalert2";
-import { JobModel } from "../../../../../models/JobModel";
-import { JobDetail, UpdateJob } from "..";
+import { DetailEmployer, UpdateEmployer } from "..";
 
-const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
+const TablePage: React.FC<{ name: string }> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const [jobs, setJobs] = useState<JobModel[]>([]);
-  const [job, setJob] = useState<JobModel>();
-
+  const [employers, setEmployers] = useState<EmployerResponseModel[]>([]);
+  const [employer, setEmployer] = useState<EmployerResponseModel>();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const [totalAmountOfItems, setTotalAmountOfItems] = useState(0);
@@ -29,21 +29,19 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
   const [showBoxUpdate, setShowBoxUpdate] = useState(false);
   const [showBoxDetail, setShowBoxDetail] = useState(false);
 
-  const [previousTitle, setPreviousTitle] = useState("");
-  const [previousCategoryId, setPreviousCategoryId] = useState("");
+  const [previousName, setPreviousName] = useState("");
 
   useEffect(() => {
     const fetchJobs = () => {
-      jobsAPI
-        .getJobsByTitleAndAdminToken(
-          props.title,
-          props.categoryId,
+      employersAPI
+        .getEmployerByNameAndAdminToken(
+          props.name,
           currentPage - 1,
           itemsPerPage,
           localStorage.getItem("adminToken") || ""
         )
         .then((res) => {
-          setJobs(res.data.content);
+          setEmployers(res.data.content);
           setTotalAmountOfItems(res.data.totalElements);
           setTotalPages(res.data.totalPages);
         })
@@ -55,24 +53,13 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
         });
     };
 
-    if (
-      props.title != previousTitle ||
-      props.categoryId != previousCategoryId
-    ) {
+    if (props.name != previousName) {
       setCurrentPage(1);
-      setPreviousTitle(props.title);
-      setPreviousCategoryId(props.categoryId);
+      setPreviousName(props.name);
     }
 
     fetchJobs();
-  }, [
-    currentPage,
-    itemsPerPage,
-    previousCategoryId,
-    previousTitle,
-    props.categoryId,
-    props.title,
-  ]);
+  }, [currentPage, itemsPerPage, previousName, props.name]);
 
   if (isLoading) {
     return (
@@ -92,17 +79,17 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const HandleUpdate = (job: JobModel) => {
+  const HandleUpdate = (employer: EmployerResponseModel) => {
     setShowBoxUpdate(true);
-    setJob(job);
+    setEmployer(employer);
   };
 
-  const HandleDetail = (job: JobModel) => {
+  const HandleDetail = (employer: EmployerResponseModel) => {
     setShowBoxDetail(true);
-    setJob(job);
+    setEmployer(employer);
   };
 
-  const HandleDelete = (job: JobModel) => {
+  const HandleDelete = (employer: EmployerResponseModel) => {
     Swal.fire({
       title: "Do you want to delete?",
       icon: "warning",
@@ -112,14 +99,14 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
-        jobsAPI
-          .deleteJobByAdminToken(
-            job.id,
+        employersAPI
+          .deleteEmployerByAdminToken(
+            employer.employerId,
             localStorage.getItem("adminToken") || ""
           )
           .then(() => {
             Swal.fire({
-              title: "Delete job success",
+              title: "Delete employer success",
               icon: "success",
               confirmButtonColor: "#3085d6",
               confirmButtonText: "Yes",
@@ -130,7 +117,7 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
             });
           })
           .catch(() => {
-            Swal.fire("Error!", "Delete job error!", "error");
+            Swal.fire("Error!", "Delete employer error!", "error");
           });
       }
     });
@@ -156,7 +143,7 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
                         scope="col"
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
                       >
-                        Title
+                        Employer
                       </th>
 
                       <th
@@ -164,20 +151,6 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
                       >
                         State
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
-                      >
-                        From Date
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-600 "
-                      >
-                        To Date
                       </th>
                       <th
                         scope="col"
@@ -190,7 +163,7 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
                   <tbody className="bg-white divide-y divide-gray-200 ">
                     {totalAmountOfItems > 0 ? (
                       <>
-                        {jobs.map((job, i) => (
+                        {employers.map((employer, i) => (
                           <tr key={i}>
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 ">
                               <div className="inline-flex items-center gap-x-3">
@@ -199,22 +172,35 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
                             </td>
 
                             <td className="px-4 py-4 text-sm text-gray-600 ">
-                              {job.title}
-                              {new Date(job.toDate) < new Date() && (
-                                <span className="text-red-500 ml-2">
-                                  (Expired)
-                                </span>
-                              )}
+                              <div className="flex items-center gap-x-4">
+                                <img
+                                  className="object-cover w-8 h-8 rounded-sm"
+                                  src={
+                                    employer.image
+                                      ? employer.image
+                                      : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
+                                  }
+                                  alt="logo"
+                                />
+                                <div>
+                                  <h2 className="text-sm font-semibold text-gray-800">
+                                    {employer.name}
+                                  </h2>
+                                  <p className="text-xs font-normal text-gray-600">
+                                    {employer.username}
+                                  </p>
+                                </div>
+                              </div>
                             </td>
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              {job.state == "pending" ? (
+                              {employer.state == "pending" ? (
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-yellow-500 bg-yellow-100/60 ">
                                   <AiOutlineExclamation />
                                   <h2 className="text-sm font-normal">
                                     Pending
                                   </h2>
                                 </div>
-                              ) : job.state == "active" ? (
+                              ) : employer.state == "active" ? (
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 ">
                                   <AiOutlineCheck />
                                   <h2 className="text-sm font-normal">
@@ -224,34 +210,24 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
                               ) : (
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60 ">
                                   <AiOutlineClose />
-                                  <h2 className="text-sm font-normal">
-                                    Refused
-                                  </h2>
+                                  <h2 className="text-sm font-normal">Deny</h2>
                                 </div>
                               )}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-600 ">
-                              {job.fromDate &&
-                                new Date(job.fromDate).toLocaleDateString()}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-600 ">
-                              {job.toDate &&
-                                new Date(job.toDate).toLocaleDateString()}
                             </td>
                             <td className="px-4 py-4 text-sm whitespace-nowrap">
                               <div className="flex items-center gap-x-6 text-2xl text-gray-600">
                                 <AiFillEye
                                   className=" cursor-pointer hover:text-yellow-500"
-                                  onClick={() => HandleDetail(job)}
+                                  onClick={() => HandleDetail(employer)}
                                 />
 
                                 <AiFillEdit
                                   className=" cursor-pointer hover:text-blue-500"
-                                  onClick={() => HandleUpdate(job)}
+                                  onClick={() => HandleUpdate(employer)}
                                 />
                                 <AiFillDelete
                                   className=" cursor-pointer hover:text-red-500"
-                                  onClick={() => HandleDelete(job)}
+                                  onClick={() => HandleDelete(employer)}
                                 />
                               </div>
                             </td>
@@ -262,7 +238,7 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
                       <tr>
                         <td colSpan={6}>
                           <div className="w-full p-5">
-                            <ErrorBox text="There are no categories!!!" />
+                            <ErrorBox text="There are no employers!!!" />
                           </div>
                         </td>
                       </tr>
@@ -283,10 +259,16 @@ const TablePage: React.FC<{ title: string; categoryId: string }> = (props) => {
         )}
       </div>
       {showBoxUpdate && localStorage.getItem("adminToken") && (
-        <UpdateJob setShowBoxUpdate={setShowBoxUpdate} job={job} />
+        <UpdateEmployer
+          setShowBoxUpdate={setShowBoxUpdate}
+          employer={employer}
+        />
       )}
       {showBoxDetail && localStorage.getItem("adminToken") && (
-        <JobDetail setShowBoxDetail={setShowBoxDetail} job={job} />
+        <DetailEmployer
+          setShowBoxDetail={setShowBoxDetail}
+          employer={employer}
+        />
       )}
     </>
   );

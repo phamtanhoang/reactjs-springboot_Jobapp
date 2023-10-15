@@ -103,5 +103,113 @@ const candidatesAPI = {
   async getCandidateProfileById(id: string) {
     return await instance.get(urlAPI.getCandidateProfileById(id));
   },
+
+  async getCandidatesByNameAndAdminToken(
+    name: string,
+    currentPage: number,
+    itemsPerPage: number,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getCandidatesByNameAndAdminToken(name, currentPage, itemsPerPage),
+      { headers }
+    );
+  },
+
+  async addCandidateByAdminToken(
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    dateOfBirth: string,
+    sex: string,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    const data = {
+      username: username,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      dateOfBirth: dateOfBirth,
+      sex: sex,
+    };
+    console.log(urlAPI.addCandidateByAdminToken);
+    console.log(data);
+
+    return await instance.post(urlAPI.addCandidateByAdminToken, data, {
+      headers,
+    });
+  },
+
+  async updateCandidateByAdminToken(
+    id: string,
+    firstName: string,
+    lastName: string,
+    state: string,
+    dateOfBirth: string,
+    sex: string,
+    skill: string,
+    experience: string,
+    avatar?: File,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      state: state,
+      dateOfBirth: dateOfBirth,
+      sex: sex,
+      skill: skill,
+      experience: experience,
+    };
+    const formData = new FormData();
+    if (avatar) {
+      formData.append("avatar", avatar);
+    }
+
+    formData.append(
+      "candidate",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+    return await instance.put(
+      urlAPI.updateCandidateByAdminToken(id),
+      formData,
+      {
+        headers,
+      }
+    );
+  },
+
+  async deleteCandidateByAdminToken(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.delete(urlAPI.deleteCandidateByAdminToken(id), {
+      headers,
+    });
+  },
+
+  async detailCandidateByAdminToken(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.detailsCandidateByAdminToken(id), {
+      headers,
+    });
+  },
 };
 export default candidatesAPI;

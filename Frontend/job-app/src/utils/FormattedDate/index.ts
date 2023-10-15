@@ -1,8 +1,8 @@
+import { addDays, format } from "date-fns";
+
 const formattedDate = (dateString: string) => {
   const parsedDate = new Date(dateString);
-  const year = parsedDate.getFullYear();
-  const month = (parsedDate.getMonth() + 1).toString().padStart(2, "0");
-  const day = parsedDate.getDate().toString().padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return format(parsedDate, "yyyy-MM-dd");
 };
+
 export default formattedDate;

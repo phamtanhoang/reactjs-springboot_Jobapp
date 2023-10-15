@@ -18,7 +18,7 @@ public interface EmployerRepository extends JpaRepository<Employer, String> {
             Pageable pageable
     );
 
-    @Query("SELECT e FROM Employer e JOIN Vip v ON e.id = v.employerId " +
+    @Query("SELECT e FROM Employer e JOIN EmployerVip v ON e.id = v.employerId " +
             "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE()")
     Page<Employer> findVipEmployers(Pageable pageable);
 

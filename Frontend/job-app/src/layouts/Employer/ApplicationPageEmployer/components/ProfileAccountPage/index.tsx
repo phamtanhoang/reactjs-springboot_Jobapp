@@ -65,7 +65,7 @@ const ProfileAccountPage: React.FC<{
           <div className="sm:flex justify-center">
             <div className="p-2 sm:w-[35%]">
               <img
-                className="w-32 h-32 rounded-full mx-auto"
+                className="w-32 h-32 rounded-full mx-auto ring-2 ring-gray-40"
                 src={
                   candidate?.avatar
                     ? candidate.avatar

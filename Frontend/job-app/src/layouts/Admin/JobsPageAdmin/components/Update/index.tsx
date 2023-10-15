@@ -21,27 +21,18 @@ const UpdateJob: React.FC<{
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const [title, setTitle] = useState("");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [cate, setCate] = useState("");
-  const [salary, setSalary] = useState("");
-  const [address, setAddress] = useState("");
-  const [description, setDescription] = useState("");
-  const [employerId, setEmployerId] = useState("");
-  const [state, setState] = useState("");
+  const [title, setTitle] = useState(props.job?.title || "");
+  const [fromDate, setFromDate] = useState(props.job?.fromDate || "");
+  const [toDate, setToDate] = useState(props.job?.toDate || "");
+  const [cate, setCate] = useState(props.job?.categoryId || "");
+  const [salary, setSalary] = useState(props.job?.salary || "");
+  const [address, setAddress] = useState(props.job?.address || "");
+  const [description, setDescription] = useState(props.job?.address || "");
+  const [employerId, setEmployerId] = useState(props.job?.employerId || "");
+  const [state, setState] = useState(props.job?.state || "");
   const [selectedOption, setSelectedOption] = useState("");
 
   useEffect(() => {
-    setTitle(props.job?.title || "");
-    setFromDate(props.job?.fromDate || "");
-    setToDate(props.job?.toDate || "");
-    setCate(props.job?.categoryId || "");
-    setSalary(props.job?.salary || "");
-    setAddress(props.job?.address || "");
-    setDescription(props.job?.description || "");
-    setState(props.job?.state || "");
-    setEmployerId(props.job?.employerId || "");
     const fetchCategories = () => {
       categoriesAPI
         .getCategories()
@@ -72,17 +63,7 @@ const UpdateJob: React.FC<{
         });
     };
     fetchEmployers();
-  }, [
-    props.job?.address,
-    props.job?.categoryId,
-    props.job?.description,
-    props.job?.employerId,
-    props.job?.fromDate,
-    props.job?.salary,
-    props.job?.state,
-    props.job?.title,
-    props.job?.toDate,
-  ]);
+  }, []);
 
   if (isLoading) {
     return (
@@ -132,8 +113,8 @@ const UpdateJob: React.FC<{
             .updateJobByAdminToken(
               props.job?.id || "",
               title.trim(),
-              fromDate.trim(),
-              toDate.trim(),
+              formattedDate(fromDate.trim()),
+              formattedDate(toDate.trim()),
               cate.trim(),
               salary.trim(),
               address.trim(),
@@ -168,10 +149,13 @@ const UpdateJob: React.FC<{
     value: employer.id,
     label: employer.name,
   }));
-  
+
   const selectedEmployer = employers.find(
     (emp) => emp.id == props.job?.employerId
   );
+
+  console.log(fromDate, toDate);
+  console.log(formattedDate(fromDate), formattedDate(toDate));
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50 text-black">

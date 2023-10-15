@@ -18,7 +18,7 @@ const HeaderAdmin = () => {
     });
   };
   return (
-    <header className="header sticky top-0 bg-white shadow-md flex items-center justify-between py-0 z-10">
+    <header className="fixed top-0 bg-white shadow-md flex items-center justify-between py-0 z-10 w-full">
       <div className="flex items-center justify-start md:justify-center md:pl-0 pl-3 w-14 md:w-64 h-14 bg-purple-500">
         <img
           className="w-7 h-7 md:w-10 md:h-10 mr-2 rounded-full overflow-hidden "

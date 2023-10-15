@@ -82,25 +82,21 @@ const JobsPageAdmin = () => {
           <div className="block lg:flex items-center">
             <form className="lg:pr-3 mb-4 lg:mb-0 sm:flex gap-4">
               <div className="mt-1 relative w-full sm:w-[60%] lg:w-80 ">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
-                  Search:
-                </label>
+                
                 <input
                   type="text"
                   name="category"
-                  className="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-2.5 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
+                  className="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-2 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
                   placeholder="Search for title..."
                   onChange={(e) => {
                     setTitle(e.target.value);
                   }}
                 />
               </div>
-              <div className="mt-1 w-full sm:w-[40%] lg:w-60">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
-                  Select category:
-                </label>
+              <div className="mt-3 sm:mt-1 w-full sm:w-[40%] lg:w-60">
+                
                 <select
-                  className="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-2.5 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
+                  className="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-2 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
                   onChange={(e) => setCategoryId(e.target.value)}
                 >
                   <option value={""}>All category</option>

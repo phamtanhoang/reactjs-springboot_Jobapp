@@ -55,6 +55,7 @@ public class ApplicationService {
         applicationRepository.deleteByJobId(jobId);
     }
 
+    public Page<Application>findAllByUserNameContaining(String email,Pageable pageable){return applicationRepository.findAllByUserNameContaining(email,pageable);}
     public Application saveWithCV(Application application, MultipartFile cvFile) {
         try {
             if (cvFile != null && !cvFile.isEmpty()) {

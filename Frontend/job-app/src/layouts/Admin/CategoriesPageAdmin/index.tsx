@@ -41,11 +41,11 @@ const CategoriesPageAdmin = () => {
           <div className="block sm:flex items-center">
             <form className="sm:pr-3 mb-4 sm:mb-0">
               <label className="sr-only">Search</label>
-              <div className="mt-1 relative sm:w-64 xl:w-96">
+              <div className="mt-1 relative sm:w-80 lg:w-96">
                 <input
                   type="text"
                   name="category"
-                  className="bg-gray-50 border border-gray-300 text-gray-700 sm:text-sm rounded-lg block w-full p-2.5 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
+                  className="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-2 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
                   placeholder="Search for category name"
                   onChange={(e) => {
                     setTitle(e.target.value);

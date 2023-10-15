@@ -7,8 +7,28 @@ const accountsAPI = {
   },
 
   async getAccountByUserName(userName: string) {
-    // console.log(instance.get(urlAPI.getAccountByUserName(userName)));
     return await instance.get(urlAPI.getAccountByUserName(userName));
+  },
+
+  async changePasswordAccountByAdminToken(
+    id: string,
+    password: string,
+    token: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const data = {
+      newPassword: password,
+    };
+    return await instance.put(
+      urlAPI.changePasswordAccountByAdminToken(id),
+      data,
+      {
+        headers,
+      }
+    );
   },
 };
 export default accountsAPI;

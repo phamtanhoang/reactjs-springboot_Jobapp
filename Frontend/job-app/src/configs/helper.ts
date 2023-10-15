@@ -194,4 +194,54 @@ export const urlAPI = {
   deleteJobByAdminToken: (id: string) => `/admin/job/delete?jobId=${id}`,
 
   detailsJobByAdminToken: (id: string) => `/admin/job/details?jobId=${id}`,
+
+  getEmployersByNameAndAdminToken: (
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => `/admin/employers?name=${name}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addEmployerByAdminToken: `/admin/employer/create`,
+
+  updateEmployerByAdminToken: (id: string) =>
+    `/admin/employer/update?employerId=${id}`,
+
+  deleteEmployerByAdminToken: (id: string) =>
+    `/admin/employer/delete?employerId=${id}`,
+
+  detailsEmployerByAdminToken: (id: string) =>
+    `/admin/employer/details?employerId=${id}`,
+
+  getCandidatesByNameAndAdminToken: (
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/admin/candidates?keyword=${name}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addCandidateByAdminToken: `/admin/candidate/create`,
+
+  updateCandidateByAdminToken: (id: string) =>
+    `/admin/candidate/update?candidateId=${id}`,
+
+  deleteCandidateByAdminToken: (id: string) =>
+    `/admin/candidate/delete?candidateId=${id}`,
+
+  detailsCandidateByAdminToken: (id: string) =>
+    `/admin/candidate/details?candidateId=${id}`,
+
+  changePasswordAccountByAdminToken: (id: string) =>
+    `/admin/changePassword?accountId=${id}`,
+
+  getVipsByNameAndAdminToken: (
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => `/admin/vips?name=${name}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addVipByAdminToken: `/admin/vip/create`,
+
+  updateVipByAdminToken: (id: string) => `/admin/vip/update?vipId=${id}`,
+
+  deleteVipByAdminToken: (id: string) => `/admin/vip/delete?vipId=${id}`,
 };

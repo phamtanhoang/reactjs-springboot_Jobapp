@@ -22,12 +22,16 @@ import {
   RegisterEmployer,
 } from "./layouts/Employer";
 import {
+  ApplicationsPageAdmin,
+  CandidatesPageAdmin,
   CategoriesPageAdmin,
   DashboardPage,
+  EmployersPageAdmin,
   JobsPageAdmin,
   LayoutAdmin,
   LoginPageAdmin,
 } from "./layouts/Admin";
+import VipsPageAdmin from "./layouts/Admin/VipsPageAdmin";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -144,6 +148,19 @@ const App = () => {
                   element={<CategoriesPageAdmin />}
                 />
                 <Route path="/admin/jobs" element={<JobsPageAdmin />} />
+                <Route
+                  path="/admin/employers"
+                  element={<EmployersPageAdmin />}
+                />
+                <Route
+                  path="/admin/candidates"
+                  element={<CandidatesPageAdmin />}
+                />
+                <Route
+                  path="/admin/applications"
+                  element={<ApplicationsPageAdmin />}
+                />
+                <Route path="/admin/vips" element={<VipsPageAdmin />} />
               </Route>
             </>
           ) : (
@@ -159,6 +176,22 @@ const App = () => {
               />
               <Route
                 path="/admin/jobs"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/employers"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/candidates"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/applications"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/vips"
                 element={<Navigate to="/admin/login" />}
               />
               <Route path="/admin/login" element={<LoginPageAdmin />} />

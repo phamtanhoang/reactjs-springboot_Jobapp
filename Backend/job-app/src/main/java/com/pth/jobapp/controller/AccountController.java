@@ -62,6 +62,7 @@ public class AccountController {
     public String addNewEmployer(@RequestBody EmployerRegistrationRequest employerRegistrationRequest) {
 
         if (accountService.findByUsername(employerRegistrationRequest.getUsername()) == null) {
+            System.out.println(employerRegistrationRequest.getPassword());
             UUID uuid = UUID.randomUUID();
             Account account= new Account();
             account.setId(uuid.toString());
@@ -76,12 +77,8 @@ public class AccountController {
             employer.setId(id.toString());
             employer.setName(employerRegistrationRequest.getName());
             employer.setAddress(employerRegistrationRequest.getAddress());
-            employer.setBanner(employerRegistrationRequest.getBanner());
-            employer.setImage(employerRegistrationRequest.getImage());
             employer.setDescription(employerRegistrationRequest.getDescription());
             employer.setAccountId(uuid.toString());
-            System.out.println(uuid);
-            // Sử dụng thể hiện của EmployerService đã được Spring quản lý thông qua injection
             employerService.save(employer);
             return "add new employer successfully";
 

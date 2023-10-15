@@ -6,4 +6,6 @@ export interface EmployerResponseModel {
   image: string;
   banner: string;
   employerId: string;
+  state: string;
+  accountId: string;
 }

@@ -32,8 +32,10 @@ public interface JobRepository extends JpaRepository<Job, String> {
             Pageable pageable
     );
 
-    List<Job> findByCategoryId(
+    @Query("SELECT j FROM Job j WHERE j.categoryId = :categoryId")
+    List<Job> findByCategoryIdWithList(
             @RequestParam(name = "category", required = false) String categoryId);
+
 
 
     Page<Job> findByCategoryId(
@@ -45,10 +47,11 @@ public interface JobRepository extends JpaRepository<Job, String> {
             @RequestParam(name = "employer", required = false) String employerId,
             Pageable pageable
     );
-    List<Job> findByEmployerId(String employerId
+    @Query("SELECT j FROM Job j WHERE j.employerId = :employerId")
+    List<Job> findByEmployerIdWithList(String employerId
     );
         @Query("SELECT j FROM Job j JOIN Employer e on j.employerId=e.id " +
-                "WHERE e.id IN (SELECT e.id FROM Employer e JOIN Vip v ON e.id = v.employerId " +
+                "WHERE e.id IN (SELECT e.id FROM Employer e JOIN EmployerVip v ON e.id = v.employerId " +
                 "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE())")
     Page<Job>findJobsWithVipEmployer(Pageable pageable);
 

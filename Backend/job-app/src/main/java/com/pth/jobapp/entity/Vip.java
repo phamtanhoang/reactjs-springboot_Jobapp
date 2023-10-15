@@ -1,12 +1,13 @@
 package com.pth.jobapp.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.UUID;
 
 @Entity
 @Table(name="vip")
@@ -14,57 +15,26 @@ import java.util.UUID;
 public class Vip {
     @Id
     @Column(name = "id")
-    private String id;
+    String id;
 
-    @Column(name = "fromDate")
-    private String fromDate;
+    @Getter
+    @Setter
+    @Column(name = "name")
+    String name;
 
-    @Column(name = "toDate")
-    private String toDate;
+    @Getter
+    @Setter
+    @Column(name = "amount")
+    int amount;
 
-    @Column(name = "employerId")
-    private String employerId;
+    @Getter
+    @Setter
+    @Column(name = "price")
+    float price;
 
-    public Vip(){
+    @Getter
+    @Setter
+    @Column(name = "state")
+    String state;
 
-    }
-
-    public Vip(String fromDate, String toDate, String employerId) {
-        this.id = String.valueOf(UUID.randomUUID());
-        this.fromDate = fromDate;
-        this.toDate = toDate;
-        this.employerId = employerId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(String fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public String getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(String toDate) {
-        this.toDate = toDate;
-    }
-
-    public String getEmployerId() {
-        return employerId;
-    }
-
-    public void setEmployerId(String employerId) {
-        this.employerId = employerId;
-    }
 }

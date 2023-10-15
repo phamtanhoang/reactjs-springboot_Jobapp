@@ -1,13 +1,11 @@
 package com.pth.jobapp.controller;
 
+import com.pth.jobapp.ResponseModels.ApplicationResponse;
 import com.pth.jobapp.ResponseModels.CandidateProfileResponse;
 import com.pth.jobapp.ResponseModels.EmployerProfileResponse;
 import com.pth.jobapp.ResponseModels.JobDetailsResponse;
 import com.pth.jobapp.entity.*;
-import com.pth.jobapp.requestmodels.AuthRequest;
-import com.pth.jobapp.requestmodels.CandidateRegistrationRequest;
-import com.pth.jobapp.requestmodels.ChangePasswordRequest;
-import com.pth.jobapp.requestmodels.EmployerRegistrationRequest;
+import com.pth.jobapp.requestmodels.*;
 import com.pth.jobapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,24 +41,31 @@ public class AdminController {
 
     @Autowired
     private AccountInfoService accountInfoService;
-    @Autowired AccountService accountService;
+    @Autowired
+    AccountService accountService;
     @Autowired
     private JwtService jwtService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired JobService jobService;
-
-    @Autowired ApplicationService applicationService;
-
-    @Autowired CategoryService categoryService;
-
-    @Autowired CandidateService candidateService;
-
+    @Autowired
+    JobService jobService;
+    @Autowired
+    ApplicationService applicationService;
+    @Autowired
+    CategoryService categoryService;
+    @Autowired
+    CandidateService candidateService;
     @Autowired
     EmployerService employerService;
+    @Autowired
+    VipService vipService;
+    @Autowired
+    EmployerVipService employerVipService;
+
+
+
 
     //---------------------------AdminLogin------------------------------------------------//
     @PostMapping("/login")
@@ -91,6 +96,26 @@ public class AdminController {
         }
     }
 
+    @PutMapping("/changePassword")
+    public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String tokenHeader,@RequestParam String accountId, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        try {
+            String email = jwtService.extractUsername(tokenHeader.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+            Account newAccount = accountService.findById(accountId).get();
+
+
+            newAccount.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        accountService.save(newAccount);
+        return ResponseEntity.ok("Change password successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!!");
+        }
+    }
+
     //---------------------------AdminLogin------------------------------------------------//
 
 
@@ -103,14 +128,14 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             Page<Job> jobs = jobService.findByTitleContainingAndCategoryId(title, categoryId, pageable);
 
             return ResponseEntity.ok(jobs);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không thể tìm kiếm công việc.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
         }
     }
 
@@ -124,7 +149,7 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             Optional<Job> jobOptional = jobService.findById(jobId);
@@ -150,10 +175,10 @@ public class AdminController {
 
                     return ResponseEntity.ok(jobDetailsResponse);
                 } else {
-                    return ResponseEntity.badRequest().body("Không tìm thấy nhà tuyển dụng hoặc danh mục.");
+                    return ResponseEntity.badRequest().body("Can't find employer or category!");
                 }
             } else {
-                return ResponseEntity.badRequest().body("Không tìm thấy công việc.");
+                return ResponseEntity.badRequest().body("ERROR!");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -168,16 +193,16 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền thêm công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             job.setFromDate(new Date());
             job.setId(UUID.randomUUID().toString());
             job.setState("active");
             jobService.save(job);
-            return ResponseEntity.ok("Đã thêm công việc thành công");
+            return ResponseEntity.ok("Add new job successfully!");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi khi thêm công việc.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
@@ -188,12 +213,12 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền sửa công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             Optional<Job> existingJob = jobService.findById(jobId);
             if (existingJob.isPresent()) {
                 Job job = existingJob.get();
-                
+
                 job.setFromDate(new Date());
                 job.setTitle(updatedJob.getTitle());
                 job.setDescription(updatedJob.getDescription());
@@ -211,9 +236,11 @@ public class AdminController {
 
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update job");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
+
+
 
     @DeleteMapping("/job/delete")
     public ResponseEntity<String> deleteJob(@RequestHeader("Authorization") String token, @RequestParam String jobId) {
@@ -222,7 +249,7 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có xóa sửa công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             Optional<Job> existingJob = jobService.findById(jobId);
             if (existingJob.isPresent()) {
@@ -237,7 +264,7 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Job not found");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete job");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
@@ -253,14 +280,14 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập vào đây.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             Page<Category> categories = categoryService.findByName(name, pageable);
 
             return ResponseEntity.ok(categories);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không thể tìm kiếm loại công việc.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
@@ -271,15 +298,15 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền thêm loại công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             category.setId(UUID.randomUUID().toString());
 
             categoryService.save(category);
-            return ResponseEntity.ok("Đã thêm loại công việc thành công");
+            return ResponseEntity.ok("Add new category successfully");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi khi thêm loại công việc.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
@@ -290,7 +317,7 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền sửa loại công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             Optional<Category> existingCategory = categoryService.findById(categoryId);
             if (existingCategory.isPresent()) {
@@ -303,7 +330,7 @@ public class AdminController {
 
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update category");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
@@ -314,12 +341,12 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền xóa loại công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             Optional<Category> existingCategory = categoryService.findById(categoryId);
             if (existingCategory.isPresent()) {
                 Category category = existingCategory.get();
-                List<Job> jobs = jobService.findByCategoryId(categoryId);
+                List<Job> jobs = jobService.findByCategoryIdWithList(categoryId);
                 for (Job job : jobs) {
                     job.setCategoryId("6");
                     jobService.save(job);
@@ -330,7 +357,7 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Category not found");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete category");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
@@ -346,7 +373,7 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập vào đây.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             Page<Candidate> candidates = candidateService.findCandidatesByKeyword(keyword, pageable);
@@ -363,12 +390,15 @@ public class AdminController {
                         profile.setDateOfBirth(candidate.getDateOfBirth());
                         profile.setSkill(candidate.getSkill());
                         profile.setExperience(candidate.getExperience());
+                        profile.setCandidateId(candidate.getId());
+                        profile.setAccountId(accountService.findById(candidate.getAccountId()).get().getId());
+                        profile.setState(accountService.findById(candidate.getAccountId()).get().getState());
                         return profile;
                     });
 
             return ResponseEntity.ok(candidateProfiles);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không thể tìm kiếm loại công việc.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
@@ -379,7 +409,7 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền xóa loại công việc.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             if (accountService.findByUsername(candidateRegistrationRequest.getUsername()) == null) {
@@ -410,28 +440,34 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Candidate with the given username already exists.");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the candidate.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
     @PutMapping("/candidate/update")
-    public ResponseEntity<?> updateCandidate(@RequestHeader("Authorization") String token, @RequestParam String candidateId, @RequestBody Candidate candidate) {
+    public ResponseEntity<?> updateCandidate(@RequestHeader("Authorization") String token, @RequestParam String candidateId, @RequestPart AdminCandidateUpdateRequest candidate, @RequestPart(required = false)MultipartFile avatar ){
 
         try {
             String email = jwtService.extractUsername(token.substring(7));
-            Account account = accountService.findByUsername(email);
+            Account adminAccount = accountService.findByUsername(email);
 
-            if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền làm việc này.");
+            if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             Optional<Candidate> existingCandidate = candidateService.findById(candidateId);
             if (existingCandidate.isPresent()) {
                 Candidate updateCandidate= existingCandidate.get();
-                System.out.println(updateCandidate.getAccountId());
                 updateCandidate.setDateOfBirth(candidate.getDateOfBirth());
                 updateCandidate.setFirstName(candidate.getFirstName());
                 updateCandidate.setLastName(candidate.getLastName());
                 updateCandidate.setSex(candidate.getSex());
+                updateCandidate.setExperience(candidate.getExperience());
+                updateCandidate.setSkill(candidate.getSkill());
+                Account account = accountService.findById(updateCandidate.getAccountId()).get();
+                account.setState(candidate.getState());
+                if (avatar != null) {
+                    candidateService.saveWithImage(updateCandidate,avatar);
+                }
 
                 candidateService.save(updateCandidate);
                 return ResponseEntity.ok("Candidate updated successfully");
@@ -439,47 +475,30 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The category with ID " + candidateId + " was not found.");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate profile");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
-    @PutMapping("/candidate/updateImage")
-    public ResponseEntity<?> updateCandidateImage(@RequestHeader("Authorization") String token,@RequestParam String candidateId, @RequestBody MultipartFile image) {
 
-        try {
-            String email = jwtService.extractUsername(token.substring(7));
-            Account account = accountService.findByUsername(email);
-            if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền làm việc này.");
-            }
-            Candidate updateCandidate= candidateService.findById(candidateId).get();
-            candidateService.saveWithImage(updateCandidate,image);
-
-            return ResponseEntity.ok("Candidate image updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
-        }
-    }
 
     @PutMapping("candidate/updateState")
     public ResponseEntity<?> updateCandidateState(@RequestHeader("Authorization") String token, @RequestParam String candidateId, @RequestParam String state) {
         try {
-            if (candidateId == null || candidateId.isEmpty() || state == null || state.isEmpty())
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("candidateId và state không được trống.");
+
             String email = jwtService.extractUsername(token.substring(7));
             Account account = accountService.findByUsername(email);
             if (account == null || !"admin".equals(account.getRole()))
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền cập nhật thông tin ứng viên.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
 
             Account candidateAccount = accountService.findById(candidateId).orElse(null);
             if (candidateAccount == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy ứng viên với ID " + candidateId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find candidate with ID " + candidateId);
 
             candidateAccount.setState(state);
             accountService.save(candidateAccount);
-            return ResponseEntity.ok("Trạng thái của ứng viên đã được cập nhật thành công.");
+            return ResponseEntity.ok("Update candidate's state successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi cập nhật trạng thái ứng viên.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
@@ -490,7 +509,7 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không thể làm việc này.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             Optional<Candidate> existingCandidate = candidateService.findById(candidateId);
             if (existingCandidate.isPresent()) {
@@ -506,7 +525,7 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Candidate not found");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete andidate");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
@@ -522,7 +541,7 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập vào đây.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             Page<Employer> employers = employerService.findByNameContaining(name, pageable);
@@ -538,15 +557,15 @@ public class AdminController {
                         profile.setBanner(employer.getBanner());
                         profile.setDescription(employer.getDescription());
                         profile.setImage(employer.getImage());
-                        profile.setCreatedAt(employerAccount.getCreateAt());
                         profile.setState(employerAccount.getState());
                         profile.setAccountId(employerAccount.getId());
+                        profile.setState(employerAccount.getState());
                         return profile;
                     });
 
             return ResponseEntity.ok(employerProfiles);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không thể tìm kiếm nhà tuyển dụng.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
@@ -557,11 +576,11 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập vào đây.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             if (accountService.findByUsername(employerRegistrationRequest.getUsername()) != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tên đăng nhập đã tồn tại. Vui lòng chọn một tên đăng nhập khác.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The username is already exists!");
             }
 
             UUID uuid = UUID.randomUUID();
@@ -580,104 +599,73 @@ public class AdminController {
             employer.setId(id.toString());
             employer.setName(employerRegistrationRequest.getName());
             employer.setAddress(employerRegistrationRequest.getAddress());
-            employer.setBanner(employerRegistrationRequest.getBanner());
-            employer.setImage(employerRegistrationRequest.getImage());
             employer.setDescription(employerRegistrationRequest.getDescription());
             employer.setAccountId(uuid.toString());
-
             employerService.save(employer);
 
-            return ResponseEntity.ok("Nhà tuyển dụng đã được tạo thành công.");
+            return ResponseEntity.ok("Add new employer successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi tạo nhà tuyển dụng.");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
     @PutMapping("/employer/update")
-    public ResponseEntity<String> updateEmployer(@RequestHeader("Authorization") String token, @RequestParam String employerId, @RequestBody Employer employer) {
+    public ResponseEntity<String> updateEmployer(@RequestHeader("Authorization") String token, @RequestParam String employerId, @RequestPart AdminEmployerUpdateRequest employer,@RequestPart(required=false)MultipartFile image,@RequestPart(required = false) MultipartFile banner) {
         try {
             String email = jwtService.extractUsername(token.substring(7));
-            Account account = accountService.findByUsername(email);
+            Account adminAccount = accountService.findByUsername(email);
 
-            if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập vào đây.");
+            if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
 
             Employer updateEmployer = employerService.findById(employerId).orElse(null);
 
-            if (employer == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy nhà tuyển dụng với ID " + employerId);
+            if (updateEmployer == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find employer with ID " + employerId);
             }
-
+            Account account = accountService.findById(updateEmployer.getAccountId()).get();
             updateEmployer.setAddress(employer.getAddress());
             updateEmployer.setDescription(employer.getDescription());
             updateEmployer.setName(employer.getName());
 
+            account.setState(employer.getState());
+            if (image != null) {
+                employerService.saveWithImage(employerService.findById(employerId).get(), image);
+            }
+            if (banner != null) {
+                employerService.saveWithBanner(employerService.findById(employerId).get(), banner);
+            }
+
             employerService.save(updateEmployer);
 
-            return ResponseEntity.ok("Hồ sơ nhà tuyển dụng đã được cập nhật thành công.");
+            return ResponseEntity.ok("Update employer successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi cập nhật hồ sơ nhà tuyển dụng.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
-    @PutMapping("/employer/updateImage")
-    public ResponseEntity<String> updateEmployerImage(@RequestHeader("Authorization") String token,@RequestParam String employerId, @RequestBody MultipartFile image) {
-
-        try {
-            String email = jwtService.extractUsername(token.substring(7));
-            Account account = accountService.findByUsername(email);
-
-            if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập vào đây.");
-            }
-            employerService.saveWithImage(employerService.findById(employerId).get(),image);
-
-            return ResponseEntity.ok("Employer image updated successfully");
-        } catch (Exception e) {
-            // Handle the exception and return an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update employer image");
-        }
-    }
-
-    @PutMapping("/employer/updateBanner")
-    public ResponseEntity<String> updateEmployerBanner(@RequestHeader("Authorization") String token,@RequestParam String employerId, @RequestBody MultipartFile banner) {
-
-        try {
-            String email = jwtService.extractUsername(token.substring(7));
-            Account account = accountService.findByUsername(email);
-
-            if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền truy cập vào đây.");
-            }
-            employerService.saveWithBanner(employerService.findById(employerId).get(),banner);
-
-            return ResponseEntity.ok("Employer banner updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update employer banner");
-        }
-    }
 
 
     @PutMapping("/employer/updateState")
     public ResponseEntity<?> updateEmployerState(@RequestHeader("Authorization") String token, @RequestParam String employerId, @RequestParam String state) {
         try {
-            if (employerId == null || employerId.isEmpty() || state == null || state.isEmpty())
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("candidateId và state không được trống.");
+
             String email = jwtService.extractUsername(token.substring(7));
             Account account = accountService.findByUsername(email);
             if (account == null || !"admin".equals(account.getRole()))
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền cập nhật thông tin ứng viên.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
 
             Account candidateAccount = accountService.findById(employerId).orElse(null);
             if (candidateAccount == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy ứng viên với ID " + employerId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find employer with Id " + employerId);
 
             candidateAccount.setState(state);
             accountService.save(candidateAccount);
-            return ResponseEntity.ok("Trạng thái của ứng viên đã được cập nhật thành công.");
+            return ResponseEntity.ok("Update employer's state successfully!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi cập nhật trạng thái ứng viên.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
         }
     }
 
@@ -688,12 +676,12 @@ public class AdminController {
             Account account = accountService.findByUsername(email);
 
             if (account == null || !"admin".equals(account.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền để làm việc này.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             Optional<Employer> existingEmployer = employerService.findById(employerId);
             if (existingEmployer.isPresent()) {
                 Employer employer = existingEmployer.get();
-                List<Job> jobs = jobService.findByEmployerId(employerId);
+                List<Job> jobs = jobService.findByEmployerIdWithList(employerId);
                 for (Job job : jobs) {
                     List<Application> applications = applicationService.findApplicationsByJobId(job.getId());
                     for (Application application : applications) {
@@ -709,13 +697,274 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Employer not found");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete employer");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
 
     //---------------------------Employers------------------------------------------------//
 
-    //Applications
+
+
+    //---------------------------Applications------------------------------------------------//
+
+    @GetMapping("/applications")
+    public ResponseEntity<?> employerApplications(
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestHeader("Authorization") String token,
+            @RequestParam("username") String email
+    ) {
+        try {
+            String adminEmail = jwtService.extractUsername(token.substring(7));
+            Account adminAccount = accountService.findByUsername(adminEmail);
+
+            if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+
+            Page<Application> applications = applicationService.findAllByUserNameContaining(email, pageable);
+            Page<ApplicationResponse> employerApplications = applications.map(application -> {
+                ApplicationResponse dto = new ApplicationResponse();
+                dto.setId(application.getId());
+                dto.setAccountId(application.getCandidateId());
+                dto.setJobId(application.getJobId());
+                dto.setUserName(accountService.findById(candidateService.findById(application.getCandidateId()).get().getAccountId()).get().getUsername());
+                dto.setAccountName(candidateService.findById(application.getCandidateId()).get().getFirstName()+ " "+candidateService.findById(application.getCandidateId()).get().getLastName());
+                dto.setApplyDate(application.getApplyDate());
+                dto.setTitle(jobService.findById(application.getJobId()).get().getTitle());
+                dto.setExpiredDate(jobService.findById(application.getJobId()).get().getToDate());
+                dto.setState(application.getState());
+                dto.setImage(candidateService.findById(application.getCandidateId()).get().getAvatar());
+                return dto;
+            });
+            return ResponseEntity.ok(employerApplications);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Page.empty());
+        }
+    }
+
+    @DeleteMapping("/application/delete")
+    public ResponseEntity<String> deleteApplication(@RequestHeader("Authorization") String token, @RequestParam String applicationId) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+            Optional<Application> existingApplication = applicationService.findById(applicationId);
+            if (existingApplication.isPresent()) {
+                Application application = existingApplication.get();
+
+
+                applicationService.delete(application);
+                return ResponseEntity.ok("Application deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Application not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR" +
+                    "");
+        }
+    }
+
+
+    //---------------------------Applications------------------------------------------------//
+
+
+
+
+    //---------------------------EmployerVip------------------------------------------------//
+
+    @GetMapping("/employerVips")
+    public ResponseEntity<?> getEmployerVips(@RequestHeader("Authorization") String token, @RequestParam String name, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+
+            Page<EmployerVip> employerVips = employerVipService.findByEmployerNameContaining(name, pageable);
+
+            return ResponseEntity.ok(employerVips);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Add new VIP error!");
+        }
+    }
+
+    @PostMapping("/employerVip/create")
+    public ResponseEntity<String> createEmployerVip(@RequestHeader("Authorization") String token, @RequestBody EmployerVip employerVip) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+            employerVip.setId(UUID.randomUUID().toString());
+            Vip vip = vipService.findById(employerVip.getVipId()).get();
+            employerVip.setFromDate(new Date());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.MONTH, vip.getAmount());
+            Date toDate = calendar.getTime();
+            employerVip.setToDate(toDate);
+            employerVip.setPrice(vip.getPrice());
+            vipService.save(vip);
+            return ResponseEntity.ok("Add new Vip employer successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR.");
+        }
+    }
+
+    @PutMapping("/employerVip/update")
+    public ResponseEntity<String> updateEmployerVip(@RequestHeader("Authorization") String token, @RequestParam String employerVipId, @RequestBody EmployerVip updateEmployer) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+            Optional<Vip> vipOptional = vipService.findById(updateEmployer.getVipId());
+            if (vipOptional.isPresent()) {
+                Vip vip = vipOptional.get();
+                updateEmployer.setId(employerVipId);
+                updateEmployer.setFromDate(new Date());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.MONTH, vip.getAmount());
+                Date toDate = calendar.getTime();
+                updateEmployer.setToDate(toDate);
+                updateEmployer.setPrice(vip.getPrice());
+                employerVipService.save(updateEmployer);
+                return ResponseEntity.ok("Vip updated successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The Vip employer with ID " + employerVipId + " was not found.");
+
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
+        }
+    }
+
+    @DeleteMapping("/employerVip/delete")
+    public ResponseEntity<String> deleteEmployerVip(@RequestHeader("Authorization") String token, @RequestParam String employerVipId) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+            Optional<EmployerVip> existingEmployerVip = employerVipService.findById(employerVipId);
+            if (existingEmployerVip.isPresent()) {
+
+                employerVipService.delete(employerVipId);
+                return ResponseEntity.ok("Vip employer deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vip employer not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
+        }
+    }
+
+    //---------------------------EmployerVip------------------------------------------------//
+
+
+
+
+    //---------------------------VIP------------------------------------------------//
+
+    @GetMapping("/vips")
+    public ResponseEntity<?> getVipsByNameContaining(@RequestHeader("Authorization") String token, @RequestParam String name, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+
+            Page<Vip> vips = vipService.findByNameContaining(name, pageable);
+
+            return ResponseEntity.ok(vips);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Add new VIP error!");
+        }
+    }
+
+    @PostMapping("/vip/create")
+    public ResponseEntity<String> createVip(@RequestHeader("Authorization") String token, @RequestBody Vip vip) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+            vip.setId(UUID.randomUUID().toString());
+            vip.setState("active");
+            vipService.save(vip);
+            return ResponseEntity.ok("Add new VIP successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR.");
+        }
+    }
+
+    @PutMapping("/vip/update")
+    public ResponseEntity<String> updateVip(@RequestHeader("Authorization") String token, @RequestParam String vipId, @RequestBody Vip updateVip) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+            Optional<Vip> vipOptional = vipService.findById(vipId);
+            if (vipOptional.isPresent()) {
+                Vip vip = vipOptional.get();
+                updateVip.setId((vip.getId()));
+                vipService.save(updateVip);
+                return ResponseEntity.ok("Vip updated successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The Vip with ID " + vipId + " was not found.");
+
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
+        }
+    }
+
+    @DeleteMapping("/vip/delete")
+    public ResponseEntity<String> deleteVip(@RequestHeader("Authorization") String token, @RequestParam String vipId) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+            Optional<Vip> existingVip = vipService.findById(vipId);
+            if (existingVip.isPresent()) {
+
+                vipService.delete(vipId);
+                return ResponseEntity.ok("Vip deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vip not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
+        }
+    }
+
+    //---------------------------VIP------------------------------------------------//
+
+
 
     //Blogs
 

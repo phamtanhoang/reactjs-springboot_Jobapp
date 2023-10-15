@@ -69,6 +69,5 @@ public class EmployerService {
         }
         return employerRepository.save(employer);
     }
-
     public void deleteById(String id){employerRepository.deleteById(id);}
 }
