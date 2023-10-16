@@ -27,7 +27,6 @@ const JobDetail: React.FC<{
           localStorage.getItem("adminToken") || ""
         )
         .then((res) => {
-          console.log(res.data);
           setJob(res.data);
         })
         .catch((error: any) => {
@@ -155,8 +154,6 @@ const JobDetail: React.FC<{
                 />
               </div>
             </div>
-
-          
           </div>
         </div>
       </div>

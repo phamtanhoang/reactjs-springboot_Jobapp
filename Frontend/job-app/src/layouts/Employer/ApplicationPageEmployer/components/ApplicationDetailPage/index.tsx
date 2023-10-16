@@ -5,25 +5,25 @@ import { Link } from "react-router-dom";
 import { ApplicationModel } from "../../../../../models/ApplicationModel";
 import { useEffect, useState } from "react";
 import { ErrorBox, Spinner } from "../../../../../components";
-import { applicationsAPI, jobsAPI } from "../../../../../services";
-import { JobModel } from "../../../../../models/JobModel";
+import { applicationsAPI } from "../../../../../services";
 import Swal from "sweetalert2";
+import { ApplicationResponseModel } from "../../../../../models/ApplicationResponseModel";
+import { openCV } from "../../../../../utils";
 
 const ApplicationDetailPage: React.FC<{
   setShowBoxApplicationDetail: any;
-  applicationID: string;
+  application?: ApplicationResponseModel;
 }> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
   const [application, setApplication] = useState<ApplicationModel>();
-  const [job, setJob] = useState<JobModel>();
 
   useEffect(() => {
     const fetchApplication = () => {
       applicationsAPI
         .getApplicationByIDAndEmployerToken(
-          props.applicationID,
+          props.application?.id || "",
           localStorage.getItem("employerToken") || ""
         )
         .then((res) => {
@@ -37,23 +37,7 @@ const ApplicationDetailPage: React.FC<{
         });
     };
     fetchApplication();
-
-    const fetchJob = () => {
-      setIsLoading(true);
-      jobsAPI
-        .getJobById(application?.jobId || "")
-        .then((res) => {
-          setJob(res.data);
-        })
-        .catch((error: any) => {
-          setHttpError(error.message);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    };
-    fetchJob();
-  }, [application?.jobId, props.applicationID]);
+  }, [props.application?.id]);
 
   if (isLoading) {
     return (
@@ -122,10 +106,10 @@ const ApplicationDetailPage: React.FC<{
           <h3 className="text-lg sm:text-xl font-semibold">
             Candidate application for{" "}
             <Link
-              to={`/employer/job/${application?.jobId}`}
+              to={`/employer/job/${props.application?.jobId}`}
               className="uppercase text-gray-700 hover:text-blue-600"
             >
-              {job?.title}
+              {props.application?.title}
             </Link>
           </h3>
           <button
@@ -178,9 +162,8 @@ const ApplicationDetailPage: React.FC<{
             <label className="block mb-5">
               <span className="font-semibold">CV: </span>
               <a
-                href="../../../../../assets/cv/f06fd6d3-b7ad-4477-af8a-1e483201993b.pdf"
-                download
-                className="hover:text-blue-600"
+                className="hover:text-blue-600 ml-1 cursor-pointer"
+                onClick={() => openCV(application?.cv || "")}
               >
                 Xem chi tiết
               </a>

@@ -35,7 +35,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
     useState(false);
 
   const [accountID, setAccountID] = useState("");
-  const [applicationID, setApplicationID] = useState("");
+  const [application, setApplication] = useState<ApplicationResponseModel>();
 
   useEffect(() => {
     const fetchApplications = () => {
@@ -265,7 +265,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
                                   className=" cursor-pointer hover:text-yellow-500"
                                   onClick={() => {
                                     setShowBoxApplicationDetail(true);
-                                    setApplicationID(application.id);
+                                    setApplication(application);
                                   }}
                                 >
                                   <AiFillEye />
@@ -336,7 +336,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
       {showBoxApplicationDetail && localStorage.getItem("employerToken") && (
         <ApplicationDetailPage
           setShowBoxApplicationDetail={setShowBoxApplicationDetail}
-          applicationID={applicationID}
+          application={application}
         />
       )}
     </>

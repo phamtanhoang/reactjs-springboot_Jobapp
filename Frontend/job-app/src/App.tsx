@@ -32,6 +32,7 @@ import {
   LoginPageAdmin,
 } from "./layouts/Admin";
 import VipsPageAdmin from "./layouts/Admin/VipsPageAdmin";
+import VipsPageEmployer from "./layouts/Employer/VipsPageEmployer";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -101,6 +102,7 @@ const App = () => {
                   path="/employer/profile"
                   element={<ProfilePageEmployer />}
                 />
+                <Route path="/employer/vips" element={<VipsPageEmployer />} />
               </Route>
             </>
           ) : (

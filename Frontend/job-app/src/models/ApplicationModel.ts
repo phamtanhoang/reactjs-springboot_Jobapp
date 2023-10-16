@@ -1,7 +1,7 @@
 export interface ApplicationModel {
   id: string;
   applyDate: string;
-  cV: string;
+  cv: string;
   letter: string;
   state: string;
   jobId: string;

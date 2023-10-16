@@ -734,6 +734,8 @@ public class AdminController {
                 dto.setExpiredDate(jobService.findById(application.getJobId()).get().getToDate());
                 dto.setState(application.getState());
                 dto.setImage(candidateService.findById(application.getCandidateId()).get().getAvatar());
+                dto.setEmployerId(jobService.findById(application.getJobId()).get().getEmployerId());
+                dto.setEmployerName(employerService.findById(jobService.findById(application.getJobId()).get().getEmployerId()).get().getName());
                 return dto;
             });
             return ResponseEntity.ok(employerApplications);
@@ -764,6 +766,33 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR" +
                     "");
+        }
+    }
+
+    @GetMapping("/application/details")
+    public ResponseEntity<?> getApplicationDetails(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String applicationId
+    ) {
+        try {
+            String adminEmail = jwtService.extractUsername(token.substring(7));
+            Account adminAccount = accountService.findByUsername(adminEmail);
+
+            if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }Optional<Application> applicationOptional = applicationService.findById(applicationId);
+
+            if (applicationOptional.isEmpty())
+                return ResponseEntity.badRequest().body("Can't find application with ID: "+ applicationId);
+
+            Application application = applicationOptional.get();
+
+            return ResponseEntity.ok(application);
+
+
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

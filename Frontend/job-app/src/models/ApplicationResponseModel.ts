@@ -2,7 +2,7 @@ export interface ApplicationResponseModel {
   id: string;
 
   accountId: string;
-  accountName: string; 
+  accountName: string;
   userName: string;
   image: string;
 
@@ -14,4 +14,6 @@ export interface ApplicationResponseModel {
 
   state: string;
 
+  employerId: string;
+  employerName: string;
 }

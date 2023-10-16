@@ -1,3 +1,4 @@
 import formattedDate from "./FormattedDate";
+import openCV from "./OpenCV";
 
-export { formattedDate };
+export { formattedDate, openCV };

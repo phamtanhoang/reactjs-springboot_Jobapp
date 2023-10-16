@@ -108,6 +108,8 @@ export const urlAPI = {
 
   candidateApply: "/candidates/apply",
 
+  getCV:(fileName:string)=> `/applies/download?fileName=${fileName}`,
+
   loginEmployer: "/auth/employer/login",
 
   registerEmployer: "/auth/employer/register",
@@ -244,4 +246,18 @@ export const urlAPI = {
   updateVipByAdminToken: (id: string) => `/admin/vip/update?vipId=${id}`,
 
   deleteVipByAdminToken: (id: string) => `/admin/vip/delete?vipId=${id}`,
+
+  getApplycationsByEmplyerAndAdminToken: (
+    name: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/admin/applications?username=${name}&page=${currentPage}&size=${itemsPerPage}`,
+
+  deleteApplicationByAdminToken: (id: string) =>
+    `/admin/application/delete?applicationId=${id}`,
+
+  getApplicationByIDAndAdminToken: (id: string) => {
+    return `/admin/application/details?applicationId=${id}`;
+  },
 };

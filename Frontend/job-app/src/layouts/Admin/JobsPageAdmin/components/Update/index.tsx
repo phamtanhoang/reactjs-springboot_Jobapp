@@ -15,6 +15,7 @@ const UpdateJob: React.FC<{
   setShowBoxUpdate: any;
   job?: JobModel;
 }> = (props) => {
+  console.log(props.job);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [employers, setEmployers] = useState<EmployerModel[]>([]);
 
@@ -27,7 +28,7 @@ const UpdateJob: React.FC<{
   const [cate, setCate] = useState(props.job?.categoryId || "");
   const [salary, setSalary] = useState(props.job?.salary || "");
   const [address, setAddress] = useState(props.job?.address || "");
-  const [description, setDescription] = useState(props.job?.address || "");
+  const [description, setDescription] = useState(props.job?.description || "");
   const [employerId, setEmployerId] = useState(props.job?.employerId || "");
   const [state, setState] = useState(props.job?.state || "");
   const [selectedOption, setSelectedOption] = useState("");

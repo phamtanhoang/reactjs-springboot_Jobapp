@@ -219,7 +219,6 @@ const TableCandidateAdmin: React.FC<{ name: string }> = (props) => {
                                 <AiFillDelete
                                   className=" cursor-pointer hover:text-red-500"
                                   onClick={() => {
-                                    console.log(candidate);
                                     HandleDelete(candidate);
                                   }}
                                 />

@@ -79,5 +79,54 @@ const applicationsAPI = {
       }
     );
   },
+
+  async getApplycationsByEmplyerAndAdminToken(
+    title: string,
+    currentPage: number,
+    itemsPerPage: number,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    return await instance.get(
+      urlAPI.getApplycationsByEmplyerAndAdminToken(
+        title,
+        currentPage,
+        itemsPerPage
+      ),
+      {
+        headers,
+      }
+    );
+  },
+
+  async deleteApplicationByAdminToken(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.delete(urlAPI.deleteApplicationByAdminToken(id), {
+      headers,
+    });
+  },
+
+  async getApplicationByIDAndAdminToken(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getApplicationByIDAndAdminToken(id), {
+      headers,
+    });
+  },
+
+  async getCV(fileName: string) {
+    return await instance.get(urlAPI.getCV(fileName), {
+      responseType: "arraybuffer",
+    });
+  },
 };
 export default applicationsAPI;

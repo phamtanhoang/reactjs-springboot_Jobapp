@@ -12,9 +12,29 @@
         Date applyDate;
         String title;
         String state;
+        String employerId;
 
+        String employerName;
 
         Date expiredDate;
+
+        public String getEmployerId() {
+            return employerId;
+        }
+
+        public void setEmployerId(String employerId) {
+            this.employerId = employerId;
+        }
+
+        public String getEmployerName() {
+            return employerName;
+        }
+
+        public void setEmployerName(String employerName) {
+            this.employerName = employerName;
+        }
+
+
 
         public String getId() {
             return id;

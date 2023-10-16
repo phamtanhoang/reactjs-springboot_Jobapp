@@ -236,9 +236,9 @@ const JobDetailPageEmployer = () => {
               </div>
 
               <div className="job-description mb-4">
-                <h3 className="text-lg font-medium mb-1">About job:</h3>
+                <h3 className="text-lg font-bold mb-1">About job:</h3>
                 <div
-                  className="mb-2"
+                  className="mb-2 p-5 ring-2 rounded-lg bg-white ring-blue-500 mt-2"
                   dangerouslySetInnerHTML={{
                     __html: job?.description || "",
                   }}
@@ -249,7 +249,7 @@ const JobDetailPageEmployer = () => {
             <div className="w-full hidden md:block md:w-[30%]">
               <div className="employer-info mb-5 text-center ">
                 <img
-                  className="h-40 w-40 inline-block rounded-lg ring-2"
+                  className="h-40 w-40 inline-block rounded-lg ring-2 ring-blue-500"
                   src={
                     employer?.image
                       ? employer?.image
