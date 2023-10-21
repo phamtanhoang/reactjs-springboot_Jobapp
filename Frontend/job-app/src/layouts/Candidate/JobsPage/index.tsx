@@ -68,12 +68,14 @@ const JobsPage = () => {
         });
     };
 
+    getCategories();
+
     const getAllJobs = () => {
       jobsAPI
         .getJobs()
         .then((res) => {
-          setAllJob(res.data._embedded.jobs);
-          handleJobAddresses(res.data._embedded.jobs);
+          setAllJob(res.data.content);
+          handleJobAddresses(res.data.content);
         })
         .catch((error: any) => {
           setHttpError(error.message);
@@ -83,7 +85,6 @@ const JobsPage = () => {
         });
     };
 
-    getCategories();
     getAllJobs();
   }, []);
 
@@ -119,9 +120,17 @@ const JobsPage = () => {
       }
       const response = await fetch(url);
       const responseJson = await response.json();
-      const responseData = responseJson._embedded.jobs;
-      setTotalAmountOfJobs(responseJson.page.totalElements);
-      setTotalPages(responseJson.page.totalPages);
+      let responseData;
+      if (searchUrl === "") {
+        responseData = responseJson.content;
+        setTotalAmountOfJobs(responseJson.totalElements);
+        setTotalPages(responseJson.totalPages);
+      } else {
+        responseData = responseJson._embedded.jobs;
+        setTotalAmountOfJobs(responseJson.page.totalElements);
+        setTotalPages(responseJson.page.totalPages);
+      }
+
       const loadedJobs: JobModel[] = [];
       for (const key in responseData) {
         loadedJobs.push({
@@ -167,13 +176,9 @@ const JobsPage = () => {
   }
 
   const searchHandleChange = () => {
-    if (searchTitle === "" && searchAddress === "") {
-      setSearchUrl("");
-    } else {
-      setSearchUrl(
-        `/search/findByTitleContainingAndAddress?title=${searchTitle}&address=${searchAddress}&page=0&size=${jobsPerPage}`
-      );
-    }
+    setSearchUrl(
+      `/search/findByTitleContainingAndAddress?title=${searchTitle}&address=${searchAddress}&page=0&size=${jobsPerPage}`
+    );
     setCurrentPage(1);
   };
 
@@ -194,14 +199,14 @@ const JobsPage = () => {
   return (
     <>
       <section className="text-gray-700">
-        <div className="px-6 py-10 ">
+        <div className="px-3 py-6 sm:px-6 sm:py-10 ">
           <div className="flex justify-between w-full md:w-[95%] lg:w-full xl:w-[85%] mx-auto">
             <div className="-mx-8 w-4/12 hidden lg:block">
               <div className="px-8">
-                <h1 className="mb-4 mt-2 text-xl font-bold">
+                <h1 className="mb-4 mt-2 xl:text-lg  font-bold py-3 pl-5 bg-white rounded-lg shadow-md">
                   Loại hình công việc:
                 </h1>
-                <div className="flex flex-col bg-white max-w-sm px-6 py-4 mx-auto rounded-lg shadow-lg">
+                <div className="flex flex-col bg-white px-6 py-4 mx-auto rounded-lg shadow-lg">
                   <ul>
                     <li className="flex items-center py-2">
                       <a
@@ -227,10 +232,10 @@ const JobsPage = () => {
                 </div>
               </div>
               <div className="mt-10 px-8">
-                <h1 className="mb-4 mt-2 text-xl font-bold">
+                <h1 className="mb-4 mt-2 xl:text-lg font-bold py-3 pl-5 bg-white rounded-lg shadow-md">
                   Một số nhà tuyển dụng nổi bật:
                 </h1>
-                <div className="flex flex-col bg-white max-w-sm px-8 py-2 mx-auto rounded-lg shadow-lg">
+                <div className="flex flex-col bg-white px-8 py-2 mx-auto rounded-lg shadow-lg">
                   {totalAmountOfEmployers > 0 ? (
                     <>
                       <ul className="">

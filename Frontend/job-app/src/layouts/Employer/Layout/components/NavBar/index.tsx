@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { AiFillSetting } from "react-icons/ai";
 import { useState } from "react";
 import { ChangePasswordPageEmployer } from "../../..";
+import { BsDiamondHalf } from "react-icons/bs";
 
 const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
   const [showBox, setShowBox] = useState(false);
@@ -93,6 +94,17 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                   </Link>
                 </li>
                 <li>
+                  <Link
+                    to="/employer/vipHistories"
+                    className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                  >
+                    <BsDiamondHalf className="text-2xl text-gray-500 group-hover:text-blue-600" />
+                    <span className="ml-3 group-hover:text-blue-600">
+                      Vip Histories
+                    </span>
+                  </Link>
+                </li>
+                <li>
                   <a
                     href="#"
                     className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
@@ -117,10 +129,13 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                 </li>
               </ul>
               <div className="space-y-2 pt-5 flex justify-center">
-                <a className="text-white  w-full bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-5 py-2.5 text-center flex">
+                <Link
+                  to="/employer/vips"
+                  className="text-white w-full bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-5 py-2.5  flex justify-center"
+                >
                   <GiCutDiamond className="text-2xl mr-2" />
-                  <span>Upgrade to Pro</span>
-                </a>
+                  <span className="mr-5">Buy Vip</span>
+                </Link>
               </div>
             </div>
           </div>

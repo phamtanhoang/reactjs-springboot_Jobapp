@@ -7,6 +7,7 @@ import EmployersPageAdmin from "./EmployersPageAdmin";
 import JobsPageAdmin from "./JobsPageAdmin";
 import LayoutAdmin from "./LayoutAdmin";
 import LoginPageAdmin from "./LoginPageAdmin";
+import VipsPageAdmin from "./VipsPageAdmin";
 
 export {
   LoginPageAdmin,
@@ -17,5 +18,6 @@ export {
   JobsPageAdmin,
   EmployersPageAdmin,
   ApplicationsPageAdmin,
-  CandidatesPageAdmin
+  CandidatesPageAdmin,
+  VipsPageAdmin
 };

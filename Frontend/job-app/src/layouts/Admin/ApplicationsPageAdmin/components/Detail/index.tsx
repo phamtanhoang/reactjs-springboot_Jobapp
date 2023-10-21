@@ -4,7 +4,6 @@ import { ApplicationModel } from "../../../../../models/ApplicationModel";
 import { applicationsAPI } from "../../../../../services";
 import { ErrorBox, Spinner } from "../../../../../components";
 import { AiOutlineClose } from "react-icons/ai";
-import Swal from "sweetalert2";
 import { openCV } from "../../../../../utils";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

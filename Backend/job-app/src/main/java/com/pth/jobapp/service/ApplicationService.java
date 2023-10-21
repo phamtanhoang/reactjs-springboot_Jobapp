@@ -1,6 +1,5 @@
 package com.pth.jobapp.service;
 
-import com.dropbox.core.DbxException;
 import com.pth.jobapp.dao.ApplicationRepository;
 import com.pth.jobapp.dao.CandidateRepository;
 import com.pth.jobapp.entity.Account;
@@ -56,14 +55,15 @@ public class ApplicationService {
     }
 
     public Page<Application>findAllByUserNameContaining(String email,Pageable pageable){return applicationRepository.findAllByUserNameContaining(email,pageable);}
+    public Page<Application> findAllByCandidateId(String candidateId,Pageable pageable){return applicationRepository.findAllByCandidateId(candidateId,pageable);}
+    public Page<Application> findAllByCandidateId(String candidateId,String state ,Pageable pageable){return applicationRepository.findAllByCandidateIdAndStateContaining(candidateId,state,pageable);}
     public Application saveWithCV(Application application, MultipartFile cvFile) {
         try {
             if (cvFile != null && !cvFile.isEmpty()) {
                 if (!cvFile.getContentType().equals("application/pdf")) {
                     throw new IllegalArgumentException("Only PDF files are allowed");
                 }
-                byte[] cvBytes = cvFile.getBytes();
-                String cvUrl = fileUploader.uploadPdfToDropbox(cvBytes);
+                String cvUrl = fileUploader.upload(cvFile);
                 application.setCV(cvUrl);
                 application.setApplyDate(new Date());
                 application.setState("pending");
@@ -71,15 +71,21 @@ public class ApplicationService {
             } else {
                 throw new IllegalArgumentException("CV file is empty");
             }
-
-        } catch (DbxException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 
+
     public Optional<Application>findByIdAndEmployerId(String id, String employerId){
         return applicationRepository.findByIdAndEmployerId(id,employerId);
+    }
+
+    public Optional<Application>findByIdAndCandidateId(String id, String candidateId){
+        return applicationRepository.findByIdAndCandidateId(id,candidateId);
     }
 }

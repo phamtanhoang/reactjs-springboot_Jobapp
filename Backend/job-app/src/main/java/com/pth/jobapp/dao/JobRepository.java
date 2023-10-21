@@ -16,7 +16,9 @@ import java.util.Optional;
 public interface JobRepository extends JpaRepository<Job, String> {
     @Query("SELECT j FROM Job j WHERE" +
             " (:title IS NULL OR j.title LIKE %:title%)" +
-            " AND (:address IS NULL OR :address = '' OR j.address = :address)")
+            " AND (:address IS NULL OR :address = '' OR j.address = :address)"+
+            " AND j.state = 'active'" +
+            " AND CURDATE() BETWEEN j.fromDate AND j.toDate")
     Page<Job> findByTitleContainingAndAddress(
             @RequestParam(name = "title", required = false) String title,
             @RequestParam(name = "address", required = false) String address,
@@ -25,7 +27,9 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
     @Query("SELECT j FROM Job j WHERE" +
             " (:title IS NULL OR j.title LIKE %:title%)" +
-            " AND (:categoryId IS NULL OR :categoryId = '' OR j.categoryId = :categoryId)")
+            " AND (:categoryId IS NULL OR :categoryId = '' OR j.categoryId = :categoryId)" +
+            " AND j.state = 'active'" +
+            " AND CURDATE() BETWEEN j.fromDate AND j.toDate")  // Check if the current date is within the range
     Page<Job> findByTitleContainingAndCategoryId(
             @RequestParam(name = "title", required = false) String title,
             @RequestParam(name = "categoryId", required = false) String categoryId,
@@ -52,7 +56,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
     );
         @Query("SELECT j FROM Job j JOIN Employer e on j.employerId=e.id " +
                 "WHERE e.id IN (SELECT e.id FROM Employer e JOIN EmployerVip v ON e.id = v.employerId " +
-                "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE())")
+                "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE()) And j.state='active'")
     Page<Job>findJobsWithVipEmployer(Pageable pageable);
 
 

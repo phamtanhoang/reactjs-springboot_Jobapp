@@ -25,15 +25,23 @@ public class Blog {
     @Column(name = "title")
     private String title;
 
+
+    @Getter
+    @Setter
+    @Column(name = "image")
+    private String image;
+
+
+    @Getter
+    @Setter
+    @Column(name = "state")
+    private String state;
+
     @Getter
     @Setter
     @Column(name = "created_at")
     private Date createdAt ;
 
-    @Getter
-    @Setter
-    @Column(name = "updated_at")
-    private Date updatedAt ;
 
     @Getter
     @Setter

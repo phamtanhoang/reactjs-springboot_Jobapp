@@ -8,15 +8,12 @@
         String accountName;
         String userName;
         String image;
-        String jobId;
         Date applyDate;
-        String title;
         String state;
+        String jobId;
+                String title;
         String employerId;
-
         String employerName;
-
-        Date expiredDate;
 
         public String getEmployerId() {
             return employerId;
@@ -34,7 +31,7 @@
             this.employerName = employerName;
         }
 
-
+        Date expiredDate;
 
         public String getId() {
             return id;

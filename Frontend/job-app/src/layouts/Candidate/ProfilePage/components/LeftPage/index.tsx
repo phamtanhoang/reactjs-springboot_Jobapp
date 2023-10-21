@@ -181,7 +181,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
           </div>
         </div>
 
-        <div className="mt-5 text-sm sm:text-base font-normal flex container md:w-1/2 lg:w-auto">
+        <div className="mt-5 text-sm sm:text-base font-normal flex container md:w-1/2 lg:w-auto  py-4 pl-4 rounded-lg ring-2 ring-orangetext">
           <div className="w-[90%]">
             <div className="flex">
               <p className="w-[50%] xl:w-[40%]  font-semibold">Họ và Tên:</p>

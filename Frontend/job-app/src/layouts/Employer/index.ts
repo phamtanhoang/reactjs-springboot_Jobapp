@@ -7,6 +7,8 @@ import Layout from "./Layout";
 import LoginEmployer from "./LoginEmployer";
 import ProfilePageEmployer from "./ProfilePageEmployer";
 import RegisterEmployer from "./RegisterEmployer";
+import VipHistoryEmployer from "./VipHistoryEmployer";
+import VipsPageEmployer from "./VipsPageEmployer";
 
 export {
   ApplicationPageEmployer,
@@ -18,4 +20,6 @@ export {
   LoginEmployer,
   ProfilePageEmployer,
   RegisterEmployer,
+  VipHistoryEmployer,
+  VipsPageEmployer
 };

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import { JobModel } from "../../../../../models/JobModel";
 import { employersAPI } from "../../../../../services";
@@ -12,7 +12,6 @@ const JobItem: React.FC<{
 }> = (props) => {
   const [employer, setEmPloyer] = useState<EmployerModel>();
   const [isJobSaved, setIsJobSaved] = useState(false);
-  const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const fetchEmployer = async () => {
@@ -21,11 +20,6 @@ const JobItem: React.FC<{
       });
     };
     fetchEmployer();
-
-    if (logoRef.current) {
-      const width = logoRef.current.offsetWidth;
-      logoRef.current.style.height = width + "px";
-    }
   }, [props.job.employerId]);
 
   useEffect(() => {
@@ -83,7 +77,7 @@ const JobItem: React.FC<{
   };
 
   return (
-    <div className="max-full px-4 py-2 sm:px-10 sm:py-4 bg-white rounded-lg shadow-md flex my-4">
+    <div className="max-full min-[480px]:pl-8 sm:pl-10 px-4 py-2 sm:px-10 sm:py-4 bg-white rounded-lg shadow-md flex my-4">
       <div className="w-1/4 sm:w-1/5 flex items-center">
         <img
           src={
@@ -92,8 +86,7 @@ const JobItem: React.FC<{
               : "https://res.cloudinary.com/dcpatkvcu/image/upload/v1695807392/DoAnNganh/non-user_lctzz5.jpg"
           }
           alt="avatar"
-          className="w-[90%] object-cover p-1 md:p-4"
-          ref={logoRef}
+          className="object-cover  md:p-4 w-[60px] h-[60px] min-[480px]:w-[80px] min-[480px]:h-[80px] sm:w-[90px] sm:h-[90px] md:w-[120px] md:h-[120px]  xl:w-[140px] xl:h-[140px]"
         />
       </div>
 

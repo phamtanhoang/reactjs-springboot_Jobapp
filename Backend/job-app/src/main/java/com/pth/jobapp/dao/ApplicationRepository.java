@@ -47,4 +47,8 @@ public interface ApplicationRepository extends JpaRepository<Application, String
             "WHERE ac.username like  %:email% ")
 
     Page<Application> findAllByUserNameContaining(@Param("email") String email, Pageable pageable);
+
+    Page<Application>findAllByCandidateId(String candidateId,Pageable pageable);
+    Page<Application>findAllByCandidateIdAndStateContaining(String candidateId,String state, Pageable pageable);
+    Optional<Application> findByIdAndCandidateId(String id,String candidateid);
 }

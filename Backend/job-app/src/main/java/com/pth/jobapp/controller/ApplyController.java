@@ -1,6 +1,5 @@
 package com.pth.jobapp.controller;
 
-import com.dropbox.core.DbxException;
 import com.pth.jobapp.ResponseModels.ApplicationResponse;
 import com.pth.jobapp.entity.*;
 import com.pth.jobapp.requestmodels.*;
@@ -121,11 +120,46 @@ public class ApplyController {
         }
     }
 
+
+    @GetMapping("/candidateApplications")
+    public ResponseEntity<?> getCandidateApplications(
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestHeader("Authorization") String token,
+            @RequestParam String state
+    ) {
+        try {
+            String canidateEmail = jwtService.extractUsername(token.substring(7));
+            Candidate candidate = candidateService.findCandidateByAccountUsername(canidateEmail).get();
+            if (candidate == null) {
+                return ResponseEntity.badRequest().body("vai");
+            }
+            Page<Application> applications = applicationService.findAllByCandidateId(candidate.getId(),state, pageable);
+            Page<ApplicationResponse> candidateApplications = applications.map(application -> {
+                ApplicationResponse dto = new ApplicationResponse();
+                dto.setId(application.getId());
+                dto.setAccountId(application.getCandidateId());
+                dto.setJobId(application.getJobId());
+                dto.setUserName(accountService.findById(candidateService.findById(application.getCandidateId()).get().getAccountId()).get().getUsername());
+                dto.setAccountName(candidateService.findById(application.getCandidateId()).get().getFirstName()+ " "+candidateService.findById(application.getCandidateId()).get().getLastName());
+                dto.setApplyDate(application.getApplyDate());
+                dto.setTitle(jobService.findById(application.getJobId()).get().getTitle());
+                dto.setExpiredDate(jobService.findById(application.getJobId()).get().getToDate());
+                dto.setState(application.getState());
+                dto.setImage(employerService.findById(jobService.findById(application.getJobId()).get().getEmployerId()).get().getImage());
+                dto.setEmployerId(employerService.findById(jobService.findById(application.getJobId()).get().getEmployerId()).get().getId());
+                dto.setEmployerName(employerService.findById(jobService.findById(application.getJobId()).get().getEmployerId()).get().getName());
+                return dto;
+            });
+            return ResponseEntity.ok(candidateApplications);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Page.empty());
+        }
+    }
+
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadCV(@RequestParam String fileName) {
         try {
-            byte[] pdfData = fileUploader.downloadPdfFromDropbox(fileName);
-            System.out.println(fileName);
+            byte[] pdfData = fileUploader.download(fileName);
             if (pdfData != null) {
                 ByteArrayResource resource = new ByteArrayResource(pdfData);
 
@@ -137,13 +171,15 @@ public class ApplyController {
                         .contentLength(pdfData.length)
                         .contentType(MediaType.APPLICATION_PDF)
                         .body(resource);
+            } else {
+                // Return an error response if pdfData is null (e.g., file not found)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-        } catch (IOException | DbxException e) {
+        } catch (Exception e) {
+            // Handle exceptions and errors here, e.g., log the error and return an error response
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
-        // Trả về lỗi nếu không thể tải tệp
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
 
 
@@ -158,6 +194,33 @@ public class ApplyController {
             if (employer != null) {
 
                 Optional<Application> applicationOptional = applicationService.findByIdAndEmployerId(applicationId,employer.getId());
+
+                if (applicationOptional.isEmpty())
+                    return ResponseEntity.badRequest().body("Không tìm thấy application tương ứng");
+
+                Application application = applicationOptional.get();
+
+                return ResponseEntity.ok(application);
+            }
+
+            else
+                return ResponseEntity.badRequest().body("Không tìm thấy employer");
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/applicationDetailsByCandidateId")
+    public ResponseEntity<?> getApplicationDetailsByCandidateId(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String applicationId
+    ) {
+        try {
+            String candidateName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
+            Candidate candidate = candidateService.findCandidateByAccountUsername(candidateName).get(); // Assuming you have a method to find an employer by username
+            if (candidate != null) {
+
+                Optional<Application> applicationOptional = applicationService.findByIdAndCandidateId(applicationId,candidate.getId());
 
                 if (applicationOptional.isEmpty())
                     return ResponseEntity.badRequest().body("Không tìm thấy application tương ứng");

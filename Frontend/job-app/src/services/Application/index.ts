@@ -128,5 +128,23 @@ const applicationsAPI = {
       responseType: "arraybuffer",
     });
   },
+
+  async getApplicationByCandidateToken(
+    state: string,
+    currentPage: number,
+    itemsPerPage: number,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getApplicationByCandidateToken(state, currentPage, itemsPerPage),
+      {
+        headers,
+      }
+    );
+  },
 };
 export default applicationsAPI;

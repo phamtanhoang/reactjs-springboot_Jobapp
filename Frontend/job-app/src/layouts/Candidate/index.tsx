@@ -1,3 +1,5 @@
+import AppliedForJobs from "./AppliedForJobs";
+import BlogsPage from "./BlogsPage";
 import ChangePasswordPage from "./ChangePasswordPage";
 import EmployerProfilePage from "./EmployerProfilePage";
 import EmployersPage from "./EmployersPage";
@@ -22,4 +24,6 @@ export {
   LoginPage,
   ProfilePage,
   RegisterPage,
+  AppliedForJobs,
+  BlogsPage,
 };

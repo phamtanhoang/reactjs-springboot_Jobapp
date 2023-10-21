@@ -720,7 +720,6 @@ public class AdminController {
             if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
-
             Page<Application> applications = applicationService.findAllByUserNameContaining(email, pageable);
             Page<ApplicationResponse> employerApplications = applications.map(application -> {
                 ApplicationResponse dto = new ApplicationResponse();
@@ -735,12 +734,36 @@ public class AdminController {
                 dto.setState(application.getState());
                 dto.setImage(candidateService.findById(application.getCandidateId()).get().getAvatar());
                 dto.setEmployerId(jobService.findById(application.getJobId()).get().getEmployerId());
+
                 dto.setEmployerName(employerService.findById(jobService.findById(application.getJobId()).get().getEmployerId()).get().getName());
                 return dto;
             });
             return ResponseEntity.ok(employerApplications);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Page.empty());
+        }
+    }
+
+    @GetMapping("/application/details")
+    public ResponseEntity<?> getApplicationDetails(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String applicationId
+    ) {
+        try {
+            String adminEmail = jwtService.extractUsername(token.substring(7));
+            Account adminAccount = accountService.findByUsername(adminEmail);
+
+            if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+                Optional<Application> applicationOptional = applicationService.findById(applicationId);
+                if (applicationOptional.isEmpty())
+                    return ResponseEntity.badRequest().body("Can't find application with ID: "+ applicationId);
+                Application application = applicationOptional.get();
+                return ResponseEntity.ok(application);
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -764,35 +787,8 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Application not found");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR" +
-                    "");
-        }
-    }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
 
-    @GetMapping("/application/details")
-    public ResponseEntity<?> getApplicationDetails(
-            @RequestHeader("Authorization") String token,
-            @RequestParam String applicationId
-    ) {
-        try {
-            String adminEmail = jwtService.extractUsername(token.substring(7));
-            Account adminAccount = accountService.findByUsername(adminEmail);
-
-            if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
-            }Optional<Application> applicationOptional = applicationService.findById(applicationId);
-
-            if (applicationOptional.isEmpty())
-                return ResponseEntity.badRequest().body("Can't find application with ID: "+ applicationId);
-
-            Application application = applicationOptional.get();
-
-            return ResponseEntity.ok(application);
-
-
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -840,7 +836,7 @@ public class AdminController {
             Date toDate = calendar.getTime();
             employerVip.setToDate(toDate);
             employerVip.setPrice(vip.getPrice());
-            vipService.save(vip);
+            employerVipService.save(employerVip);
             return ResponseEntity.ok("Add new Vip employer successfully");
         } catch (Exception e) {
             e.printStackTrace();
@@ -936,7 +932,7 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
             }
             vip.setId(UUID.randomUUID().toString());
-            vip.setState("active");
+
             vipService.save(vip);
             return ResponseEntity.ok("Add new VIP successfully");
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import com.pth.jobapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -83,6 +84,16 @@ public class JobController {
         }
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> getActiveJob(@PageableDefault(page = 0, size = 10) Pageable pageable){
+        try{
+            Page<Job>jobs =jobService.findByTitleContainingAndAddress(pageable);
+            return  ResponseEntity.ok(jobs);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("ERROR!");
+        }
+    }
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteJob(
             @RequestHeader("Authorization") String token,
@@ -133,7 +144,6 @@ public class JobController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

@@ -90,12 +90,12 @@ const FavoritePage = () => {
   return (
     <>
       <section className="text-gray-700">
-        <div className="px-6 py-10 ">
+        <div className="px-3 py-6 sm:px-6 sm:py-10 ">
           <div className="flex justify-between w-full md:w-[95%] lg:w-full xl:w-[85%] mx-auto">
-            <div className="w-full lg:w-8/12">
-              <div className="w-full flex-row sm:flex text-center lg:justify-between ">
+            <div className="w-full lg:w-8/12 ">
+              <div className="w-full flex-row sm:flex  lg:justify-between py-3 pl-5 bg-white rounded-lg shadow-md ">
                 <h1 className="text-lg sm:text-xl font-bold md:text-2xl  uppercase">
-                  Công việc đã lưu
+                  Công việc đã lưu:
                 </h1>
               </div>
               {totalAmountOfJobs > 0 ? (
@@ -127,7 +127,7 @@ const FavoritePage = () => {
             </div>
             <div className="-mx-8 w-4/12 hidden lg:block">
               <div className="px-8">
-                <h1 className="mb-5 text-xl font-bold">
+                <h1 className="mb-5 text-xl font-bold py-3 pl-5 bg-white rounded-lg shadow-md">
                   Một số nhà tuyển dụng nổi bật:
                 </h1>
                 <div className="flex flex-col bg-white max-w-sm px-8 py-2 mx-auto rounded-lg shadow-lg">

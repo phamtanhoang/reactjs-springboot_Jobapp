@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
 import { ApplicationModel } from "../../../../../models/ApplicationModel";
 import { Link } from "react-router-dom";
+import { AiFillWarning } from "react-icons/ai";
 
 export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
   const [showBox, setShowBox] = useState(false);
@@ -231,13 +232,15 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
               </div>
             </>
           ) : (
-            <>
-              <div className="mt-4 ">
-                <span className="font-semibold text-lg md:text-xl text-red-500">
-                  Đã hết hạn
-                </span>
-              </div>
-            </>
+            <div
+              className="flex bg-red-100 rounded-lg p-3 md:p-4 mt-2 lg:mt-5 text-sm lg:text-base text-red-700"
+              role="alert"
+            >
+              <AiFillWarning className="text-lg lg:text-xl md:mr-3 mr-2"/>
+              <p>
+                Đã <span className="font-medium">hết hạn</span> ứng tuyển!!!
+              </p>
+            </div>
           )}
         </div>
       </div>

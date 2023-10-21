@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import {
+  AppliedForJobs,
+  BlogsPage,
   EmployerProfilePage,
   EmployersPage,
   FavoritePage,
@@ -20,6 +22,8 @@ import {
   LoginEmployer,
   ProfilePageEmployer,
   RegisterEmployer,
+  VipHistoryEmployer,
+  VipsPageEmployer,
 } from "./layouts/Employer";
 import {
   ApplicationsPageAdmin,
@@ -30,9 +34,8 @@ import {
   JobsPageAdmin,
   LayoutAdmin,
   LoginPageAdmin,
+  VipsPageAdmin,
 } from "./layouts/Admin";
-import VipsPageAdmin from "./layouts/Admin/VipsPageAdmin";
-import VipsPageEmployer from "./layouts/Employer/VipsPageEmployer";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -53,6 +56,7 @@ const App = () => {
               element={<EmployerProfilePage />}
             />
             <Route path="/home/favorite" element={<FavoritePage />} />
+            <Route path="/home/blogs" element={<BlogsPage />} />
             {candidateToken ? (
               <>
                 <Route path="/home/login" element={<Navigate to="/home" />} />
@@ -61,11 +65,19 @@ const App = () => {
                   element={<Navigate to="/home" />}
                 />
                 <Route path="/home/profile" element={<ProfilePage />} />
+                <Route
+                  path="/home/appliedforjobs"
+                  element={<AppliedForJobs />}
+                />
               </>
             ) : (
               <>
                 <Route path="/home/login" element={<LoginPage />} />
                 <Route path="/home/register" element={<RegisterPage />} />
+                <Route
+                  path="/home/appliedforjobs"
+                  element={<Navigate to="/home/login" />}
+                />
                 <Route
                   path="/home/profile"
                   element={<Navigate to="/home/login" />}
@@ -103,6 +115,10 @@ const App = () => {
                   element={<ProfilePageEmployer />}
                 />
                 <Route path="/employer/vips" element={<VipsPageEmployer />} />
+                <Route
+                  path="/employer/vipHistories"
+                  element={<VipHistoryEmployer />}
+                />
               </Route>
             </>
           ) : (
@@ -129,6 +145,14 @@ const App = () => {
               />
               <Route
                 path="/employer/profile"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/vips"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/vipHistories"
                 element={<Navigate to="/employer/login" />}
               />
               <Route path="/employer/login" element={<LoginEmployer />} />

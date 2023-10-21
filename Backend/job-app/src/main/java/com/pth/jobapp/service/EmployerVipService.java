@@ -19,7 +19,14 @@ public class EmployerVipService {
     public List<EmployerVip> findByVipIdWithList(String vipId){return employerVipRepository.findByVipIdWithList(vipId);  }
     public Optional<EmployerVip>findById(String id){return employerVipRepository.findById(id);}
 
+    public Optional<EmployerVip>findByIdAndEmployerId(String id,String employerId){return employerVipRepository.findByIdAndEmployerId(id,employerId);}
+
     public EmployerVip save(EmployerVip employerVip){return employerVipRepository.save(employerVip);}
 
+    public Optional<EmployerVip>findByEmployerIdAndAvailable(String employerId){return  employerVipRepository.findLatestByEmployerId(employerId);}
+
+    public Page<EmployerVip>findByEmployerId(String employerId,Pageable pageable){return employerVipRepository.findByEmployerId(employerId,pageable);}
     public void delete(String employerVipId){ employerVipRepository.deleteById(employerVipId);}
+
+
 }

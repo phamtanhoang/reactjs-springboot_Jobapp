@@ -34,7 +34,7 @@ const NavBar = () => {
           console.log(error.message);
         });
     }
-  }, [candidateToken, localStorage.getItem("candidateToken")]);
+  }, [candidateToken]);
 
   const LogoutHandle = () => {
     Swal.fire({
@@ -158,12 +158,12 @@ const NavBar = () => {
                         </Link>
                       </li>
                       <li>
-                        <a
-                          href="#"
+                        <Link
+                          to="/home/appliedforjobs"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orangetext"
                         >
                           Công việc đã ứng tuyển
-                        </a>
+                        </Link>
                       </li>
                       <li>
                         <a

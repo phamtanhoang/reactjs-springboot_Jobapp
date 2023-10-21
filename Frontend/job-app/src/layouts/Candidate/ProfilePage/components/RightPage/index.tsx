@@ -104,7 +104,7 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
       <div className="w-full lg:w-[50%]">
         <div className="mt-7 lg:mt-0">
           <div className="flex justify-between">
-            <h1 className="font-bold text-xl text-orangetext">Kĩ năng:</h1>
+            <h1 className="font-bold text-xl text-gray-700">Kĩ năng:</h1>
             <button
               className="hover:text-orangetext"
               onClick={() => setShowBoxSkill(!showBoxSkill)}
@@ -112,7 +112,7 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
               <BsFillPencilFill />
             </button>
           </div>
-          <div className="mt-5 ml-5">
+          <div className="mt-2 p-4 rounded-lg ring-2 ring-orangetext">
             {props.candidateRes?.skill ? (
               <div
                 className=""
@@ -127,7 +127,7 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
         </div>
         <div className="mt-7">
           <div className="flex justify-between">
-            <h1 className="font-bold text-xl text-orangetext">Kinh nghiệm:</h1>
+            <h1 className="font-bold text-xl text-gray-700">Kinh nghiệm:</h1>
             <button
               className="hover:text-orangetext"
               onClick={() => setShowBoxExp(!showBoxExp)}
@@ -135,7 +135,7 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
               <BsFillPencilFill />
             </button>
           </div>
-          <div className="mt-5 ml-5">
+          <div className="mt-2 p-4 rounded-lg ring-2 ring-orangetext">
             {props.candidateRes?.experience ? (
               <div
                 className=""

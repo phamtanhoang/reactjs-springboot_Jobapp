@@ -1,17 +1,22 @@
 package com.pth.jobapp.controller;
 
+import com.pth.jobapp.ResponseModels.ApplicationResponse;
 import com.pth.jobapp.ResponseModels.EmployerProfileResponse;
+import com.pth.jobapp.ResponseModels.VipResponse;
 import com.pth.jobapp.entity.*;
 import com.pth.jobapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
-
+import org.springframework.data.domain.Page;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/employers")
@@ -27,6 +32,11 @@ public class EmployerController {
 
     @Autowired CategoryService categoryService;
 
+    @Autowired EmployerVipService employerVipService;
+
+    @Autowired VipService vipService;
+
+    @Autowired AccountService accountService;
     @GetMapping("/profile")
     public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
         try {
@@ -156,7 +166,68 @@ public class EmployerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
         }
     }
+
+    @GetMapping("/vipHistories")
+    public ResponseEntity<?> EmployerVipsById(
+            @RequestHeader("Authorization") String token,@PageableDefault(page = 0, size = 10) Pageable pageable
+    ) {
+        try {
+            String employerUserName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
+            Employer employer = employerService.findByAccountUsername(employerUserName); // Assuming you have a method to find an employer by username
+
+            if (employer != null) {
+               Page<EmployerVip> employerVipPage = employerVipService.findByEmployerId(employer.getId(),pageable);
+               if(employerVipPage==null)
+                   return ResponseEntity.badRequest().body("You haven't upgrade your account yet!");
+                Page<VipResponse> vipResponses = employerVipPage.map(employerVip -> {
+                    VipResponse dto = new VipResponse();
+                    dto.setEmployerVipId(employerVip.getId());
+                    dto.setEmployerId(employerVip.getId());
+                    dto.setVipId(employerVip.getVipId());
+                    dto.setFromDate(employerVip.getFromDate());
+                    dto.setToDate(employerVip.getToDate());
+                    dto.setPrice(employerVip.getPrice());
+                    dto.setEmployerUsername(employerUserName);
+                    dto.setEmployerName(employer.getName());
+                    dto.setVipName(vipService.findById(employerVip.getVipId()).get().getName());
+                    dto.setImage(employer.getImage());
+                    return dto;
+                });
+                    return ResponseEntity.ok(vipResponses);
+
+
+            } else {
+                return ResponseEntity.badRequest().body("Can't find this employer");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
+        }
     }
+
+    @GetMapping("/vips")
+    public ResponseEntity<?> getVips(@RequestHeader("Authorization") String token) {
+        try {
+            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
+            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+
+            if (employer != null) {
+                List<Vip> vips = vipService.findAllByState("active");
+
+
+                return ResponseEntity.ok(vips);
+
+
+            } else {
+                return ResponseEntity.badRequest().body("Can't find this employer");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
+        }
+    }
+
+
+}
 
 
 

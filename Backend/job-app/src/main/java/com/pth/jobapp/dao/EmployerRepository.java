@@ -11,15 +11,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 
 public interface EmployerRepository extends JpaRepository<Employer, String> {
-    @Query("SELECT e FROM Employer e WHERE" +
-            " (:name IS NULL OR e.name LIKE %:name%)")
+    @Query("SELECT e FROM Employer e " +
+            "JOIN  Account a on e.accountId=a.id " +
+            "WHERE (:name IS NULL OR e.name LIKE %:name%)" +
+            "AND a.state = 'active'")
     Page<Employer> findByNameContaining(
             @RequestParam(name = "name", required = false) String name,
             Pageable pageable
     );
-
-    @Query("SELECT e FROM Employer e JOIN EmployerVip v ON e.id = v.employerId " +
-            "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE()")
+    @Query("SELECT distinct e FROM Employer e " +
+            "JOIN  Account a on e.accountId=a.id "+
+            "JOIN EmployerVip v ON e.id = v.employerId " +
+            "WHERE DATE(v.fromDate) <= CURRENT_DATE() AND DATE(v.toDate) >= CURRENT_DATE()" +
+            "And a.state='active'")
     Page<Employer> findVipEmployers(Pageable pageable);
 
     @Query("SELECT e FROM Employer e JOIN Account a on  e.accountId = a.id where a.username = :username")

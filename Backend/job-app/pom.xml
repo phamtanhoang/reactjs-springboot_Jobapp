@@ -71,11 +71,16 @@
 			<version>1.27.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.dropbox.core</groupId>
-			<artifactId>dropbox-core-sdk</artifactId>
-			<version>5.4.5</version>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>9.2.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>5.0.0</version> <!-- Sá»­ dá»¥ng phiÃªn báº£n phÃ¹ há»£p -->
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

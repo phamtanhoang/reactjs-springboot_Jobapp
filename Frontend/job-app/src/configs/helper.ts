@@ -108,7 +108,7 @@ export const urlAPI = {
 
   candidateApply: "/candidates/apply",
 
-  getCV:(fileName:string)=> `/applies/download?fileName=${fileName}`,
+  getCV: (fileName: string) => `/applies/download?fileName=${fileName}`,
 
   loginEmployer: "/auth/employer/login",
 
@@ -260,4 +260,18 @@ export const urlAPI = {
   getApplicationByIDAndAdminToken: (id: string) => {
     return `/admin/application/details?applicationId=${id}`;
   },
+
+  getAllVipOfEmployer: "/employers/vips",
+
+  getVipHistoriesByEmployerToken: (currentPage: number, itemsPerPage: number) =>
+    `/employers/vipHistories?page=${currentPage}&size=${itemsPerPage}`,
+
+  payment: (vipId: string) => `/VNPay/pay?vipId=${vipId}`,
+
+  getApplicationByCandidateToken: (
+    state: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/applies/candidateApplications?state=${state}&page=${currentPage}&size=${itemsPerPage}`,
 };

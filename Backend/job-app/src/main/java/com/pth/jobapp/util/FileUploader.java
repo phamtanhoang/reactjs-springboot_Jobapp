@@ -2,17 +2,18 @@ package com.pth.jobapp.util;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.dropbox.core.DbxException;
-import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.files.WriteMode;
+import com.google.auth.Credentials;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.*;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.ClassPathResource;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,18 +21,25 @@ import java.util.UUID;
 public class FileUploader {
 
     private Cloudinary cloudinary;
-    private final DbxClientV2 dropboxClient;
+//    private final Storage storage;
+    private final String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/jobapp-c9389.appspot.com/o/%s?alt=media";
 
-    public FileUploader() {
+    public FileUploader() throws IOException {
         cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", "dzitm0sot",
                 "api_key", "965528647757955",
                 "api_secret", "iGqHN-8tTsL393sNEhWvcfWs6IQ",
                 "overwrite", true));
 
-        // Khởi tạo Dropbox Client
-        DbxRequestConfig config = DbxRequestConfig.newBuilder("jobappPDF").build();
-        dropboxClient = new DbxClientV2(config, "sl.BoBetuWA236r6OFt9kM1VCqdXBJ3wNc4tlPcNp8CO9i8Oi0RY86t_z7kKy3K1PXV3PXs1GcwQMVlbgTkr16T6u67qjQ17XmSqUsRtOT8q5_2B4LkcSvl4jzaex4QGufr5seLwovUyBrhYipXNvRpNHk");
+//        // Initialize Firebase using the JSON key file
+//        InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream("googleAccountKey/jobapp-c9389-firebase-adminsdk-3s8lm-0869469335.json");
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .build();
+//        FirebaseApp.initializeApp(options);
+//
+//        // Get an instance of Firebase Storage
+//        storage = StorageClient.getInstance().bucket().getStorage();
     }
 
     public String uploadImage(byte[] imageBytes) {
@@ -58,31 +66,68 @@ public class FileUploader {
         }
     }
 
-    public String uploadPdfToDropbox(byte[] pdfData) throws IOException, DbxException {
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(pdfData)) {
-            UUID uuid = UUID.randomUUID();
-            String randomPath = uuid.toString();
-            String fullPath = "/" + randomPath + ".pdf"; // Thêm phần mở rộng tệp PDF
-            FileMetadata metadata = dropboxClient.files().uploadBuilder(fullPath)
-                    .withMode(WriteMode.ADD)
-                    .uploadAndFinish(inputStream);
-            return metadata.getPathDisplay();
+
+
+    public String upload(MultipartFile multipartFile) {
+
+        try {
+            String fileName = multipartFile.getOriginalFilename();
+            fileName = UUID.randomUUID().toString().concat(this.getExtension(fileName));
+
+            File file = this.convertToFile(multipartFile, fileName);
+            String TEMP_URL = this.uploadFile(file, fileName);
+            file.delete();
+            return fileName;
         } catch (Exception e) {
             e.printStackTrace();
+            return "ll";
         }
-        return null;
+
     }
-    public byte[] downloadPdfFromDropbox(String dropboxFilePath) throws IOException, DbxException {
-        try (OutputStream outputStream = new ByteArrayOutputStream()) {
-            System.out.println("đang cố gắng download file");
-            dropboxClient.files().downloadBuilder(dropboxFilePath).download(outputStream);
-            return ((ByteArrayOutputStream) outputStream).toByteArray();
+
+    public byte[] download(String fileName) {
+        try {
+            Resource resource = new ClassPathResource("/googleAccountKey/jobapp-c9389-firebase-adminsdk-3s8lm-0869469335.json");
+            FileInputStream serviceAccount = new FileInputStream(resource.getFile());
+            Credentials credentials = GoogleCredentials.fromStream(serviceAccount);
+            Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+            Blob blob = storage.get(BlobId.of("jobapp-c9389.appspot.com", fileName));
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            blob.downloadTo(outputStream);
+
+            return outputStream.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
-    // Phương thức để trích xuất public ID từ URL
+
+
+    private String uploadFile(File file, String fileName) throws IOException {
+        BlobId blobId = BlobId.of("jobapp-c9389.appspot.com", fileName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
+        Resource resource = new ClassPathResource("/googleAccountKey/jobapp-c9389-firebase-adminsdk-3s8lm-0869469335.json");
+        FileInputStream serviceAccount = new FileInputStream(resource.getFile());
+        Credentials credentials = GoogleCredentials.fromStream(serviceAccount);
+        Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+        storage.create(blobInfo, Files.readAllBytes(file.toPath()));
+        return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+    }
+
+    private File convertToFile(MultipartFile multipartFile, String fileName) throws IOException {
+        File tempFile = new File(fileName);
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            fos.write(multipartFile.getBytes());
+            fos.close();
+        }
+        return tempFile;
+    }
+
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
+
     private String getPublicIdFromUrl(String imageUrl) {
         int lastIndex = imageUrl.lastIndexOf("/");
         if (lastIndex != -1) {

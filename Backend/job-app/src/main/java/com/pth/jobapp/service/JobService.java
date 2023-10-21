@@ -1,5 +1,6 @@
 package com.pth.jobapp.service;
 
+import com.google.api.PageOrBuilder;
 import com.pth.jobapp.dao.JobRepository;
 import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.entity.Job;
@@ -59,5 +60,7 @@ public class JobService {
             jobRepository.save(job);
         }
     }
+
+    public Page<Job> findByTitleContainingAndAddress(Pageable pageable){return  jobRepository.findByTitleContainingAndAddress("","",pageable);}
 
 }

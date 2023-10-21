@@ -13,6 +13,9 @@ import java.util.Optional;
 public interface BlogRepository extends JpaRepository<Blog,String> {
     Optional<Blog> findByAccountId(String accountId);
 
-    Page<Blog> findAllByOrderByUpdatedAtDesc(Pageable pageable);
+    Page<Blog> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Blog> findAllByTitleContainingOrderByCreatedAtDesc(String title, Pageable pageable);
+
+    Page<Blog> findAllByTitleContainingAndStateOrderByCreatedAtDesc(String title,String state, Pageable pageable);
 
 }

@@ -169,5 +169,31 @@ const employersAPI = {
       headers,
     });
   },
+
+  async getAllVipOfEmployer(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getAllVipOfEmployer, {
+      headers,
+    });
+  },
+  async getVipHistoriesByEmployerToken(
+    currentPage: number,
+    itemsPerPage: number,
+    token?: string
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getVipHistoriesByEmployerToken(currentPage, itemsPerPage),
+      {
+        headers,
+      }
+    );
+  },
 };
 export default employersAPI;
