@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { JobModel } from "../../../../../models/JobModel";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { calculateDaysRemaining } from "../../../../../utils";
 
 export const JobItem: React.FC<{
   job: JobModel;
@@ -53,19 +54,6 @@ export const JobItem: React.FC<{
         }
       });
     }
-  };
-
-  const calculateDaysRemaining = (toDate: string) => {
-    const currentDate = new Date() as any; // Ngày hiện tại
-    const targetDate = new Date(toDate) as any; // Chuyển đổi chuỗi toDate thành đối tượng Date
-
-    // Tính số mili giây còn lại giữa ngày đích và ngày hiện tại
-    const timeRemaining = targetDate - currentDate;
-
-    // Chuyển đổi số mili giây thành số ngày và làm tròn xuống
-    const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-
-    return daysRemaining;
   };
 
   return (

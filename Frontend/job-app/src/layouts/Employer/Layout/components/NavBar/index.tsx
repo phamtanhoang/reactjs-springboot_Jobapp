@@ -12,6 +12,7 @@ import { AiFillSetting } from "react-icons/ai";
 import { useState } from "react";
 import { ChangePasswordPageEmployer } from "../../..";
 import { BsDiamondHalf } from "react-icons/bs";
+import { RiPagesFill } from "react-icons/ri";
 
 const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
   const [showBox, setShowBox] = useState(false);
@@ -65,9 +66,7 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                     className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
                   >
                     <HiDocumentText className="text-2xl text-gray-500 group-hover:text-blue-600" />
-                    <span className="ml-3 group-hover:text-blue-600">
-                      All jobs
-                    </span>
+                    <span className="ml-3 group-hover:text-blue-600">Jobs</span>
                   </Link>
                 </li>
                 <li>
@@ -79,6 +78,15 @@ const NavBar: React.FC<{ isNavBarVisible: any }> = (props) => {
                     <span className="ml-3 group-hover:text-blue-600">
                       Aplication
                     </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/employer/blogs"
+                    className="text-base text-gray-900 rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                  >
+                    <RiPagesFill className="text-2xl text-gray-500 group-hover:text-blue-600" />
+                    <span className="ml-3 group-hover:text-blue-600">Blog</span>
                   </Link>
                 </li>
                 <hr></hr>

@@ -31,8 +31,7 @@ const VipDetail: React.FC<{ vip?: VipModel }> = (props) => {
           </div>
 
           <p className="flex items-center justify-center space-x-4 text-gray-500 text-center text-sm">
-            Team can be any size, and you can add or switch members as needed.
-            Companies using our platform include:
+          This vip will start to apply on 6/9/2024 and end on 6/12/2024.
           </p>
           <button
             type="button"

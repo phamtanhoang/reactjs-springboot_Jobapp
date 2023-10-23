@@ -1,4 +1,5 @@
 import AppliedForJobs from "./AppliedForJobs";
+import BlogDetailPage from "./BlogDetailPage";
 import BlogsPage from "./BlogsPage";
 import ChangePasswordPage from "./ChangePasswordPage";
 import EmployerProfilePage from "./EmployerProfilePage";
@@ -26,4 +27,5 @@ export {
   RegisterPage,
   AppliedForJobs,
   BlogsPage,
+  BlogDetailPage
 };

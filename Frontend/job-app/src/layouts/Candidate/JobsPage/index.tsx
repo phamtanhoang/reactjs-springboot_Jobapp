@@ -10,6 +10,7 @@ import { EmployerModel } from "../../../models/EmployerModel";
 import { JobModel } from "../../../models/JobModel";
 
 const JobsPage = () => {
+  
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 

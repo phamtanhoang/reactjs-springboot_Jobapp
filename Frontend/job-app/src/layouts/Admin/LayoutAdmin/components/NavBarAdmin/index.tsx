@@ -5,7 +5,7 @@ import { BiSolidCategory, BiSolidMessageAltDetail } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { FaUserEdit, FaUserGraduate, FaUserTie } from "react-icons/fa";
 import { MdCategory, MdContactPage } from "react-icons/md";
-import { RiVipDiamondFill } from "react-icons/ri";
+import { RiPagesFill, RiVipDiamondFill } from "react-icons/ri";
 import { useState } from "react";
 import { ChangePasswordPageAdmin } from "../../..";
 
@@ -78,6 +78,19 @@ const NavBarAdmin = () => {
             </Link>
           </li>
           <li>
+            <a
+              href="#"
+              className="relative flex flex-row items-center h-11 focus:outline-none  hover:text-purple-600 hover:bg-purple-100 border-x-4 border-transparent hover:border-purple-600 pr-6 rounded-md"
+            >
+              <span className="inline-flex justify-center items-center ml-4">
+                <RiPagesFill className="text-xl" />
+              </span>
+              <span className="ml-2 text-base tracking-wide truncate">
+                Blog
+              </span>
+            </a>
+          </li>
+          <li>
             <Link
               to="/admin/employers"
               className="relative flex flex-row items-center h-11 focus:outline-none  hover:text-purple-600 hover:bg-purple-100 border-x-4 border-transparent hover:border-purple-600 pr-6 rounded-md"
@@ -115,22 +128,6 @@ const NavBarAdmin = () => {
                 Vips
               </span>
             </Link>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="relative flex flex-row items-center h-11 focus:outline-none  hover:text-purple-600 hover:bg-purple-100 border-x-4 border-transparent hover:border-purple-600 pr-6 rounded-md"
-            >
-              <span className="inline-flex justify-center items-center ml-4">
-                <BiSolidMessageAltDetail className="text-xl" />
-              </span>
-              <span className="ml-2 text-base tracking-wide truncate">
-                Messages
-              </span>
-              <span className="hidden md:block px-2 py-0.5 ml-auto text-sm font-medium tracking-wide text-red-500 bg-red-50 rounded-full">
-                1.2k
-              </span>
-            </a>
           </li>
 
           <li className="px-5 hidden md:block">

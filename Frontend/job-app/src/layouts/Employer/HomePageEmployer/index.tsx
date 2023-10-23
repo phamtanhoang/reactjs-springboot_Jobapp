@@ -1,3 +1,4 @@
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 const HomePageEmployer = () => {
@@ -5,18 +6,7 @@ const HomePageEmployer = () => {
     <>
       <div className="p-6 bg-gray-100 mb-20">
         <div>
-          <nav aria-label="Breadcrumb" className="text-sm font-semibold mb-6">
-            <ol className="list-none p-0 inline-flex">
-              <li className="flex items-center">
-                <Link
-                  to="/employer"
-                  className="text-gray-600 hover:text-blue-600"
-                >
-                  Home
-                </Link>
-              </li>
-            </ol>
-          </nav>
+          
           <div className="lg:flex justify-between items-center mb-6">
             <p className="text-2xl font-semibold mb-2 lg:mb-0">
               Greetings, Employer!
@@ -26,112 +16,210 @@ const HomePageEmployer = () => {
             <div className="w-1/2 xl:w-1/4 px-3">
               <div className="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6 mb-6 xl:mb-0">
                 <div className="text-gray-700">
-                  <p className="font-semibold text-3xl">237</p>
-                  <p>Products Sold</p>
+                  <p className="font-semibold text-3xl">10</p>
+                  <p>All job</p>
                 </div>
               </div>
             </div>
             <div className="w-1/2 xl:w-1/4 px-3">
               <div className="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6 mb-6 xl:mb-0">
                 <div className="text-gray-700">
-                  <p className="font-semibold text-3xl">177</p>
-                  <p>Product Reviews</p>
+                  <p className="font-semibold text-3xl">0</p>
+                  <p>Pending jobs</p>
                 </div>
               </div>
             </div>
             <div className="w-1/2 xl:w-1/4 px-3">
               <div className="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6">
                 <div className="text-gray-700">
-                  <p className="font-semibold text-3xl">31</p>
-                  <p>New Enquiries</p>
+                  <p className="font-semibold text-3xl">10</p>
+                  <p>All application</p>
                 </div>
               </div>
             </div>
             <div className="w-1/2 xl:w-1/4 px-3">
               <div className="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6">
                 <div className="text-gray-700">
-                  <p className="font-semibold text-3xl">1,653</p>
-                  <p>Product Views</p>
+                  <p className="font-semibold text-3xl">0</p>
+                  <p>Pending applications</p>
                 </div>
               </div>
             </div>
           </div>
           <div className="flex flex-wrap -mx-3">
             <div className="w-full xl:w-1/3 px-3">
-              <p className="text-xl font-semibold mb-4">Recent Sales</p>
+              <p className="text-xl font-semibold mb-4">Pending job</p>
               <div className="w-full bg-white border rounded-lg p-4 mb-8 xl:mb-0">
-                <div className="chartjs-size-monitor">
-                  <div className="chartjs-size-monitor-expand">
-                    <div className=""></div>
-                  </div>
-                  <div className="chartjs-size-monitor-shrink">
-                    <div className=""></div>
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
+                  <div>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p>Công nghệ thông tin</p>
                   </div>
                 </div>
-                <canvas
-                  id="buyers-chart"
-                  width="447"
-                  height="297"
-                  className="chartjs-render-monitor"
-                ></canvas>
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
+                  <div>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p>Công nghệ thông tin</p>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
+                  <div>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p>Công nghệ thông tin</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="w-full xl:w-1/3 px-3">
-              <p className="text-xl font-semibold mb-4">Recent Reviews</p>
+              <p className="text-xl font-semibold mb-4">Pending application</p>
               <div className="w-full bg-white border rounded-lg p-4 mb-8 xl:mb-0">
-                <div className="chartjs-size-monitor">
-                  <div className="chartjs-size-monitor-expand">
-                    <div className=""></div>
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
+                  <div>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500 truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p className="truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]">
+                      Công nghệ thông tin
+                    </p>
                   </div>
-                  <div className="chartjs-size-monitor-shrink">
-                    <div className=""></div>
+                  <div className="flex gap-1 sm:gap-2 text-2xl">
+                    <div className="cursor-pointer hover:text-blue-500">
+                      <AiFillCheckCircle />
+                    </div>
+                    <div className="cursor-pointer hover:text-red-500">
+                      <AiFillCloseCircle />
+                    </div>
                   </div>
                 </div>
-                <canvas
-                  id="reviews-chart"
-                  width="447"
-                  height="297"
-                  className="chartjs-render-monitor"
-                ></canvas>
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
+                  <div>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500  truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p className="truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]">
+                      Công nghệ thông tin
+                    </p>
+                  </div>
+                  <div className="flex gap-1 sm:gap-2 text-2xl">
+                    <div className="cursor-pointer hover:text-blue-500">
+                      <AiFillCheckCircle />
+                    </div>
+                    <div className="cursor-pointer hover:text-red-500">
+                      <AiFillCloseCircle />
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
+                  <div>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500  truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p className="truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]">
+                      Công nghệ thông tin
+                    </p>
+                  </div>
+                  <div className="flex gap-1 sm:gap-2 text-2xl">
+                    <div className="cursor-pointer hover:text-blue-500">
+                      <AiFillCheckCircle />
+                    </div>
+                    <div className="cursor-pointer hover:text-red-500">
+                      <AiFillCloseCircle />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="w-full xl:w-1/3 px-3">
-              <p className="text-xl font-semibold mb-4">Recent Transactions</p>
+              <p className="text-xl font-semibold mb-4">Popular jobs</p>
               <div className="w-full bg-white border rounded-lg p-4">
-                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
                   <div>
-                    <p className="font-semibold text-xl">Trent Murphy</p>
-                    <p>Product 1</p>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500 truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p className="truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]">
+                      Công nghệ thông tin
+                    </p>
                   </div>
-                  <span className="text-green-500 font-semibold text-lg">
-                    $25.00
+                  <span className="text-blue-500 font-semibold text-lg">
+                    3 apply
                   </span>
                 </div>
-                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
                   <div>
-                    <p className="font-semibold text-xl">Joseph Brent</p>
-                    <p>Product 34</p>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500  truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p className="truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]">
+                      Công nghệ thông tin
+                    </p>
                   </div>
-                  <span className="text-red-500 font-semibold text-lg">
-                    $74.99
+                  <span className="text-blue-500 font-semibold text-lg">
+                    3 apply
                   </span>
                 </div>
-                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
+                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 my-2">
                   <div>
-                    <p className="font-semibold text-xl">Jacob Bator</p>
-                    <p>Product 23</p>
+                    <div className="flex items-center">
+                      <Link
+                        to="#"
+                        className="font-semibold text-lg hover:text-blue-500  truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]"
+                      >
+                        Lập trình viên
+                      </Link>
+                    </div>
+                    <p className="truncate max-w-[180px] sm:max-w-[450px]  lg:max-w-[180px]">
+                      Công nghệ thông tin
+                    </p>
                   </div>
-                  <span className="text-green-500 font-semibold text-lg">
-                    $14.95
-                  </span>
-                </div>
-                <div className="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2">
-                  <div>
-                    <p className="font-semibold text-xl">Alex Mason</p>
-                    <p>Product 66</p>
-                  </div>
-                  <span className="text-green-500 font-semibold text-lg">
-                    $44.99
+                  <span className="text-blue-500 font-semibold text-lg">
+                    3 apply
                   </span>
                 </div>
               </div>

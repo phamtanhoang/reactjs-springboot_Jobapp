@@ -55,7 +55,7 @@ const NavBar = () => {
   return (
     <>
       <nav
-        className={`w-full  bg-white ${
+        className={`w-full bg-white ${
           sticky
             ? " shadow-lg shadow-gray-300/30 z-[999] fixed left-0 top-0"
             : ""

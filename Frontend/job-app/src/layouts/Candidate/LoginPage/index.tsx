@@ -8,8 +8,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (email && password) {
@@ -20,7 +18,7 @@ const LoginPage = () => {
           localStorage.setItem("candidateToken", res.data);
           localStorage.removeItem("adminToken");
           localStorage.removeItem("employerToken");
-          navigate("/");
+          window.location.reload();
         })
         .catch(() => {
           Swal.fire("Thất bại!", "Đăng nhập thất bại!", "error");

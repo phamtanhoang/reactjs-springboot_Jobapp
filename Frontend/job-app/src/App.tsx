@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import {
   AppliedForJobs,
+  BlogDetailPage,
   BlogsPage,
   EmployerProfilePage,
   EmployersPage,
@@ -15,6 +16,8 @@ import {
 } from "./layouts/Candidate";
 import {
   ApplicationPageEmployer,
+  BlogDetailEmployer,
+  BlogsPageEmployer,
   HomePageEmployer,
   JobDetailPageEmployer,
   JobsPageEmployer,
@@ -57,6 +60,7 @@ const App = () => {
             />
             <Route path="/home/favorite" element={<FavoritePage />} />
             <Route path="/home/blogs" element={<BlogsPage />} />
+            <Route path="/home/blog/:id" element={<BlogDetailPage />} />
             {candidateToken ? (
               <>
                 <Route path="/home/login" element={<Navigate to="/home" />} />
@@ -119,6 +123,11 @@ const App = () => {
                   path="/employer/vipHistories"
                   element={<VipHistoryEmployer />}
                 />
+                <Route path="/employer/blogs" element={<BlogsPageEmployer />} />
+                <Route
+                  path="/employer/blog/:id"
+                  element={<BlogDetailEmployer />}
+                />
               </Route>
             </>
           ) : (
@@ -153,6 +162,14 @@ const App = () => {
               />
               <Route
                 path="/employer/vipHistories"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/blogs"
+                element={<Navigate to="/employer/login" />}
+              />
+              <Route
+                path="/employer/blog/:id"
                 element={<Navigate to="/employer/login" />}
               />
               <Route path="/employer/login" element={<LoginEmployer />} />

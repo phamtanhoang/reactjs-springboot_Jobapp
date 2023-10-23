@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <section className="flex py-6 lg:flex-row flex-col-reverse items-center bg-orangebackground">
+    <section className="min-h-[90vh] flex py-6 lg:flex-row flex-col-reverse items-center bg-orangebackground">
       <div className="flex-auto lg:w-2/3 ">
         <div className="w-4/5 mx-auto   lg:w-10/12 m-0 lg:mx-32">
           <h1 className="font-bold text-3xl lg:text-4xl">
@@ -27,7 +26,6 @@ const Hero = () => {
             </a>
             <a href="#">Frontend</a>
           </div>
-
           <Link
             to="/home/jobs"
             className="text-base lg:text-sm  xl:text-base text-white px-8 py-2 rounded-full font-semibold bg-orangetext hover:outline-none hover:ring hover:ring-orangebackground  "

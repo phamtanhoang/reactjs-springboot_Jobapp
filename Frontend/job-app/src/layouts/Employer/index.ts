@@ -1,4 +1,6 @@
 import ApplicationPageEmployer from "./ApplicationPageEmployer";
+import BlogDetailEmployer from "./BlogDetailEmployer";
+import BlogsPageEmployer from "./BlogsPageEmployer";
 import ChangePasswordPageEmployer from "./ChangePasswordPageEmployer";
 import HomePageEmployer from "./HomePageEmployer";
 import JobDetailPageEmployer from "./JobProfilePageEmployer";
@@ -21,5 +23,7 @@ export {
   ProfilePageEmployer,
   RegisterEmployer,
   VipHistoryEmployer,
-  VipsPageEmployer
+  VipsPageEmployer,
+  BlogsPageEmployer,
+  BlogDetailEmployer
 };

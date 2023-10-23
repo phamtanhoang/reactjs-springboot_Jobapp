@@ -1,28 +1,21 @@
+import { BiGroup } from "react-icons/bi";
+
 const DashboardPage = () => {
   return (
     <>
-      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-6 gap-4 pb-0">
+        <div className="md:col-span-2 xl:col-span-3">
+          <h3 className="text-2xl font-bold">Welcome back, ADMIN!!!</h3>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-6 gap-4">
         <div className="bg-purple-500 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-purple-600 text-white font-medium group">
           <div className="flex justify-center items-center w-14 h-14 bg-white rounded-full transition-all duration-300 transform group-hover:rotate-12">
-            <svg
-              width="30"
-              height="30"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="stroke-current text-purple-600 transform transition-transform duration-500 ease-in-out"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              ></path>
-            </svg>
+            <BiGroup className="stroke-current text-purple-600 transform transition-transform duration-500 ease-in-out text-xl" />
           </div>
           <div className="text-right">
-            <p className="text-2xl">1,257</p>
-            <p>Visitors</p>
+            <p className="text-2xl">20</p>
+            <p>Employers</p>
           </div>
         </div>
         <div className="bg-purple-500 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-purple-600 text-white font-medium group">
@@ -44,8 +37,8 @@ const DashboardPage = () => {
             </svg>
           </div>
           <div className="text-right">
-            <p className="text-2xl">557</p>
-            <p>Orders</p>
+            <p className="text-2xl">20</p>
+            <p>Jobs</p>
           </div>
         </div>
         <div className="bg-purple-500 rounded-md flex items-center justify-between p-3 border-b-4 border-purple-600 text-white font-medium group">
@@ -67,8 +60,8 @@ const DashboardPage = () => {
             </svg>
           </div>
           <div className="text-right">
-            <p className="text-2xl">$11,257</p>
-            <p>Sales</p>
+            <p className="text-2xl">3</p>
+            <p>Blogs</p>
           </div>
         </div>
         <div className="bg-purple-500 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-purple-600 text-white font-medium group">
@@ -91,12 +84,12 @@ const DashboardPage = () => {
           </div>
           <div className="text-right">
             <p className="text-2xl">$75,257</p>
-            <p>Balances</p>
+            <p>Sales</p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 p-6 gap-4">
         <div className="relative flex flex-col min-w-0 mb-4 lg:mb-0 break-words bg-gray-50 w-full shadow-lg rounded">
           <div className="rounded-t mb-0 px-0 border-0">
             <div className="flex flex-wrap items-center px-4 py-2">
@@ -406,7 +399,7 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-4 text-black ">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-6 text-black ">
         <div className="md:col-span-2 xl:col-span-3">
           <h3 className="text-lg font-semibold">
             Task summaries of recent sprints
@@ -573,7 +566,7 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-      <div className="mt-4 mx-4">
+      <div className="mt-4 mx-6">
         <div className="w-full overflow-hidden rounded-lg shadow-xs">
           <div className="w-full overflow-x-auto">
             <table className="w-full">
@@ -824,7 +817,7 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="mt-8 mx-4">
+      <div className="mt-8 mx-6">
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="p-6 mr-2 bg-gray-100 sm:rounded-lg">
             <h1 className="text-4xl sm:text-5xl text-gray-800  font-extrabold tracking-tight">
@@ -950,7 +943,7 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="mt-8 mx-4">
+      <div className="mt-8 mx-6">
         <div className="p-4 bg-blue-50 border-blue-500 rounded-lg shadow-md">
           <h4 className="text-lg font-semibold">
             Have taken ideas & reused components from the following resources:
@@ -1108,7 +1101,7 @@ const DashboardPage = () => {
             </li>
           </ul>
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
