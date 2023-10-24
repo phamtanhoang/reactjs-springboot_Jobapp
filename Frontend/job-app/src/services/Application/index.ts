@@ -146,5 +146,36 @@ const applicationsAPI = {
       }
     );
   },
+
+  async getAllApplicationByEmployerToken(
+    token?: string,
+    title?: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getAllApplicationByEmployerToken(title, currentPage, itemsPerPage),
+      { headers }
+    );
+  },
+
+  async getPendingApplicationsByEmployerToken(
+    token?: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getPendingApplicationsByEmployerToken(currentPage, itemsPerPage),
+      { headers }
+    );
+  },
 };
 export default applicationsAPI;

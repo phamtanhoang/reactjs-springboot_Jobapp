@@ -1,9 +1,6 @@
 package com.pth.jobapp.controller;
 
-import com.pth.jobapp.ResponseModels.ApplicationResponse;
-import com.pth.jobapp.ResponseModels.CandidateProfileResponse;
-import com.pth.jobapp.ResponseModels.EmployerProfileResponse;
-import com.pth.jobapp.ResponseModels.JobDetailsResponse;
+import com.pth.jobapp.ResponseModels.*;
 import com.pth.jobapp.entity.*;
 import com.pth.jobapp.requestmodels.*;
 import com.pth.jobapp.service.*;
@@ -40,6 +37,10 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     @Autowired
+    private BlogService blogService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
     private AccountInfoService accountInfoService;
     @Autowired
     AccountService accountService;
@@ -71,7 +72,6 @@ public class AdminController {
     @PostMapping("/login")
     public ResponseEntity<String> adminAuthentication(@RequestBody AuthRequest authRequest) {
         try {
-            System.out.println(authRequest.getPassword());
 
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
@@ -80,18 +80,17 @@ public class AdminController {
 
                 if ("admin".equals(account.getRole()) && "active".equals(account.getState())) {
                     String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
-                    System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
 
                     return ResponseEntity.ok(token);
                 } else {
-                    throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
+                    throw new UsernameNotFoundException("Invalid user request!");
                 }
             } else {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (AuthenticationException e) {
             System.err.println("Authentication error: " + e.getMessage());
-            throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
+            throw new UsernameNotFoundException("Invalid user request!");
 
         }
     }
@@ -139,6 +138,41 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/newestJobs")
+    public ResponseEntity<?> getNewestJobs(@RequestHeader("Authorization") String token, @RequestParam String title, @RequestParam String categoryId, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+
+            Page<Job> jobs = jobService.findByTitleContainingAndCategoryId(title, categoryId, pageable);
+
+            return ResponseEntity.ok(jobs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
+        }
+    }
+
+    @GetMapping("/pendingJobs")
+    public ResponseEntity<?> getPendingJob(@RequestHeader("Authorization") String token, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+
+            Page<Job> jobs = jobService.findByState("pending", pageable);
+
+            return ResponseEntity.ok(jobs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
+        }
+    }
     @GetMapping("/job/details")
     public ResponseEntity<?> getJobDetails(
             @RequestHeader("Authorization") String token,
@@ -568,6 +602,41 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
         }
     }
+    @GetMapping("/pendingEmployers")
+    public ResponseEntity<?> getpendingEmployers(@RequestHeader("Authorization") String token, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+
+            Page<Employer> employers = employerService.findByState("pending", pageable);
+
+            Page<EmployerProfileResponse> employerProfiles = employers
+                    .map(employer -> {
+                        Account employerAccount = accountService.findById(employer.getAccountId()).get();
+                        EmployerProfileResponse profile = new EmployerProfileResponse();
+                        profile.setUsername(employerAccount.getUsername());
+                        profile.setName(employer.getName());
+                        profile.setAddress(employer.getAddress());
+                        profile.setEmployerId(employer.getId());
+                        profile.setBanner(employer.getBanner());
+                        profile.setDescription(employer.getDescription());
+                        profile.setImage(employer.getImage());
+                        profile.setState(employerAccount.getState());
+                        profile.setAccountId(employerAccount.getId());
+                        profile.setState(employerAccount.getState());
+                        return profile;
+                    });
+
+            return ResponseEntity.ok(employerProfiles);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
+        }
+    }
+
 
     @PostMapping("/employer/create")
     public ResponseEntity<?> addNewEmployer(@RequestHeader("Authorization") String token, @RequestBody EmployerRegistrationRequest employerRegistrationRequest) {
@@ -818,6 +887,20 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/employerVip/revenue")
+    public ResponseEntity<?>getViprevenue(@RequestHeader("Authorization")String token){
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+        return ResponseEntity.ok(employerVipService.sumPrice());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR");
+        }
+    }
     @PostMapping("/employerVip/create")
     public ResponseEntity<String> createEmployerVip(@RequestHeader("Authorization") String token, @RequestBody EmployerVip employerVip) {
         try {
@@ -990,8 +1073,247 @@ public class AdminController {
     //---------------------------VIP------------------------------------------------//
 
 
+    //---------------------------Blog------------------------------------------------//
 
-    //Blogs
+    @GetMapping("/blogs")
+    public ResponseEntity<?>getBlogs(@RequestHeader("Authorization")String token, @RequestParam String title,
+                                     @PageableDefault(page = 0, size = 10) Pageable pageable){
+        try{
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+
+            Page<Blog> blogs= blogService.findAllByTitleContainingAndStateOrderByCreatedAtDesc(title,"",pageable);
+            Page<BlogResponse> blogResponses = blogs.map(blog -> {
+                BlogResponse dto = new BlogResponse();
+                dto.setBlogId(blog.getId());
+                dto.setAccountId(blog.getAccountId());
+                dto.setTitle(blog.getTitle());
+                dto.setBlogImage(blog.getImage());
+                dto.setName("admin");
+                dto.setUserImage("https://res.cloudinary.com/dcpatkvcu/image/upload/v1696784020/DoAnNganh/Host_And_Admin_Marketing_Job_Vacancies_Vector_Recruitment_Open_Job_Office_Girls_PNG_and_Vector_with_Transparent_Background_for_Free_Download_unyj7i.jpg");
+                dto.setContent(blog.getContent());
+                dto.setCreatedAt(blog.getCreatedAt());
+                dto.setState(blog.getState());
+                dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
+                return dto;
+            });
+            return ResponseEntity.ok(blogResponses);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(("An eror occurred"));
+        }
+
+    }
+    @GetMapping("/newestBlogs")
+    public ResponseEntity<?>getnewestBlogs(@RequestHeader("Authorization")String token, @PageableDefault(page = 0, size = 10) Pageable pageable){
+        try{
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required.");
+            }
+            Page<Blog> blogs= blogService.findAllByTitleContainingAndStateOrderByCreatedAtDesc("","",pageable);
+            Page<BlogResponse> blogResponses = blogs.map(blog -> {
+                BlogResponse dto = new BlogResponse();
+                dto.setBlogId(blog.getId());
+                dto.setAccountId(blog.getAccountId());
+                dto.setTitle(blog.getTitle());
+                dto.setBlogImage(blog.getImage());
+                dto.setName("admin");
+                dto.setUserImage("https://res.cloudinary.com/dcpatkvcu/image/upload/v1696784020/DoAnNganh/Host_And_Admin_Marketing_Job_Vacancies_Vector_Recruitment_Open_Job_Office_Girls_PNG_and_Vector_with_Transparent_Background_for_Free_Download_unyj7i.jpg");
+                dto.setContent(blog.getContent());
+                dto.setCreatedAt(blog.getCreatedAt());
+                dto.setState(blog.getState());
+                dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
+                return dto;
+            });
+            return ResponseEntity.ok(blogResponses);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(("An eror occurred"));
+        }
+
+    }
+    @GetMapping("/blog/details")
+    public ResponseEntity<?> getBlogDetails(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String blogId
+    ) {
+        try {
+            String adminEmail = jwtService.extractUsername(token.substring(7));
+            Account adminAccount = accountService.findByUsername(adminEmail);
+
+            if (adminAccount == null || !"admin".equals(adminAccount.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+            Optional<Blog> blogOptional = blogService.findById(blogId);
+            if (blogOptional.isEmpty())
+                return ResponseEntity.badRequest().body("Can't find blog with ID: "+ blogId);
+            Blog blog = blogOptional.get();
+            BlogResponse dto = new BlogResponse();
+            dto.setBlogId(blog.getId());
+            dto.setAccountId(blog.getAccountId());
+            dto.setTitle(blog.getTitle());
+            dto.setBlogImage(blog.getImage());
+            dto.setContent(blog.getContent());
+
+            if(accountService.findById(blog.getAccountId()).get().getRole().equals("admin"))
+            {
+                dto.setUserImage("https://res.cloudinary.com/dcpatkvcu/image/upload/v1696784020/DoAnNganh/Host_And_Admin_Marketing_Job_Vacancies_Vector_Recruitment_Open_Job_Office_Girls_PNG_and_Vector_with_Transparent_Background_for_Free_Download_unyj7i.jpg");
+                dto.setName("admin");
+            }
+            else
+            {
+                dto.setName(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getName());
+                dto.setUserImage(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getImage());
+
+            }
+            dto.setCreatedAt(blog.getCreatedAt());
+            dto.setState(blog.getState());
+            dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
+            return ResponseEntity.ok(dto);
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @GetMapping("/comments")
+    public ResponseEntity<?>getComments(@RequestParam String blogId,Pageable pageable) {
+        try {
+
+            Page<Comment> comments = commentService.findByBlogId(blogId, pageable);
+
+            Page<CommentResponse> commentResponses = comments.map(comment -> {
+                CommentResponse dto = new CommentResponse();
+                Account account = accountService.findById(comment.getAccountId()).get();
+                dto.setId(comment.getId());
+                dto.setAccountId(comment.getAccountId());
+                dto.setAccountUserName(accountService.findById(comment.getAccountId()).get().getUsername());
+                if (account.getRole().equals("candidate")) {
+                    dto.setName(candidateService.findCandidateByAccountUsername(account.getUsername()).get().getFirstName() + " " + candidateService.findCandidateByAccountUsername(account.getUsername()).get().getLastName());
+                    dto.setAvatar(candidateService.findCandidateByAccountUsername(account.getUsername()).get().getAvatar());
+                }
+                else if (account.getRole().equals("employer")) {
+                    dto.setName(employerService.findByAccountUsername(account.getUsername()).getName());
+                    dto.setAvatar(employerService.findByAccountUsername(account.getUsername()).getImage());
+                } else {
+                    dto.setName("admin");
+                    dto.setAvatar("https://res.cloudinary.com/dcpatkvcu/image/upload/v1696784020/DoAnNganh/Host_And_Admin_Marketing_Job_Vacancies_Vector_Recruitment_Open_Job_Office_Girls_PNG_and_Vector_with_Transparent_Background_for_Free_Download_unyj7i.jpg");
+                }
+                dto.setComment(comment.getComment());
+                dto.setBlogId(comment.getBlogId());
+                dto.setCommentedAt(comment.getCommentedAt());
+                dto.setCommentId(comment.getCommentId());
+                return dto;
+            });
+            return ResponseEntity.ok(commentResponses);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(("An eror occurred"));
+
+        }
+    }
+    @PostMapping("/blog/create")
+    public ResponseEntity<?> createBlog(@RequestHeader("Authorization") String token, @RequestPart Blog blog, @RequestPart MultipartFile image) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+            if (account == null || !account.getRole().equals("admin")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization required!");
+            }
+            blog.setId(UUID.randomUUID().toString());
+            blog.setState("active");
+            blog.setCreatedAt(new Date());
+            blogService.saveWithImage(blog, image);
+            return ResponseEntity.ok("Add new blog successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+
+
+
+    @PutMapping("/blog/update")
+    public ResponseEntity<?> updateBlog(@RequestHeader("Authorization") String token,@RequestParam String blogId,  @RequestPart Blog updatedBlog,@RequestPart(required = false) MultipartFile image) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !account.getRole().equals("admin")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization required!");
+            }
+
+            Blog existingBlog = blogService.findById(blogId).get();
+
+            if (existingBlog == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Blog not found");
+            }
+
+
+            existingBlog.setTitle(updatedBlog.getTitle());
+            existingBlog.setContent(updatedBlog.getContent());
+            existingBlog.setState(updatedBlog.getState());
+            existingBlog.setCreatedAt(new Date());
+
+            blogService.saveWithImage(existingBlog,image);
+
+            return ResponseEntity.ok("Blog updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+
+
+    @DeleteMapping("/blog/delete")
+    public ResponseEntity<?> deleteBlog(@RequestHeader("Authorization") String token, @RequestParam String blogId) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !account.getRole().equals("admin")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization required!");
+            }
+
+            Blog blog = blogService.findById(blogId).get();
+            if (blog == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Blog not found");
+            }
+
+            blogService.deleteById(blogId);
+
+            return ResponseEntity.ok("Blog deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+
+    @DeleteMapping("/comment/delete")
+    public ResponseEntity<?> deleteBlogComment(@RequestHeader("Authorization") String token, @RequestParam String commentId) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !account.getRole().equals("admin")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization required!");
+            }
+            commentService.deleteComment(commentId);
+
+            return ResponseEntity.ok("Comment deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
 
 
 }

@@ -39,6 +39,8 @@ import {
   LoginPageAdmin,
   VipsPageAdmin,
 } from "./layouts/Admin";
+import BlogsPageAdmin from "./layouts/Admin/BlogsPageAdmin";
+import BlogDetailAdmin from "./layouts/Admin/BlogDetailAdmin";
 
 const App = () => {
   const candidateToken = localStorage.getItem("candidateToken");
@@ -203,7 +205,12 @@ const App = () => {
                   path="/admin/applications"
                   element={<ApplicationsPageAdmin />}
                 />
-                <Route path="/admin/vips" element={<VipsPageAdmin />} />
+                <Route
+                  path="/admin/candidates"
+                  element={<CandidatesPageAdmin />}
+                />
+                <Route path="/admin/blogs" element={<BlogsPageAdmin />} />
+                <Route path="/admin/blog/:id" element={<BlogDetailAdmin />} />
               </Route>
             </>
           ) : (
@@ -235,6 +242,14 @@ const App = () => {
               />
               <Route
                 path="/admin/vips"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/blogs"
+                element={<Navigate to="/admin/login" />}
+              />
+              <Route
+                path="/admin/blog/:id"
                 element={<Navigate to="/admin/login" />}
               />
               <Route path="/admin/login" element={<LoginPageAdmin />} />

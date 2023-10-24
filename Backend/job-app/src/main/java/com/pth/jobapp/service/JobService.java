@@ -1,11 +1,13 @@
 package com.pth.jobapp.service;
 
 import com.google.api.PageOrBuilder;
+import com.pth.jobapp.ResponseModels.PopularJobResponse;
 import com.pth.jobapp.dao.JobRepository;
 import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.entity.Job;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,4 +66,18 @@ public class JobService {
 
     public Page<Job> findByTitleContainingAndAddress(Pageable pageable){return  jobRepository.findByTitleContainingAndAddress("","",pageable);}
 
+
+    public Page<Job> findByEmployerIdAndState(String employerId, String state, Pageable pageable){return jobRepository.findByEmployerIdAndState(employerId,state,pageable);}
+
+    public Page<Job> findTop5JobsByApplyCount(String employerId){
+        Pageable pageable = PageRequest.of(0, 5);
+        return jobRepository.findTop5JobsByApplyCount(employerId,pageable);
+    }
+    public List<Long> findTop5JobApplyCounts(String employerId){
+        Pageable pageable = PageRequest.of(0, 5);
+        return jobRepository.findTop5JobApplyCounts(employerId,pageable);
+    }
+    public Page<Job> findByState(String state,Pageable pageable){
+        return jobRepository.findByState(state,pageable);
+    }
 }

@@ -16,6 +16,10 @@ public interface BlogRepository extends JpaRepository<Blog,String> {
     Page<Blog> findAllByOrderByCreatedAtDesc(Pageable pageable);
     Page<Blog> findAllByTitleContainingOrderByCreatedAtDesc(String title, Pageable pageable);
 
-    Page<Blog> findAllByTitleContainingAndStateOrderByCreatedAtDesc(String title,String state, Pageable pageable);
+    Page<Blog> findAllByTitleContainingAndStateContainingOrderByCreatedAtDesc(String title,String state, Pageable pageable);
 
+    Page<Blog>findAllByTitleContainingAndAccountIdAndStateOrderByCreatedAtDesc(String title,String accountId,String state,Pageable pageable);
+    void deleteByIdAndAccountId(String id, String accountId);
+
+    Optional<Blog>findByIdAndAccountId(String id, String accountId);
 }

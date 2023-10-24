@@ -79,9 +79,8 @@ import java.util.UUID;
 
         try {
             String candidateEmail = jwtService.extractUsername(token.substring(7));
-            Optional<Candidate> existingCandidate = candidateService.findCandidateByAccountUsername(candidateEmail);// Remove "Bearer " prefix from token
+            Optional<Candidate> existingCandidate = candidateService.findCandidateByAccountUsername(candidateEmail);
             Candidate updateCandidate= existingCandidate.get();
-            System.out.println(updateCandidate.getAccountId());
             updateCandidate.setDateOfBirth(candidate.getDateOfBirth());
             updateCandidate.setFirstName(candidate.getFirstName());
             updateCandidate.setLastName(candidate.getLastName());
@@ -90,7 +89,6 @@ import java.util.UUID;
 
             return ResponseEntity.ok("Candidate profile updated successfully");
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate profile");
         }
     }
@@ -106,7 +104,6 @@ import java.util.UUID;
 
                 return ResponseEntity.ok("Candidate image updated successfully");
             } catch (Exception e) {
-                // Handle the exception and return an appropriate response
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
             }
         }
@@ -116,7 +113,6 @@ import java.util.UUID;
         try {
             String token = tokenHeader.substring(7);
             String username = jwtService.extractUsername(token);
-            System.out.println(username);
 
             Candidate candidate = candidateService.findCandidateByAccountUsername(username).orElse(null);
 
@@ -130,15 +126,11 @@ import java.util.UUID;
                 candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
                 candidateProfileResponse.setSkill(candidate.getSkill());
                 candidateProfileResponse.setExperience(candidate.getExperience());
-//                System.out.println(candidateProfileResponse.getSkill());
-                System.out.println(candidate);
                 return ResponseEntity.ok(candidateProfileResponse);
             } else {
-                System.out.println("Người dùng không tồn tại");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
             }
         } catch (Exception e) {
-            System.out.println("Lỗi");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
         }
     }
@@ -154,7 +146,6 @@ import java.util.UUID;
 
             return ResponseEntity.ok("Candidate skill updated successfully");
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate skill");
         }
     }
@@ -171,7 +162,6 @@ import java.util.UUID;
 
             return ResponseEntity.ok("Candidate image updated successfully");
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
         }
     }
@@ -196,14 +186,11 @@ import java.util.UUID;
                 candidateProfileResponse.setDateOfBirth(candidate.getDateOfBirth());
                 candidateProfileResponse.setSkill(candidate.getSkill());
                 candidateProfileResponse.setExperience(candidate.getExperience());
-                System.out.println(candidate);
                 return ResponseEntity.ok(candidateProfileResponse);
             } else {
-                System.out.println("Người dùng không tồn tại");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
             }
         } catch (Exception e) {
-            System.out.println("Lỗi");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
         }
     }

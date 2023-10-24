@@ -40,9 +40,9 @@ const TablePage: React.FC<{ title: any }> = (props) => {
           localStorage.getItem("employerToken") || ""
         )
         .then((res) => {
-          setJobs(res.data._embedded.jobs);
-          setTotalAmountOfJobs(res.data.page.totalElements);
-          setTotalPages(res.data.page.totalPages);
+          setJobs(res.data.content);
+          setTotalAmountOfJobs(res.data.totalElements);
+          setTotalPages(res.data.totalPages);
         })
         .catch((error: any) => {
           setHttpError(error.message);

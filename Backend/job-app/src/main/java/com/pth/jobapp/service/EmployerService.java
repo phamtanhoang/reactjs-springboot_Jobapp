@@ -25,7 +25,7 @@ public class EmployerService {
     }
     public Optional<Employer> findById(String id){return  employerRepository.findById(id);}
     public Employer findByAccountUsername(String username){return employerRepository.findByAccountUsername(username);}
-
+    public Page<Employer>findByState(String state, Pageable pageable){return employerRepository.findByState(state,pageable);}
     public Page<Employer> findByNameContaining(String name, Pageable pageable){return employerRepository.findByNameContaining(name,pageable);}
     public Employer saveWithImage(Employer employer, MultipartFile image) {
         if (image != null && !image.isEmpty()) {

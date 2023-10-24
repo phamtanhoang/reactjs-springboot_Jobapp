@@ -41,8 +41,8 @@ public class VNPayController {
     public ResponseEntity<?> getPay(@RequestParam String vipId,@RequestHeader("Authorization") String token) throws UnsupportedEncodingException {
         try {
 
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
 
@@ -94,11 +94,9 @@ public class VNPayController {
                     String fieldName = (String) itr.next();
                     String fieldValue = (String) vnp_Params.get(fieldName);
                     if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                        //Build hash data
                         hashData.append(fieldName);
                         hashData.append('=');
                         hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                        //Build query
                         query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
                         query.append('=');
                         query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
@@ -143,7 +141,6 @@ public class VNPayController {
                         employerVip.setVipId(vipId);
                         employerVip.setId(vnpTransactionNo);
                         employerVip.setPrice(vip.getPrice());
-                        System.out.println(employerVip.getToDate());
                         employerVip.setFromDate(Date.from(existsEmployerVip.getToDate().toInstant().plus(1, ChronoUnit.DAYS)));
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(existsEmployerVip.getToDate());
@@ -153,11 +150,9 @@ public class VNPayController {
 
                         Date toDate = calendar.getTime();
                         employerVip.setToDate(toDate);
-                        System.out.println("Đã vào đây 1");
                         employerVipService.save(employerVip);
                         return ResponseEntity.ok("Thanh toán thành công");
                     } else {
-                        System.out.println("Đã vào đây 2");
 
                         EmployerVip employerVip = new EmployerVip();
                         employerVip.setId(vnpTransactionNo);
@@ -182,7 +177,7 @@ public class VNPayController {
                 return ResponseEntity.badRequest().body("Thanh toán thất bại");
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Hoặc log lỗi tại đây.
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi xảy ra trong quá trình xử lý thanh toán");
         }
     }

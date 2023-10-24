@@ -4,11 +4,14 @@ import java.util.Date;
 public class BlogResponse {
     String blogId;
     String title;
-    String image;
+    String blogImage;
     Date createdAt;
     String accountId;
     String accountUserName;
+    String name;
     String state;
+    String content;
+    String userImage;
 
     public String getBlogId() {
         return blogId;
@@ -26,12 +29,20 @@ public class BlogResponse {
         this.title = title;
     }
 
-    public String getImage() {
-        return image;
+    public String getBlogImage() {
+        return blogImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setBlogImage(String blogImage) {
+        this.blogImage = blogImage;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
     }
 
     public Date getCreatedAt() {
@@ -64,6 +75,22 @@ public class BlogResponse {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
 

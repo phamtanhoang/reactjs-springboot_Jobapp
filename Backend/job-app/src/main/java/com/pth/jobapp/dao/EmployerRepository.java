@@ -26,6 +26,10 @@ public interface EmployerRepository extends JpaRepository<Employer, String> {
             "And a.state='active'")
     Page<Employer> findVipEmployers(Pageable pageable);
 
+    @Query("SELECT  e FROM Employer e " +
+            "JOIN  Account a on e.accountId=a.id "+
+            "And a.state='pending'")
+    Page<Employer> findByState(String state, Pageable pageable);
     @Query("SELECT e FROM Employer e JOIN Account a on  e.accountId = a.id where a.username = :username")
     Employer findByAccountUsername(@Param("username") String username);
 

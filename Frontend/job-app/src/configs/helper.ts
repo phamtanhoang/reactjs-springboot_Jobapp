@@ -125,7 +125,7 @@ export const urlAPI = {
     currentPage: number,
     itemsPerPage: number
   ) => {
-    return `/jobs/search/findByEmployerIdAndTitleContaining?title=${title}&page=${currentPage}&size=${itemsPerPage}`;
+    return `/jobs/jobsEmployer?title=${title}&page=${currentPage}&size=${itemsPerPage}`;
   },
 
   addJobByEmployerToken: "/jobs/create",
@@ -274,4 +274,88 @@ export const urlAPI = {
     itemsPerPage: number
   ) =>
     `/applies/candidateApplications?state=${state}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getBlogsByTitleAndEmployerToken: (
+    title: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => `/blogs?title=${title}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getAllJobByEmployerToken: (
+    title?: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) =>
+    `/jobs/jobsEmployer?title=${title}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getPendingJobsByEmployerToken: (
+    currentPage?: number,
+    itemsPerPage?: number
+  ) => `/jobs/pendingJobsEmployer?page=${currentPage}&size=${itemsPerPage}`,
+
+  getAllApplicationByEmployerToken: (
+    title?: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) =>
+    `/applies/employerApplications?title=${title}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getPendingApplicationsByEmployerToken: (
+    currentPage?: number,
+    itemsPerPage?: number
+  ) => `/applies/pendingApplications?page=${currentPage}&size=${itemsPerPage}`,
+
+  getPopularJobs: "/jobs/popularJobs",
+
+  //
+  getAllBlogs: (title: string, currentPage: number, itemsPerPage: number) =>
+    `/blogs?title=${title}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getAllBlogsByEmployerToken: (
+    title: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/blogs/employerBlogs?title=${title}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getAllComments: (
+    blogId: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) =>
+    `/blogs/comments?blogId=${blogId}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addBlogByEmployerToken: `/blogs/create`,
+
+  updateBlogByEmployerToken: (id: string) => `/blogs/update?blogId=${id}`,
+
+  deleteBlogByEmployerToken: (id: string) => `/blogs/delete?blogId=${id}`,
+
+  addCommentByToken: (id: string) => `/blogs/comment?blogId=${id}`,
+
+  addReplyByToken: (id: string) => `/blogs/reply?commentId=${id}`,
+
+  deleteSelfComment: (id: string) => `/blogs/deleteSelfComment?commentId=${id}`,
+
+  deleteBlogComment: (id: string) => `/blogs/deleteBlogComment?commentId=${id}`,
+
+  deleteBlogCommentByAdminToken: (id: string) =>
+    `/admin/comment/delete?commentId=${id}`,
+
+  getBlogsByAdminToken: (
+    title: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) => `/admin/blogs?title=${title}&page=${currentPage}&size=${itemsPerPage}`,
+
+  addBlogByAdminToken: `/admin/blog/create`,
+
+  updateBlogByAdminToken: (id: string) => `/admin/blog/update?blogId=${id}`,
+
+  deleteBlogByAdminToken: (id: string) => `/admin/blog/delete?blogId=${id}`,
+
+  getBlogByIdAndEmployerToken: (id: string) =>
+    `/employers/blogDetails?blogId=${id}`,
+
+  getBlogByIdAndAdminToken: (id: string) => `/admin/blog/details?blogId=${id}`,
 };

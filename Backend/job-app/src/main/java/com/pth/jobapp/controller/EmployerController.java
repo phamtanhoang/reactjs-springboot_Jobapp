@@ -1,6 +1,7 @@
 package com.pth.jobapp.controller;
 
 import com.pth.jobapp.ResponseModels.ApplicationResponse;
+import com.pth.jobapp.ResponseModels.BlogResponse;
 import com.pth.jobapp.ResponseModels.EmployerProfileResponse;
 import com.pth.jobapp.ResponseModels.VipResponse;
 import com.pth.jobapp.entity.*;
@@ -25,10 +26,10 @@ public class EmployerController {
     @Autowired
     private JobService jobService;
     @Autowired
-    private EmployerService employerService; // Assuming you have an EmployerService
+    private EmployerService employerService;
 
     @Autowired
-    private JwtService jwtService; // Assuming you have a JwtService to handle JWT operations
+    private JwtService jwtService;
 
     @Autowired CategoryService categoryService;
 
@@ -37,12 +38,13 @@ public class EmployerController {
     @Autowired VipService vipService;
 
     @Autowired AccountService accountService;
+
+    @Autowired BlogService blogService;
     @GetMapping("/profile")
     public ResponseEntity<?> getAccountFromToken(@RequestHeader("Authorization") String tokenHeader) {
         try {
             String token = tokenHeader.substring(7);
             String username = jwtService.extractUsername(token);
-            System.out.println(username);
 
             Employer employer = employerService.findByAccountUsername(username);
 
@@ -58,11 +60,9 @@ public class EmployerController {
 
                 return ResponseEntity.ok(employerProfileResponse);
             } else {
-                System.out.println("Người dùng không tồn tại");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại");
             }
         } catch (Exception e) {
-            System.out.println("Lỗi");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi");
         }
     }
@@ -93,8 +93,8 @@ public class EmployerController {
             @RequestParam String jobId
     ) {
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
                 Optional<Job> job = jobService.findById(jobId);
@@ -118,7 +118,7 @@ public class EmployerController {
                 @RequestParam String jobId
         ) {
             try {
-                String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
+                String employerName = jwtService.extractUsername(token.substring(7));
                 Employer employer = employerService.findByAccountUsername(employerName);
 
                 if (employer != null) {
@@ -137,6 +137,44 @@ public class EmployerController {
             }
         }
 
+    @GetMapping("/blogDetails")
+    public ResponseEntity<?>getBlogs(@RequestParam String blogId,
+                                     @RequestHeader("Authorization")String token){
+        try {
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
+            if (employer != null) {
+                Optional<Blog> blogOptional= blogService.findByIdAndAccountId(blogId,employer.getAccountId());
+
+                if (blogOptional.isPresent()) {
+                    Blog blog = blogOptional.get();
+
+                    BlogResponse dto = new BlogResponse();
+                    dto.setBlogId(blog.getId());
+                    dto.setAccountId(blog.getAccountId());
+                    dto.setTitle(blog.getTitle());
+                    dto.setBlogImage(blog.getImage());
+                    dto.setContent(blog.getContent());
+                    dto.setName(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getName());
+                    dto.setUserImage(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getImage());
+                    dto.setCreatedAt(blog.getCreatedAt());
+                    dto.setState(blog.getState());
+                    dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
+                    return ResponseEntity.ok(dto);
+                }
+                else
+                {
+                    return ResponseEntity.badRequest().body("Can't find blog.");
+                }
+            } else {
+                return ResponseEntity.badRequest().body("Can't find employer.");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(("An eror occurred"));
+        }
+
+    }
     @PutMapping("/updateImage")
     public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String token, @RequestBody MultipartFile image) {
 
@@ -147,7 +185,6 @@ public class EmployerController {
 
             return ResponseEntity.ok("Candidate image updated successfully");
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
         }
     }
@@ -162,7 +199,6 @@ public class EmployerController {
 
             return ResponseEntity.ok("Candidate image updated successfully");
         } catch (Exception e) {
-            // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update candidate image");
         }
     }
@@ -172,8 +208,8 @@ public class EmployerController {
             @RequestHeader("Authorization") String token,@PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
         try {
-            String employerUserName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerUserName); // Assuming you have a method to find an employer by username
+            String employerUserName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerUserName);
 
             if (employer != null) {
                Page<EmployerVip> employerVipPage = employerVipService.findByEmployerId(employer.getId(),pageable);
@@ -207,8 +243,8 @@ public class EmployerController {
     @GetMapping("/vips")
     public ResponseEntity<?> getVips(@RequestHeader("Authorization") String token) {
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
                 List<Vip> vips = vipService.findAllByState("active");

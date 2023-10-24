@@ -29,7 +29,7 @@ public class Comment {
     private String commentId;
 
     @Column(name = "account_id")
-    private String account_id;
+    private String accountId;
 
     @Column(name = "blog_id")
     private String blogId;
@@ -69,12 +69,12 @@ public class Comment {
         this.commentId = commentId;
     }
 
-    public String getAccount_id() {
-        return account_id;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public void setAccount_id(String account_id) {
-        this.account_id = account_id;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public String getBlogId() {

@@ -58,5 +58,12 @@ public class BlogService {
 
     public Page<Blog>findAllByTitleContainingOrderByCreatedAtDesc(String title,Pageable pageable){return blogRepository.findAllByTitleContainingOrderByCreatedAtDesc(title,pageable);}
 
-    public Page<Blog> findAllByTitleContainingAndStateOrderByCreatedAtDesc(String title,String state,Pageable pageable){return  blogRepository.findAllByTitleContainingAndStateOrderByCreatedAtDesc(title,state,pageable);}
+    public Page<Blog> findAllByTitleContainingAndStateOrderByCreatedAtDesc(String title,String state,Pageable pageable){return  blogRepository.findAllByTitleContainingAndStateContainingOrderByCreatedAtDesc(title,state,pageable);}
+
+    public Page<Blog> findAllByTitleContainingAndAccountIdAndStateOrderByCreatedAtDesc(String title,String accountId,String state,Pageable pageable){return  blogRepository.findAllByTitleContainingAndAccountIdAndStateOrderByCreatedAtDesc(title,accountId,state,pageable);}
+
+    public void deleteByIdAndAccountId(String id,String accountId){blogRepository.deleteByIdAndAccountId(id,accountId);}
+    public void deleteById(String id){blogRepository.deleteById(id);}
+    public Optional<Blog>findById(String id){return  blogRepository.findById(id);}
+    public Optional<Blog>findByIdAndAccountId(String id,String accountId){return blogRepository.findByIdAndAccountId(id,accountId);}
 }

@@ -47,7 +47,6 @@ public class CandidateService {
 
 
     public Optional<Candidate> findCandidateByAccountUsername(String username){
-        System.out.println(username);
         return candidateRepository.findCandidateByAccountUsername(username);
     }
     public Optional<Candidate> findById(String id){return candidateRepository.findById(id);}

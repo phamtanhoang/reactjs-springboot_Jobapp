@@ -9,26 +9,19 @@ import com.pth.jobapp.requestmodels.EmployerRegistrationRequest;
 import com.pth.jobapp.service.*;
 import com.pth.jobapp.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -62,7 +55,6 @@ public class AccountController {
     public String addNewEmployer(@RequestBody EmployerRegistrationRequest employerRegistrationRequest) {
 
         if (accountService.findByUsername(employerRegistrationRequest.getUsername()) == null) {
-            System.out.println(employerRegistrationRequest.getPassword());
             UUID uuid = UUID.randomUUID();
             Account account= new Account();
             account.setId(uuid.toString());
@@ -109,7 +101,6 @@ public class AccountController {
             candidate.setDateOfBirth(candidateRegistrationRequest.getDateOfBirth());
             candidate.setSex(candidateRegistrationRequest.getSex());
             candidate.setAccountId(uuid.toString());
-            System.out.println(uuid);
             candidateService.save(candidate);
             return "add new employer successfully";
 
@@ -118,17 +109,12 @@ public class AccountController {
             return "add new employer failed";
     }
 
-//    @GetMapping("/admin/adminProfile")
-//    @PreAuthorize("hasAuthority('employer')")
-//    public String adminProfile() {
-//        return "Welcome to Admin Profile";
-//    }
+
 
 
     @PostMapping("/candidate/login")
     public ResponseEntity<String> authenticateCandidate(@RequestBody AuthRequest authRequest) {
         try {
-            System.out.println(authRequest.getPassword());
 
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
@@ -137,18 +123,17 @@ public class AccountController {
 
                 if ("candidate".equals(account.getRole()) && "active".equals(account.getState())) {
                     String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
-                    System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
 
                     return ResponseEntity.ok(token);
                 } else {
-                    throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
+                    throw new UsernameNotFoundException("Invalid user request!");
                 }
             } else {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (AuthenticationException e) {
             System.err.println("Authentication error: " + e.getMessage());
-            throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
+            throw new UsernameNotFoundException("Invalid user request!");
 
         }
     }
@@ -165,17 +150,16 @@ public class AccountController {
             if (authentication.isAuthenticated()) {
                 if (accountService.findByUsername(authentication.getName()).getRole().equals("employer") && accountService.findByUsername(authentication.getName()).getState().equals("active")) {
                     String token = jwtService.generateToken(authRequest.getUsername(), authRequest.getState());
-                    System.out.println("User '" + authRequest.getUsername() + "' successfully authenticated and received JWT token: " + token);
                     return ResponseEntity.ok(token);
                 } else {
-                    throw new UsernameNotFoundException("Invalid user request!"); // Replace YourCustomException with the appropriate exception class
+                    throw new UsernameNotFoundException("Invalid user request!");
                 }
             } else {
                 throw new UsernameNotFoundException("Invalid user request!");
             }
         } catch (AuthenticationException e) {
             System.err.println("Authentication error: " + e.getMessage());
-            throw new UsernameNotFoundException("Authentication error: " + e.getMessage()); // Replace YourCustomException with the appropriate exception class
+            throw new UsernameNotFoundException("Authentication error: " + e.getMessage());
         }
     }
 
@@ -186,15 +170,15 @@ public class AccountController {
         Account account = accountService.findByUsername(username);
 
         if (account == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tài khoản không tồn tại"); // Mã lỗi 1: Tài khoản không tồn tại
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tài khoản không tồn tại");
         }
 
         if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), account.getPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu hiện tại không đúng"); // Mã lỗi 2: Mật khẩu hiện tại không đúng
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu hiện tại không đúng");
         }
 
         if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Xác nhận mật khẩu không khớp"); // Mã lỗi 3: Xác nhận mật khẩu không khớp
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Xác nhận mật khẩu không khớp");
         }
 
         account.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));

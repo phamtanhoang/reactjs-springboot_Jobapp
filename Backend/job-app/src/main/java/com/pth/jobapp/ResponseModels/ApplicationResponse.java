@@ -11,7 +11,7 @@
         Date applyDate;
         String state;
         String jobId;
-                String title;
+        String title;
         String employerId;
         String employerName;
 

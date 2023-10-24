@@ -28,7 +28,8 @@ public interface EmployerVipRepository extends JpaRepository<EmployerVip,String>
     @Query("SELECT v FROM EmployerVip v WHERE v.employerId = :employerId AND DATE(v.toDate) >= CURRENT_DATE() AND v.toDate = (SELECT MAX(e.toDate) FROM EmployerVip e WHERE e.employerId = :employerId)")
     Optional<EmployerVip> findLatestByEmployerId(@Param("employerId") String employerId);
 
-
+    @Query("SELECT COALESCE(SUM(e.price), 0) FROM EmployerVip e ")
+    float sumPrice();
 
 
 }

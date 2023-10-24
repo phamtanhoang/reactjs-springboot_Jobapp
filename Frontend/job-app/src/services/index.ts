@@ -1,5 +1,6 @@
 import accountsAPI from "./Accounts";
 import applicationsAPI from "./Application";
+import blogsAPI from "./Blogs";
 import candidatesAPI from "./Candidates";
 import categoriesAPI from "./Categories";
 import employersAPI from "./Employers";
@@ -14,4 +15,5 @@ export {
   candidatesAPI,
   applicationsAPI,
   paymentsAPI,
+  blogsAPI,
 };

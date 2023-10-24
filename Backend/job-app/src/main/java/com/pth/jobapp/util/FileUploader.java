@@ -13,7 +13,6 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,7 +20,6 @@ import java.util.UUID;
 public class FileUploader {
 
     private Cloudinary cloudinary;
-//    private final Storage storage;
     private final String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/jobapp-c9389.appspot.com/o/%s?alt=media";
 
     public FileUploader() throws IOException {
@@ -44,7 +42,6 @@ public class FileUploader {
 
     public String uploadImage(byte[] imageBytes) {
         try {
-            System.out.println("đang thực hiện upload");
             Map<?, ?> uploadResult = cloudinary.uploader().upload(imageBytes, ObjectUtils.emptyMap());
             return (String) uploadResult.get("secure_url");
         } catch (IOException e) {
@@ -55,7 +52,6 @@ public class FileUploader {
 
     public String updateImage(String existingImageUrl, byte[] newImageBytes) {
         try {
-            System.out.println("đã có ảnh thì update");
             Map<?, ?> uploadResult = cloudinary.uploader().upload(newImageBytes, ObjectUtils.asMap(
                     "public_id", getPublicIdFromUrl(existingImageUrl)
             ));

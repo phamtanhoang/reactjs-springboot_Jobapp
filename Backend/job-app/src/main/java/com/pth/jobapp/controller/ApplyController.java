@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.*;
 
 @CrossOrigin("*")
@@ -55,28 +54,20 @@ public class ApplyController {
             }
 
             Page<Application> pendingApplications = applicationService.findPendingApplicationsByEmployerName(employer.getName(), pageable);
-            List<ApplicationResponse> responseList = new ArrayList<>();
 
-            for (Application application : pendingApplications) {
-                System.out.println(application.getId());
-                Optional<Candidate> candidateOptional = candidateService.findById(application.getCandidateId());
-                Optional<Job> jobOptional = jobService.findById(application.getJobId());
-
-                if (candidateOptional.isPresent() && jobOptional.isPresent()) {
-                     ApplicationResponse dto = new ApplicationResponse();
-                    dto.setId(application.getId());
-                    dto.setAccountId(application.getCandidateId());
-                    dto.setJobId(application.getJobId());
-                    dto.setUserName(accountService.findById(candidateService.findById(application.getCandidateId()).get().getAccountId()).get().getUsername());
-                    dto.setAccountName(candidateService.findById(application.getCandidateId()).get().getFirstName()+ " "+candidateService.findById(application.getCandidateId()).get().getLastName());
-                    dto.setApplyDate(application.getApplyDate());
-                    dto.setTitle(jobService.findById(application.getJobId()).get().getTitle());
-                    dto.setState(application.getState());
-                    dto.setImage(candidateService.findById(application.getCandidateId()).get().getAvatar());
-                } else {
-                    return ResponseEntity.badRequest().body("Không tìm thấy ứng viên hoặc công việc tương ứng");
-                }
-            }
+            Page<ApplicationResponse> responseList = pendingApplications.map(application -> {
+                ApplicationResponse dto = new ApplicationResponse();
+                dto.setId(application.getId());
+                dto.setAccountId(application.getCandidateId());
+                dto.setJobId(application.getJobId());
+                dto.setUserName(accountService.findById(candidateService.findById(application.getCandidateId()).get().getAccountId()).get().getUsername());
+                dto.setAccountName(candidateService.findById(application.getCandidateId()).get().getFirstName() + " " + candidateService.findById(application.getCandidateId()).get().getLastName());
+                dto.setApplyDate(application.getApplyDate());
+                dto.setTitle(jobService.findById(application.getJobId()).get().getTitle());
+                dto.setState(application.getState());
+                dto.setImage(candidateService.findById(application.getCandidateId()).get().getAvatar());
+                return dto;
+            });
 
             return ResponseEntity.ok(responseList);
         } catch (Exception e) {
@@ -94,11 +85,9 @@ public class ApplyController {
         try {
             String employerName = jwtService.extractUsername(token.substring(7));
             Employer employer = employerService.findByAccountUsername(employerName);
-            System.out.println(employerName);
             if (employer == null) {
                 return ResponseEntity.badRequest().body("vai");
             }
-            System.out.println(employerName);
             Page<Application> applications = applicationService.findApplicationsByEmployerIdAndContainingTitle(employer.getId(), pageable,title);
             Page<ApplicationResponse> employerApplications = applications.map(application -> {
                 ApplicationResponse dto = new ApplicationResponse();
@@ -172,11 +161,9 @@ public class ApplyController {
                         .contentType(MediaType.APPLICATION_PDF)
                         .body(resource);
             } else {
-                // Return an error response if pdfData is null (e.g., file not found)
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
         } catch (Exception e) {
-            // Handle exceptions and errors here, e.g., log the error and return an error response
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -189,8 +176,8 @@ public class ApplyController {
             @RequestParam String applicationId
     ) {
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
             if (employer != null) {
 
                 Optional<Application> applicationOptional = applicationService.findByIdAndEmployerId(applicationId,employer.getId());
@@ -216,8 +203,8 @@ public class ApplyController {
             @RequestParam String applicationId
     ) {
         try {
-            String candidateName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Candidate candidate = candidateService.findCandidateByAccountUsername(candidateName).get(); // Assuming you have a method to find an employer by username
+            String candidateName = jwtService.extractUsername(token.substring(7));
+            Candidate candidate = candidateService.findCandidateByAccountUsername(candidateName).get();
             if (candidate != null) {
 
                 Optional<Application> applicationOptional = applicationService.findByIdAndCandidateId(applicationId,candidate.getId());
@@ -248,11 +235,9 @@ public class ApplyController {
         try {
             String employerName = jwtService.extractUsername(token.substring(7));
             Employer employer = employerService.findByAccountUsername(employerName);
-            System.out.println(employerName);
             if (employer == null) {
                 return ResponseEntity.badRequest().body("vai");
             }
-            System.out.println(employerName);
             Page<Application> applications = applicationService.findApplicationsByJobId(jobId, pageable);
             Page<ApplicationResponse> employerApplications = applications.map(application -> {
                 ApplicationResponse dto = new ApplicationResponse();
@@ -268,7 +253,6 @@ public class ApplyController {
                 dto.setImage(candidateService.findById(application.getCandidateId()).get().getAvatar());
                 return dto;
             });
-            System.out.println("da zo day");
             return ResponseEntity.ok(employerApplications);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Page.empty());
@@ -316,7 +300,7 @@ public class ApplyController {
             @RequestParam String jobId
     ) {
         try {
-            String email = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
+            String email = jwtService.extractUsername(token.substring(7));
             Candidate candidate = candidateService.findCandidateByAccountUsername(email).get();
             Application isApplied = applicationService.findByJobIdAndCandidateId(jobId, candidate.getId());
             return ResponseEntity.ok(isApplied);

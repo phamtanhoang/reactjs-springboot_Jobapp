@@ -1,9 +1,16 @@
 package com.pth.jobapp.controller;
 
+import com.pth.jobapp.JobAppApplication;
+import com.pth.jobapp.ResponseModels.ApplicationResponse;
+import com.pth.jobapp.ResponseModels.BlogResponse;
+import com.pth.jobapp.ResponseModels.JobDetailsResponse;
+import com.pth.jobapp.ResponseModels.PopularJobResponse;
 import com.pth.jobapp.entity.*;
 import com.pth.jobapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -11,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -25,11 +33,13 @@ public class JobController {
     @Autowired
     CandidateService candidateService;
     @Autowired ApplicationService applicationService;
+
+    @Autowired CategoryService categoryService;
     @PostMapping("/create")
     public ResponseEntity<String> createJob(@RequestBody Job job,@RequestHeader("Authorization") String token) {
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
             UUID uuid = UUID.randomUUID();
             job.setId(uuid.toString());
             job.setFromDate(new Date());
@@ -45,8 +55,8 @@ public class JobController {
     @PutMapping("/update")
     public ResponseEntity<String> updateJob(@RequestHeader("Authorization") String token, @RequestParam String jobId, @RequestBody Job updatedJob) {
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
             if (employer == null)
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Not employer");
 
@@ -64,7 +74,6 @@ public class JobController {
                 if (job.getToDate().before(currentDate)) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The updated toDate must be after the current date.");
                 }
-                System.out.println("da vao day");
                 job.setFromDate(new Date());
                 job.setTitle(updatedJob.getTitle());
                 job.setDescription(updatedJob.getDescription());
@@ -85,7 +94,7 @@ public class JobController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getActiveJob(@PageableDefault(page = 0, size = 10) Pageable pageable){
+    public ResponseEntity<?> getActiveJob(@PageableDefault(page = 0, size = 10) Pageable pageable  ){
         try{
             Page<Job>jobs =jobService.findByTitleContainingAndAddress(pageable);
             return  ResponseEntity.ok(jobs);
@@ -132,13 +141,13 @@ public class JobController {
 
 
     @GetMapping("/jobsEmployer")
-    public ResponseEntity<Page<Job>> jobsEmployer(@RequestHeader("Authorization") String token, Pageable pageable) {
+    public ResponseEntity<Page<Job>> jobsEmployer(@RequestHeader("Authorization") String token,@RequestParam String title, Pageable pageable) {
         try {
-            String employerName = jwtService.extractUsername(token.substring(7)); // Remove "Bearer " prefix from token
-            Employer employer = employerService.findByAccountUsername(employerName); // Assuming you have a method to find an employer by username
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
-                Page<Job> employerJobs = jobService.findByEmployerId(employer.getId(), pageable);
+                Page<Job> employerJobs = jobService.findByEmployerIdAndTitleContaining(employer.getId(),title, pageable);
                 return ResponseEntity.ok(employerJobs);
             } else {
                 return ResponseEntity.notFound().build();
@@ -148,6 +157,61 @@ public class JobController {
         }
     }
 
+    @GetMapping("/pendingJobsEmployer")
+    public ResponseEntity<?> pendingJobsEmployer(@RequestHeader("Authorization") String token, Pageable pageable) {
+        try {
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
+
+            if (employer != null) {
+                Page<Job> employerJobs = jobService.findByEmployerIdAndState(employer.getId(), "pending", pageable);
+
+                Page<PopularJobResponse> jobDetailsResponses = employerJobs.map(job -> {
+                    PopularJobResponse dto = new PopularJobResponse();
+                    dto.setTitle(job.getTitle());
+                    dto.setId(job.getId() );
+                    dto.setCategoryName(categoryService.findById(job.getCategoryId()).get().getName());
+                    return dto;
+                });
+
+
+                return ResponseEntity.ok(jobDetailsResponses);
+            }
+             else {
+                return ResponseEntity.badRequest().body("Can't find employer");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
+        }
+    }
+
+    @GetMapping("/popularJobs")
+    public ResponseEntity<?> popularJob(@RequestHeader("Authorization") String token,Pageable pageable) {
+        try {
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
+
+            if (employer != null) {
+                Page<Job> result = jobService.findTop5JobsByApplyCount(employer.getId());
+                List<Long>applyCounts = jobService.findTop5JobApplyCounts(employer.getId());
+                Page<PopularJobResponse> popularJobResponses = result.map(job -> {
+                    PopularJobResponse dto = new PopularJobResponse();
+                    dto.setTitle(job.getTitle());
+                    dto.setId(job.getId());
+                    dto.setCategoryName(categoryService.findById(job.getCategoryId()).get().getName());
+                    dto.setApplyCount(applyCounts.get(result.getContent().indexOf(job))); // Sử dụng index để lấy số lượt apply
+                    return dto;
+                });
+
+                return ResponseEntity.ok(popularJobResponses);
+            } else {
+                return ResponseEntity.badRequest().body("Can't find employer");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
+        }
+    }
 
 
 }

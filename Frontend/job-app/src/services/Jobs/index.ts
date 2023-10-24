@@ -256,5 +256,44 @@ const jobsAPI = {
       headers,
     });
   },
+
+  async getAllJobByEmployerToken(
+    token?: string,
+    title: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getAllJobByEmployerToken(title, currentPage, itemsPerPage),
+      { headers }
+    );
+  },
+
+  async getPendingJobsByEmployerToken(
+    token?: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getPendingJobsByEmployerToken(currentPage, itemsPerPage),
+      { headers }
+    );
+  },
+
+  async getPopularJobs(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getPopularJobs, { headers });
+  },
 };
 export default jobsAPI;

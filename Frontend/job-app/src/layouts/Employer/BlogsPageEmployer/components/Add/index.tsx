@@ -4,34 +4,16 @@ import { ErrorBox, Spinner } from "../../../../../components";
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
 import { useState } from "react";
+import { blogsAPI } from "../../../../../services";
 
 const AddJob: React.FC<{
   setShowBoxAdd: any;
 }> = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [httpError, setHttpError] = useState(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
-  // const [imageUrl, setImageUrl] = useState("");
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
-  if (isLoading) {
-    return (
-      <div className="flex-grow">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (httpError) {
-    return (
-      <div className="flex-grow w-5/6 sm:w-3/4 mx-auto my-10">
-        <ErrorBox text={httpError} />
-      </div>
-    );
-  }
 
   const handleDescriptionChange = (content: string) => {
     setDescription(content);
@@ -49,27 +31,28 @@ const AddJob: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
-          // jobsAPI
-          //   .addJobByEmployerToken(
-          //     title.trim(),
-          //     description.trim(),
-          //     localStorage.getItem("employerToken") || ""
-          //   )
-          //   .then(() => {
-          //     Swal.fire({
-          //       title: "Add new job success",
-          //       icon: "success",
-          //       confirmButtonColor: "#3085d6",
-          //       confirmButtonText: "Yes",
-          //     }).then((result) => {
-          //       if (result.isConfirmed) {
-          //         window.location.reload();
-          //       }
-          //     });
-          //   })
-          //   .catch(() => {
-          //     Swal.fire("Error!", "Add new job error!", "error");
-          //   });
+          blogsAPI
+            .addBlog(
+              title.trim(),
+              description.trim(),
+              imageFile || undefined,
+              localStorage.getItem("employerToken") || ""
+            )
+            .then(() => {
+              Swal.fire({
+                title: "Add new blog success",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Yes",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              });
+            })
+            .catch(() => {
+              Swal.fire("Error!", "Add new blog error!", "error");
+            });
         }
       });
     } else {
@@ -109,12 +92,8 @@ const AddJob: React.FC<{
 
               <div className="col-span-full">
                 <label className="font-semibold text-sm block text-gray-700">
-                  Image{" "}
-                  <span className="text-blue-500 font-normal">(optional)</span>:
+                  Image:
                 </label>
-                {/* {imageUrl && (
-                  <img src={imageUrl} alt="Selected Image" className="mt-1" />
-                )} */}
                 <input
                   className="border rounded-lg p-2 mt-1 text-sm w-full"
                   type="file"
@@ -123,7 +102,6 @@ const AddJob: React.FC<{
                     const file = event.target.files && event.target.files[0];
                     if (file) {
                       setImageFile(file);
-                      // setImageUrl(URL.createObjectURL(file));
                     }
                   }}
                 ></input>

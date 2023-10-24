@@ -1,5 +1,6 @@
 package com.pth.jobapp.dao;
 
+import com.pth.jobapp.ResponseModels.PopularJobResponse;
 import com.pth.jobapp.entity.Employer;
 import com.pth.jobapp.entity.Job;
 import org.springframework.data.domain.Page;
@@ -25,11 +26,12 @@ public interface JobRepository extends JpaRepository<Job, String> {
             Pageable pageable
     );
 
+    Page<Job>findByState(String state,Pageable pageable);
     @Query("SELECT j FROM Job j WHERE" +
             " (:title IS NULL OR j.title LIKE %:title%)" +
             " AND (:categoryId IS NULL OR :categoryId = '' OR j.categoryId = :categoryId)" +
             " AND j.state = 'active'" +
-            " AND CURDATE() BETWEEN j.fromDate AND j.toDate")  // Check if the current date is within the range
+            " AND CURDATE() BETWEEN j.fromDate AND j.toDate")
     Page<Job> findByTitleContainingAndCategoryId(
             @RequestParam(name = "title", required = false) String title,
             @RequestParam(name = "categoryId", required = false) String categoryId,
@@ -72,8 +74,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
             "WHERE a.id=:applicationId")
     Optional<Job> findJobByApplicationId( @RequestParam(name = "applicationId") String applicationId);
 
-    @Query("SELECT j FROM Job j WHERE (:employerId IS NULL OR j.employerId = :employerId) " +
-            "AND (:title IS NULL OR j.title LIKE %:title%)")
+
     Page<Job> findByEmployerIdAndTitleContaining(
             @Param("employerId") String employerId,
             @Param("title") String title,
@@ -81,4 +82,26 @@ public interface JobRepository extends JpaRepository<Job, String> {
     );
 
     Optional<Job>findJobByEmployerIdAndId(String employerId,String id);
+
+    Page<Job>findByEmployerIdAndState(String employerId,String state, Pageable pageable);
+
+    @Query("SELECT j " +
+            "FROM Job j " +
+            "LEFT JOIN Application a ON j.id = a.jobId " +
+            "WHERE j.employerId = :employerId " +
+            "AND j.state = 'active' " +
+            "GROUP BY j.id, j.title " +
+            "ORDER BY COUNT(a.id) DESC")
+    Page<Job> findTop5JobsByApplyCount(@Param("employerId") String employerId, Pageable pageable);
+
+
+    @Query("SELECT COUNT(a.id) AS applyCount " +
+            "FROM Job j " +
+            "LEFT JOIN Application a ON j.id = a.jobId " +
+            "WHERE j.employerId = :employerId " +
+            "AND j.state = 'active' " +
+            "GROUP BY j.id " +
+            "ORDER BY applyCount DESC")
+    List<Long> findTop5JobApplyCounts(@Param("employerId") String employerId, Pageable pageable);
+
 }

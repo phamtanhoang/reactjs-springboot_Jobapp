@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { JobModel } from "../../../../../models/JobModel";
-import { jobsAPI } from "../../../../../services";
+import { blogsAPI } from "../../../../../services";
 import { ErrorBox, PaginationAdmin, Spinner } from "../../../../../components";
 import {
   AiFillDelete,
@@ -8,41 +7,41 @@ import {
   AiFillEye,
   AiOutlineCheck,
   AiOutlineClose,
-  AiOutlineExclamation,
 } from "react-icons/ai";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { EditPage } from "..";
+import { BlogResponseModel } from "../../../../../models/BlogResponseModel";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const TablePage: React.FC<{ title: any }> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const [jobs, setJobs] = useState<JobModel[]>([]);
+  const [blogs, setBlogs] = useState<BlogResponseModel[]>([]);
 
-  const [editJob, setEditJob] = useState<JobModel>();
+  const [editBlog, setEditBlog] = useState<BlogResponseModel>();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [jobsPerPage] = useState(6);
-  const [totalAmountOfJobs, setTotalAmountOfJobs] = useState(0);
+  const [itemsPerPage] = useState(6);
+  const [totalAmountOfItems, setTotalAmountOfItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
   const [showBoxEdit, setShowBoxEdit] = useState(false);
 
   useEffect(() => {
-    const fetchJobs = () => {
-      jobsAPI
-        .getJobsByTitleContainingAndEmployerToken(
+    const fetchBlogs = () => {
+      blogsAPI
+        .getAllBlogsByEmployerToken(
           props.title,
           currentPage - 1,
-          jobsPerPage,
+          itemsPerPage,
           localStorage.getItem("employerToken") || ""
         )
         .then((res) => {
-          setJobs(res.data._embedded.jobs);
-          setTotalAmountOfJobs(res.data.page.totalElements);
-          setTotalPages(res.data.page.totalPages);
+          setBlogs(res.data.content);
+          setTotalAmountOfItems(res.data.totalElements);
+          setTotalPages(res.data.totalPages);
         })
         .catch((error: any) => {
           setHttpError(error.message);
@@ -51,8 +50,8 @@ const TablePage: React.FC<{ title: any }> = (props) => {
           setIsLoading(false);
         });
     };
-    fetchJobs();
-  }, [currentPage, jobsPerPage, props.title]);
+    fetchBlogs();
+  }, [currentPage, itemsPerPage, props.title]);
 
   if (isLoading) {
     return (
@@ -70,12 +69,12 @@ const TablePage: React.FC<{ title: any }> = (props) => {
     );
   }
 
-  const EditHandle = (job: JobModel) => {
+  const EditHandle = (x: BlogResponseModel) => {
     setShowBoxEdit(true);
-    setEditJob(job);
+    setEditBlog(x);
   };
 
-  const DeleteJob = (job: JobModel) => {
+  const DeleteHandle = (x: BlogResponseModel) => {
     Swal.fire({
       title: "Do you want to delete?",
       icon: "warning",
@@ -85,14 +84,14 @@ const TablePage: React.FC<{ title: any }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
-        jobsAPI
-          .deleteJobByEmployerToken(
-            job.id,
+        blogsAPI
+          .deleteBlogByEmployerToken(
+            x.blogId,
             localStorage.getItem("employerToken") || ""
           )
           .then(() => {
             Swal.fire({
-              title: "Delete job success",
+              title: "Delete success",
               icon: "success",
               confirmButtonColor: "#3085d6",
               confirmButtonText: "Yes",
@@ -103,7 +102,7 @@ const TablePage: React.FC<{ title: any }> = (props) => {
             });
           })
           .catch(() => {
-            Swal.fire("Error!", "Delete job error!", "error");
+            Swal.fire("Error!", "Delete fail!", "error");
           });
       }
     });
@@ -158,9 +157,9 @@ const TablePage: React.FC<{ title: any }> = (props) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 ">
-                    {totalAmountOfJobs > 0 ? (
+                    {totalAmountOfItems > 0 ? (
                       <>
-                        {jobs.map((job, i) => (
+                        {blogs.map((blog, i) => (
                           <tr key={i}>
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 ">
                               <div className="inline-flex items-center gap-x-3">
@@ -168,22 +167,10 @@ const TablePage: React.FC<{ title: any }> = (props) => {
                               </div>
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-600 ">
-                              {job.title}
-                              {new Date(job.toDate) < new Date() && (
-                                <span className="text-red-500 ml-2">
-                                  (Expired)
-                                </span>
-                              )}
+                              {blog.title}
                             </td>
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              {job.state == "pending" ? (
-                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-yellow-500 bg-yellow-100/60 ">
-                                  <AiOutlineExclamation />
-                                  <h2 className="text-sm font-normal">
-                                    Pending
-                                  </h2>
-                                </div>
-                              ) : job.state == "active" ? (
+                              {blog.state == "active" ? (
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 ">
                                   <AiOutlineCheck />
                                   <h2 className="text-sm font-normal">
@@ -194,31 +181,31 @@ const TablePage: React.FC<{ title: any }> = (props) => {
                                 <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60 ">
                                   <AiOutlineClose />
                                   <h2 className="text-sm font-normal">
-                                    Refused
+                                    InActive
                                   </h2>
                                 </div>
                               )}
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-600 ">
-                              {job.fromDate &&
-                                new Date(job.fromDate).toLocaleDateString()}
+                              {blog.createdAt &&
+                                new Date(blog.createdAt).toLocaleDateString()}
                             </td>
                             <td className="px-4 py-4 text-sm whitespace-nowrap">
                               <div className="flex items-center gap-x-6 text-2xl text-gray-600">
-                                <Link to={`/employer/blog/${job.id}`}>
+                                <Link to={`/employer/blog/${blog.blogId}`}>
                                   <AiFillEye className=" cursor-pointer hover:text-yellow-500" />
                                 </Link>
 
                                 <AiFillEdit
                                   className=" cursor-pointer hover:text-blue-500"
                                   onClick={() => {
-                                    EditHandle(job);
+                                    EditHandle(blog);
                                   }}
                                 />
 
                                 <AiFillDelete
                                   className=" cursor-pointer hover:text-red-500"
-                                  onClick={() => DeleteJob(job)}
+                                  onClick={() => DeleteHandle(blog)}
                                 />
                               </div>
                             </td>
@@ -250,7 +237,7 @@ const TablePage: React.FC<{ title: any }> = (props) => {
         )}
       </div>
       {showBoxEdit && localStorage.getItem("employerToken") && (
-        <EditPage setShowBoxEdit={setShowBoxEdit} job={editJob} />
+        <EditPage setShowBoxEdit={setShowBoxEdit} blog={editBlog} />
       )}
     </>
   );

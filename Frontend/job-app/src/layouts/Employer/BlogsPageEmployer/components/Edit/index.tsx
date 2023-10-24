@@ -5,34 +5,17 @@ import { ErrorBox, Spinner } from "../../../../../components";
 import Swal from "sweetalert2";
 import { JobModel } from "../../../../../models/JobModel";
 import { useState } from "react";
+import { BlogResponseModel } from "../../../../../models/BlogResponseModel";
+import { blogsAPI } from "../../../../../services";
 
 const EditPage: React.FC<{
   setShowBoxEdit: any;
-  job?: JobModel;
+  blog?: BlogResponseModel;
 }> = (props) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [httpError, setHttpError] = useState(null);
-
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-
-  if (isLoading) {
-    return (
-      <div className="flex-grow">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (httpError) {
-    return (
-      <div className="flex-grow w-5/6 sm:w-3/4 mx-auto my-10">
-        <ErrorBox text={httpError} />
-      </div>
-    );
-  }
+  const [title, setTitle] = useState(props.blog?.title || "");
+  const [description, setDescription] = useState(props.blog?.content || "");
 
   const handleDescriptionChange = (content: string) => {
     setDescription(content);
@@ -50,32 +33,29 @@ const EditPage: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
-          // jobsAPI
-          //   .updateJobByEmployerToken(
-          //     props.job?.id || "",
-          //     title.trim(),
-          //     toDate.trim(),
-          //     cate.trim(),
-          //     salary.trim(),
-          //     address.trim(),
-          //     description.trim(),
-          //     localStorage.getItem("employerToken") || ""
-          //   )
-          //   .then(() => {
-          //     Swal.fire({
-          //       title: "Update job success",
-          //       icon: "success",
-          //       confirmButtonColor: "#3085d6",
-          //       confirmButtonText: "Yes",
-          //     }).then((result) => {
-          //       if (result.isConfirmed) {
-          //         window.location.reload();
-          //       }
-          //     });
-          //   })
-          //   .catch(() => {
-          //     Swal.fire("Error!", "Update job error!", "error");
-          //   });
+          blogsAPI
+            .updateBlog(
+              props.blog?.blogId || "",
+              title,
+              description,
+              imageFile || undefined,
+              localStorage.getItem("employerToken") || ""
+            )
+            .then(() => {
+              Swal.fire({
+                title: "Update success",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Yes",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              });
+            })
+            .catch(() => {
+              Swal.fire("Error!", "Update Fail!", "error");
+            });
         }
       });
     } else {
@@ -108,6 +88,7 @@ const EditPage: React.FC<{
                   className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
                   type="text"
                   onChange={(e) => setTitle(e.target.value)}
+                  value={title}
                   placeholder="Please fill in Job title..."
                   required
                 />
@@ -141,6 +122,7 @@ const EditPage: React.FC<{
                 <ReactQuill
                   theme="snow"
                   onChange={handleDescriptionChange}
+                  value={description}
                   className="mt-1"
                 />
               </div>

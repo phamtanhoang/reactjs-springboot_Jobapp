@@ -32,6 +32,13 @@ public class Blog {
     private String image;
 
 
+
+    @Getter
+    @Setter
+    @Column(name = "content")
+    private String content;
+
+
     @Getter
     @Setter
     @Column(name = "state")

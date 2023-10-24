@@ -11,7 +11,7 @@ const Header: React.FC<{ isNavBarVisible: any; setIsNavBarVisible: any }> = (
 ) => {
   const [employer, setEmployer] = useState<EmployerModel>();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [httpError, setHttpError] = useState(null);
 
   useEffect(() => {
@@ -71,7 +71,6 @@ const Header: React.FC<{ isNavBarVisible: any; setIsNavBarVisible: any }> = (
         </div>
 
         <div className="flex items-center relative">
-          
           <Link to="/employer/profile">
             <img
               src={

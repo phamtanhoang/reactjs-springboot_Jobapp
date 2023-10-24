@@ -28,5 +28,6 @@ public class EmployerVipService {
     public Page<EmployerVip>findByEmployerId(String employerId,Pageable pageable){return employerVipRepository.findByEmployerId(employerId,pageable);}
     public void delete(String employerVipId){ employerVipRepository.deleteById(employerVipId);}
 
+    public float sumPrice(){return employerVipRepository.sumPrice();}
 
 }
