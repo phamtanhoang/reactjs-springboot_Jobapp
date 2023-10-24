@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { calculateDaysRemaining } from "../../../../../utils";
 
-export const JobItem: React.FC<{
+const JobItem: React.FC<{
   job: JobModel;
 }> = (props) => {
   const [isJobSaved, setIsJobSaved] = useState(false);
@@ -90,3 +90,5 @@ export const JobItem: React.FC<{
     </div>
   );
 };
+
+export default JobItem;

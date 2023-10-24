@@ -33,5 +33,7 @@ public interface EmployerRepository extends JpaRepository<Employer, String> {
     @Query("SELECT e FROM Employer e JOIN Account a on  e.accountId = a.id where a.username = :username")
     Employer findByAccountUsername(@Param("username") String username);
 
+    @Query("SELECT COUNT(e) FROM Employer e")
+    Long countAll();
 
 }

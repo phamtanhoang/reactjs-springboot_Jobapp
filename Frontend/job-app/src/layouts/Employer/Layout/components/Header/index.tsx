@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { AiFillCrown, AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { EmployerModel } from "../../../../../models/EmployerModel";
 import authsAPI from "../../../../../services/Auths";
 import { ErrorBox, Spinner } from "../../../../../components";
+import { employersAPI } from "../../../../../services";
 
 const Header: React.FC<{ isNavBarVisible: any; setIsNavBarVisible: any }> = (
   props
 ) => {
   const [employer, setEmployer] = useState<EmployerModel>();
+  const [isVip, setIsVip] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [httpError, setHttpError] = useState(null);
@@ -29,6 +31,20 @@ const Header: React.FC<{ isNavBarVisible: any; setIsNavBarVisible: any }> = (
         });
     };
     fetchEmployer();
+
+    const checkVip = () => {
+      setIsLoading(true);
+      employersAPI
+        .isEmployerVip(localStorage.getItem("employerToken") || "")
+        .then((res) => setIsVip(res.data))
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
+    checkVip();
   }, []);
 
   if (isLoading) {
@@ -81,6 +97,9 @@ const Header: React.FC<{ isNavBarVisible: any; setIsNavBarVisible: any }> = (
               className="w-10 h-10 rounded-lg ring-2"
             />
           </Link>
+          {isVip && (
+            <AiFillCrown className="absolute -right-3 -top-3 text-xl transform rotate-45 text-yellow-500" />
+          )}
         </div>
       </div>
     </div>

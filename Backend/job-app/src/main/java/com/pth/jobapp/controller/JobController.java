@@ -94,7 +94,7 @@ public class JobController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getActiveJob(@PageableDefault(page = 0, size = 10) Pageable pageable  ){
+    public ResponseEntity<?> getActiveJob(Pageable pageable  ){
         try{
             Page<Job>jobs =jobService.findByTitleContainingAndAddress(pageable);
             return  ResponseEntity.ok(jobs);
@@ -147,7 +147,7 @@ public class JobController {
             Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
-                Page<Job> employerJobs = jobService.findByEmployerIdAndTitleContaining(employer.getId(),title, pageable);
+                Page<Job> employerJobs = jobService.findByEmployerIdAndTitleContaining(employer.getId(),title,"active", pageable);
                 return ResponseEntity.ok(employerJobs);
             } else {
                 return ResponseEntity.notFound().build();

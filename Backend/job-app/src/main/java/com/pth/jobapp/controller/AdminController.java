@@ -138,6 +138,52 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/jobCount")
+    public ResponseEntity<?> getjobCount(@RequestHeader("Authorization") String token  ) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+
+            return ResponseEntity.ok(jobService.countAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
+        }
+    }
+    @GetMapping("/employerCount")
+    public ResponseEntity<?> getEmployerCount(@RequestHeader("Authorization") String token  ) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+
+            return ResponseEntity.ok(employerService.countAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
+        }
+    }
+    @GetMapping("/blogCount")
+    public ResponseEntity<?> getBlogCount(@RequestHeader("Authorization") String token  ) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (account == null || !"admin".equals(account.getRole())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorization required!");
+            }
+
+            return ResponseEntity.ok(blogService.countAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
+        }
+    }
+
     @GetMapping("/newestJobs")
     public ResponseEntity<?> getNewestJobs(@RequestHeader("Authorization") String token, @RequestParam String title, @RequestParam String categoryId, @PageableDefault(page = 0, size = 10) Pageable pageable) {
         try {
@@ -1314,6 +1360,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
+
 
 
 }

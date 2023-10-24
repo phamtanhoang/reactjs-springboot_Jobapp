@@ -195,5 +195,54 @@ const employersAPI = {
       }
     );
   },
+
+  async isEmployerVip(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.iSVipEmployer, {
+      headers,
+    });
+  },
+
+  async getBlogCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getBlogCount(), { headers });
+  },
+
+  async getEmployerCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getEmployerCount(), { headers });
+  },
+
+  async getJobCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getJobCount(), { headers });
+  },
+
+  async getPendingEmployersByAdminToken(
+    token?: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getPendingEmployersByAdminToken(currentPage, itemsPerPage),
+      { headers }
+    );
+  },
 };
 export default employersAPI;

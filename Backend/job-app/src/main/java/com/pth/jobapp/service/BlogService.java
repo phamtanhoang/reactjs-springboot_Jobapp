@@ -3,9 +3,11 @@ package com.pth.jobapp.service;
 import com.pth.jobapp.dao.BlogRepository;
 import com.pth.jobapp.entity.Blog;
 import com.pth.jobapp.entity.Candidate;
+import com.pth.jobapp.entity.Job;
 import com.pth.jobapp.util.FileUploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,4 +68,11 @@ public class BlogService {
     public void deleteById(String id){blogRepository.deleteById(id);}
     public Optional<Blog>findById(String id){return  blogRepository.findById(id);}
     public Optional<Blog>findByIdAndAccountId(String id,String accountId){return blogRepository.findByIdAndAccountId(id,accountId);}
+    public Optional<Blog>findByIdAndState(String id,String state){return  blogRepository.findByIdAndState(id,state);}
+    public Page<Blog> findTop5JobsByApplyCount(){
+        Pageable pageable = PageRequest.of(0, 5);
+        return blogRepository.findTop5BlogsByCommentCount(pageable);
+    }
+
+    public Long countAll(){return blogRepository.countAll();}
 }

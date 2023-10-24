@@ -259,7 +259,7 @@ const jobsAPI = {
 
   async getAllJobByEmployerToken(
     token?: string,
-    title: string,
+    title?: string,
     currentPage?: number,
     itemsPerPage?: number
   ) {
@@ -294,6 +294,45 @@ const jobsAPI = {
       "Content-Type": "application/json",
     };
     return await instance.get(urlAPI.getPopularJobs, { headers });
+  },
+
+  async getBlogCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getBlogCount(), { headers });
+  },
+
+  async getEmployerCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getEmployerCount(), { headers });
+  },
+
+  async getJobCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getJobCount(), { headers });
+  },
+
+  async getPendingJobsByAdminToken(
+    token: string,
+    currentPage?: number,
+    itemsPerPage?: number
+  ) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(
+      urlAPI.getPendingJobsByAdminToken(currentPage, itemsPerPage),
+      { headers }
+    );
   },
 };
 export default jobsAPI;

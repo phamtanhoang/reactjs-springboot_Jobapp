@@ -97,7 +97,7 @@ public class EmployerController {
             Employer employer = employerService.findByAccountUsername(employerName);
 
             if (employer != null) {
-                Optional<Job> job = jobService.findById(jobId);
+                Optional<Job> job = jobService.findJobByEmployerIdAndId(employer.getId(),jobId);
 
                 if (job.isPresent()) {
                     return ResponseEntity.ok(job.get());
@@ -237,6 +237,24 @@ public class EmployerController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
+        }
+    }
+    @GetMapping("/isVip")
+    public ResponseEntity<?>isVip(@RequestHeader("Authorization") String token){
+        try {
+            String employerName = jwtService.extractUsername(token.substring(7));
+            Employer employer = employerService.findByAccountUsername(employerName);
+
+            if (employer != null) {
+                if(employerVipService.findByEmployerIdAndAvailable(employer.getId()).isPresent())
+                    return ResponseEntity.ok(true);
+                return ResponseEntity.ok(false);
+            } else {
+                return ResponseEntity.badRequest().body("Can't find this employer");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR!");
         }
     }
 

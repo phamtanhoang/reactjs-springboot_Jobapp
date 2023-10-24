@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 import { ErrorBox, Pagination } from "../../../../../components";
 import { EmployerModel } from "../../../../../models/EmployerModel";
-
 import { JobModel } from "../../../../../models/JobModel";
-import { JobItem } from "../JobItem";
-import { jobsAPI } from "../../../../../services";
+import { blogsAPI, jobsAPI } from "../../../../../services";
+import { BlogResponseModel } from "../../../../../models/BlogResponseModel";
+import { JobItem } from "..";
+import BlogItem from "../BlogItem";
 
 export const RightPage: React.FC<{
   employer?: EmployerModel;
@@ -18,6 +19,13 @@ export const RightPage: React.FC<{
   const [itemsPerPage] = useState(4);
   const [totalAmountOfItems, setTotalAmountOfItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
+  const [blogs, setBlogs] = useState<BlogResponseModel[]>([]);
+
+  const [currentBlogPage, setCurrentBlogPage] = useState(1);
+  const [blogsPerPage] = useState(5);
+  const [totalAmountOfBlogs, setTotalAmountOfBlogs] = useState(0);
+  const [totalBlogPages, setTotalBlogPages] = useState(0);
 
   useEffect(() => {
     const fetchJobs = () => {
@@ -37,7 +45,28 @@ export const RightPage: React.FC<{
     fetchJobs();
   }, [currentPage, itemsPerPage, props.employer?.id]);
 
+  useEffect(() => {
+    const fetchBlogs = () => {
+      blogsAPI
+        .getBlogsByEmployerId(
+          props.employer?.id || "",
+          currentBlogPage - 1,
+          blogsPerPage
+        )
+        .then((res) => {
+          setBlogs(res.data.content);
+          setTotalAmountOfBlogs(res.data.totalElements);
+          setTotalBlogPages(res.data.totalPages);
+        })
+        .catch((error: any) => console.log(error));
+    };
+    fetchBlogs();
+  }, [blogsPerPage, currentBlogPage, props.employer?.id]);
+
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const paginateEmployers = (pageNumber: number) =>
+    setCurrentBlogPage(pageNumber);
   return (
     <div className="lg:-mx-8 w-full lg:w-[35%]">
       <div className="">
@@ -99,7 +128,32 @@ export const RightPage: React.FC<{
               )}
             </ul>
           ) : (
-            <ErrorBox text="Không có blog nào được đăng" />
+            <ul className="-mx-4 text-[#333333]">
+              {totalAmountOfBlogs > 0 ? (
+                <>
+                  {blogs.map((blog, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center my-2 bg-[#fff4e9] rounded-lg p-3 border-2 border-orangebackground"
+                    >
+                      <BlogItem blog={blog} key={i} />
+                    </li>
+                  ))}
+                  <div className="flex justify-center m-2">
+                    {totalBlogPages > 0 && (
+                      <Pagination
+                        currentPage={currentBlogPage}
+                        totalPages={totalBlogPages}
+                        paginate={paginateEmployers}
+                        type={false}
+                      />
+                    )}
+                  </div>
+                </>
+              ) : (
+                <ErrorBox text="Không có blog nào được đăng" />
+              )}
+            </ul>
           )}
         </div>
       </div>

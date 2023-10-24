@@ -38,19 +38,24 @@ public interface JobRepository extends JpaRepository<Job, String> {
             Pageable pageable
     );
 
+    @Query("SELECT COUNT(e) FROM Job e")
+    Long countAll();
     @Query("SELECT j FROM Job j WHERE j.categoryId = :categoryId")
     List<Job> findByCategoryIdWithList(
             @RequestParam(name = "category", required = false) String categoryId);
 
 
-
+    @Query("SELECT j FROM Job j" +
+            " WHERE" +
+            " j.state = 'active'" +
+            " AND CURDATE() BETWEEN j.fromDate AND j.toDate" +
+            " and j.categoryId=:categoryId")
     Page<Job> findByCategoryId(
             @RequestParam(name = "category", required = false) String categoryId,
             Pageable pageable
     );
-
-    Page<Job> findByEmployerId(
-            @RequestParam(name = "employer", required = false) String employerId,
+    @Query("SELECT j FROM Job j WHERE j.state = 'active' AND CURDATE() BETWEEN j.fromDate AND j.toDate AND j.employerId = :employerId")
+    Page<Job> findByEmployerId(String employerId,
             Pageable pageable
     );
     @Query("SELECT j FROM Job j WHERE j.employerId = :employerId")
@@ -75,15 +80,16 @@ public interface JobRepository extends JpaRepository<Job, String> {
     Optional<Job> findJobByApplicationId( @RequestParam(name = "applicationId") String applicationId);
 
 
-    Page<Job> findByEmployerIdAndTitleContaining(
+    Page<Job> findByEmployerIdAndTitleContainingAndState(
             @Param("employerId") String employerId,
             @Param("title") String title,
+            String state,
             Pageable pageable
     );
 
     Optional<Job>findJobByEmployerIdAndId(String employerId,String id);
 
-    Page<Job>findByEmployerIdAndState(String employerId,String state, Pageable pageable);
+        Page<Job>findByEmployerIdAndState(String employerId,String state, Pageable pageable);
 
     @Query("SELECT j " +
             "FROM Job j " +

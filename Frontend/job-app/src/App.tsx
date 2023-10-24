@@ -209,6 +209,7 @@ const App = () => {
                   path="/admin/candidates"
                   element={<CandidatesPageAdmin />}
                 />
+                <Route path="/admin/vips" element={<VipsPageAdmin />} />
                 <Route path="/admin/blogs" element={<BlogsPageAdmin />} />
                 <Route path="/admin/blog/:id" element={<BlogDetailAdmin />} />
               </Route>

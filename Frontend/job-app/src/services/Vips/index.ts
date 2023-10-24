@@ -73,5 +73,13 @@ const vipsAPI = {
       headers,
     });
   },
+
+  async getVipRevenueByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getVipRevenueByAdminToken(), { headers });
+  },
 };
 export default vipsAPI;

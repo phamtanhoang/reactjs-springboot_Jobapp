@@ -358,4 +358,35 @@ export const urlAPI = {
     `/employers/blogDetails?blogId=${id}`,
 
   getBlogByIdAndAdminToken: (id: string) => `/admin/blog/details?blogId=${id}`,
+
+  iSVipEmployer: `/employers/isVip`,
+
+  getTopBlogs: () => `/blogs/topBlogs`,
+
+  getBlogsByEmployerId: (
+    employerId: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) =>
+    `/blogs/employerBlogsById?employerId=${employerId}&page=${currentPage}&size=${itemsPerPage}`,
+
+  getBlogById: (id: string) => `/blogs/blogDetails?blogId=${id}`,
+
+  checkComment: (id: string) => `/blogs/checkComment?commentId=${id}`,
+
+  getVipRevenueByAdminToken: () => `/admin/employerVip/revenue`,
+
+  getJobCount: () => `/admin/jobCount`,
+
+  getEmployerCount: () => `/admin/employerCount`,
+
+  getBlogCount: () => `/admin/blogCount`,
+
+  getPendingJobsByAdminToken: (currentPage?: number, itemsPerPage?: number) =>
+    `/admin/pendingJobs?page=${currentPage}&size=${itemsPerPage}`,
+
+  getPendingEmployersByAdminToken: (
+    currentPage?: number,
+    itemsPerPage?: number
+  ) => `/admin/pendingEmployers?page=${currentPage}&size=${itemsPerPage}`,
 };

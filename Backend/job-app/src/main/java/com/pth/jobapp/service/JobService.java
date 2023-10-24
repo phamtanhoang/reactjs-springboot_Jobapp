@@ -30,7 +30,7 @@ public class JobService {
     public Optional<Job> findById(String id){return jobRepository.findById(id);}
     public void delete(Job job){ jobRepository.delete(job);}
     public Page<Job> findByEmployerId(String employerId,Pageable pageable){
-        return jobRepository.findByEmployerId(employerId,pageable);
+        return jobRepository.findByEmployerIdAndState(employerId,"active", pageable);
     }
     public List<Job> findByEmployerIdWithList(String employerId){
         return jobRepository.findByEmployerIdWithList(employerId);
@@ -44,8 +44,8 @@ public class JobService {
         return jobRepository.findJobByApplicationId(applicationId);
     };
 
-    public Page<Job>findByEmployerIdAndTitleContaining(String employerId,String title ,Pageable pageable){
-        return jobRepository.findByEmployerIdAndTitleContaining(employerId,title,pageable);
+    public Page<Job>findByEmployerIdAndTitleContaining(String employerId,String title, String state ,Pageable pageable){
+        return jobRepository.findByEmployerIdAndTitleContainingAndState(employerId,title,state,pageable);
     }
 
     public Page<Job> findByTitleContainingAndCategoryId(String title, String categoryId, Pageable pageable){return jobRepository.findByTitleContainingAndCategoryId(title,categoryId,pageable);}
@@ -80,4 +80,7 @@ public class JobService {
     public Page<Job> findByState(String state,Pageable pageable){
         return jobRepository.findByState(state,pageable);
     }
+
+
+    public Long countAll(){return jobRepository.countAll();}
 }

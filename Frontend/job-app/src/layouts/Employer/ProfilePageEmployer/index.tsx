@@ -9,10 +9,12 @@ import {
   EditLogoEmployer,
   EditProfileEmployer,
 } from "./components";
+import { AiFillCrown } from "react-icons/ai";
+import { employersAPI } from "../../../services";
 
 const ProfilePageEmployer = () => {
   const [employer, setEmployer] = useState<EmployerResponseModel>();
-
+  const [isVip, setIsVip] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
@@ -35,6 +37,20 @@ const ProfilePageEmployer = () => {
         });
     };
     fetchEmployer();
+
+    const checkVip = () => {
+      setIsLoading(true);
+      employersAPI
+        .isEmployerVip(localStorage.getItem("employerToken") || "")
+        .then((res) => setIsVip(res.data))
+        .catch((error: any) => {
+          setHttpError(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
+    checkVip();
   }, []);
 
   if (isLoading) {
@@ -102,6 +118,9 @@ const ProfilePageEmployer = () => {
                 >
                   <BsFillCameraFill className="text-lg " />
                 </div>
+                {isVip && (
+                  <AiFillCrown className="absolute -right-6 -top-6 text-5xl transform rotate-45 text-yellow-500" />
+                )}
               </div>
             </div>
           </div>

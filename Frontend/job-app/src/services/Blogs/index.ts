@@ -257,5 +257,57 @@ const blogsAPI = {
       headers: headers,
     });
   },
+
+  async getTopBlogs() {
+    return await instance.get(urlAPI.getTopBlogs());
+  },
+
+  async getBlogsByEmployerId(
+    employerId: string,
+    currentPage: number,
+    itemsPerPage: number
+  ) {
+    return await instance.get(
+      urlAPI.getBlogsByEmployerId(employerId, currentPage, itemsPerPage)
+    );
+  },
+
+  async getBlogById(blogId: string) {
+    return await instance.get(urlAPI.getBlogById(blogId));
+  },
+
+  async checkComment(id: string, token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    return await instance.get(urlAPI.checkComment(id), {
+      headers: headers,
+    });
+  },
+  async getBlogCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getBlogCount(), { headers });
+  },
+
+  async getEmployerCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getEmployerCount(), { headers });
+  },
+
+  async getJobCountByAdminToken(token?: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    return await instance.get(urlAPI.getJobCount(), { headers });
+  },
 };
 export default blogsAPI;

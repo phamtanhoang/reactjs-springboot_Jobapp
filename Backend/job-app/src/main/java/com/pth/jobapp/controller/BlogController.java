@@ -69,6 +69,67 @@ public class BlogController {
 
     }
 
+    @GetMapping("/blogDetails")
+    public ResponseEntity<?>getBlogDetails(@RequestParam String blogId) {
+        try {
+            Optional<Blog> blogOptional = blogService.findByIdAndState(blogId, "active");
+            if (blogOptional.isPresent()) {
+                Blog blog = blogOptional.get();
+
+                BlogResponse dto = new BlogResponse();
+                dto.setBlogId(blog.getId());
+                dto.setAccountId(blog.getAccountId());
+                dto.setTitle(blog.getTitle());
+                dto.setBlogImage(blog.getImage());
+                dto.setContent(blog.getContent());
+                dto.setName("admin");
+                dto.setUserImage("https://res.cloudinary.com/dcpatkvcu/image/upload/v1696784020/DoAnNganh/Host_And_Admin_Marketing_Job_Vacancies_Vector_Recruitment_Open_Job_Office_Girls_PNG_and_Vector_with_Transparent_Background_for_Free_Download_unyj7i.jpg");
+                if(accountService.findById(blog.getAccountId()).get().getRole().equals("employer")) {
+                    dto.setName(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getName());
+                    dto.setUserImage(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getImage());
+                }
+                dto.setCreatedAt(blog.getCreatedAt());
+                dto.setState(blog.getState());
+                dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
+                return ResponseEntity.ok(dto);
+            } else {
+                return ResponseEntity.badRequest().body("Can't find blog.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(("An eror occurred"));
+        }
+    }
+    @GetMapping("/topBlogs")
+    public ResponseEntity<?>getTopBlogs(){
+        try{
+            Page<Blog> blogs= blogService.findTop5JobsByApplyCount();
+            Page<BlogResponse> blogResponses = blogs.map(blog -> {
+                BlogResponse dto = new BlogResponse();
+                dto.setBlogId(blog.getId());
+                dto.setAccountId(blog.getAccountId());
+                dto.setTitle(blog.getTitle());
+                dto.setBlogImage(blog.getImage());
+                dto.setName("admin");
+                dto.setUserImage("https://res.cloudinary.com/dcpatkvcu/image/upload/v1696784020/DoAnNganh/Host_And_Admin_Marketing_Job_Vacancies_Vector_Recruitment_Open_Job_Office_Girls_PNG_and_Vector_with_Transparent_Background_for_Free_Download_unyj7i.jpg");
+                dto.setContent(blog.getContent());
+                if(accountService.findById(blog.getAccountId()).get().getRole().equals("employer")) {
+                    dto.setName(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getName());
+                    dto.setUserImage(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getImage());
+                }
+                dto.setCreatedAt(blog.getCreatedAt());
+                dto.setState(blog.getState());
+                dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
+                return dto;
+            });
+            return ResponseEntity.ok(blogResponses);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(("An eror occurred"));
+        }
+
+    }
+
 
     @GetMapping("/employerBlogs")
     public ResponseEntity<?>getBlogs(@RequestHeader("Authorization")String token, @RequestParam String title,
@@ -102,6 +163,35 @@ public class BlogController {
         }
 
     }
+    @GetMapping("/employerBlogsById")
+    public ResponseEntity<?>getemployerBlogsById( @RequestParam String employerId,
+                                     @PageableDefault(page = 0, size = 10) Pageable pageable){
+        try{
+            Account account = accountService.findById(employerService.findById(employerId).get().getAccountId()).get();
+
+            Page<Blog> blogs= blogService.findAllByTitleContainingAndAccountIdAndStateOrderByCreatedAtDesc("",account.getId(), "active",pageable);
+            Page<BlogResponse> blogResponses = blogs.map(blog -> {
+                BlogResponse dto = new BlogResponse();
+                dto.setBlogId(blog.getId());
+                dto.setAccountId(blog.getAccountId());
+                dto.setTitle(blog.getTitle());
+                dto.setBlogImage(blog.getImage());
+                dto.setContent(blog.getContent());
+                dto.setName(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getName());
+                dto.setUserImage(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getImage());
+                dto.setCreatedAt(blog.getCreatedAt());
+                dto.setState(blog.getState());
+                dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
+                return dto;
+            });
+            return ResponseEntity.ok(blogResponses);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(("An eror occurred"));
+        }
+
+    }
+
 
     @GetMapping("/comments")
     public ResponseEntity<?>getComments(@RequestParam String blogId,Pageable pageable) {
@@ -273,15 +363,29 @@ public class BlogController {
             String email = jwtService.extractUsername(token.substring(7));
             Account account = accountService.findByUsername(email);
 
-
-
-            if (commentService.findById(commentId).get().getAccountId().equals(account.getId())) {
+            if (!commentService.findById(commentId).get().getAccountId().equals(account.getId())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized to delete this comment");
             }
 
             commentService.deleteComment(commentId);
 
             return ResponseEntity.ok("Comment deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+    @GetMapping("/checkComment")
+    public ResponseEntity<?> checkComment(@RequestHeader("Authorization") String token, @RequestParam String commentId) {
+        try {
+            String email = jwtService.extractUsername(token.substring(7));
+            Account account = accountService.findByUsername(email);
+
+            if (commentService.findById(commentId).get().getAccountId().equals(account.getId())) {
+                return ResponseEntity.ok(true);
+            }
+
+            return ResponseEntity.badRequest().body(false);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
@@ -300,23 +404,6 @@ public class BlogController {
             commentService.deleteComment(commentId);
 
             return ResponseEntity.ok("Comment deleted successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
-        }
-    }
-
-    @GetMapping("/checkComment")
-    public ResponseEntity<?> checkComment(@RequestHeader("Authorization") String token, @RequestParam String commentId) {
-        try {
-            String email = jwtService.extractUsername(token.substring(7));
-            Account account = accountService.findByUsername(email);
-
-            if (commentService.findById(commentId).get().getAccountId().equals(account.getId())) {
-                return ResponseEntity.ok(true);
-            }
-
-            return ResponseEntity.badRequest().body(false);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
