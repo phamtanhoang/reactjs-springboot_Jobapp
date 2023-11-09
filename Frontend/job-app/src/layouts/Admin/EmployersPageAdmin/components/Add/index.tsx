@@ -31,6 +31,13 @@ const AddEmployer: React.FC<{ setShowBoxAdd: any }> = (props) => {
       }).then((result) => {
         if (result.isConfirmed) {
           if (password.trim() == confirmpPassword.trim()) {
+            const waitingPopup: any = Swal.fire({
+              title: "Waiting...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
             employersAPI
               .addEmployerByAdminToken(
                 username.trim(),
@@ -54,6 +61,9 @@ const AddEmployer: React.FC<{ setShowBoxAdd: any }> = (props) => {
               })
               .catch((error: any) => {
                 Swal.fire("Error!", error.response.data, "error");
+              })
+              .finally(() => {
+                waitingPopup.close();
               });
           } else {
             Swal.fire("Error!", "Confirm password is incorrect!", "error");

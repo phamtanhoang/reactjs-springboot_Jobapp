@@ -21,6 +21,13 @@ const AddVipAdmin: React.FC<{ setShowBoxAdd: any }> = (props) => {
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           vipsAPI
             .addVipByAdminToken(
               name,
@@ -42,6 +49,9 @@ const AddVipAdmin: React.FC<{ setShowBoxAdd: any }> = (props) => {
             })
             .catch(() => {
               Swal.fire("Error!", "Add new vip fail!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });

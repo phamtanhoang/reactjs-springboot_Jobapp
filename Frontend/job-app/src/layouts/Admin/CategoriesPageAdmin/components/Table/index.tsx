@@ -86,6 +86,13 @@ const TablePage: React.FC<{ title: string }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        const waitingPopup: any = Swal.fire({
+          title: "Waiting...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         categoriesAPI
           .deleteCategoryByAdminToken(
             cate.id,
@@ -105,6 +112,9 @@ const TablePage: React.FC<{ title: string }> = (props) => {
           })
           .catch(() => {
             Swal.fire("Error!", "Delete category error!", "error");
+          })
+          .finally(() => {
+            waitingPopup.close();
           });
       }
     });

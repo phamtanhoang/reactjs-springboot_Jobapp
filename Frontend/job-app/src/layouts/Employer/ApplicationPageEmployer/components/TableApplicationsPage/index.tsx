@@ -88,7 +88,14 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
-          setIsLoading(true);
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
           applicationsAPI
             .updateState(
               state,
@@ -96,6 +103,7 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
               localStorage.getItem("employerToken") || ""
             )
             .then(() => {
+              waitingPopup.close();
               Swal.fire({
                 title: `${state} application success`,
                 icon: "success",
@@ -107,12 +115,9 @@ const TableApplicationsPage: React.FC<{ title: any }> = (props) => {
                     window.location.reload();
                   }
                 })
-                .catch(() => {
-                  Swal.fire("Error!", `${state} application fail`, "error");
-                })
-                .finally(() => {
-                  setIsLoading(false);
-                });
+            }).catch(() => {
+              waitingPopup.close();
+              Swal.fire("Error!", `${state} application fail`, "error");
             });
         }
       });

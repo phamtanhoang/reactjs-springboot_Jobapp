@@ -22,6 +22,13 @@ const UpdateCategoryPage: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           categoriesAPI
             .updateCategoryByAdminToken(
               props.cate?.id || "",
@@ -42,6 +49,8 @@ const UpdateCategoryPage: React.FC<{
             })
             .catch(() => {
               Swal.fire("Error!", "Update category fail!", "error");
+            }).finally(()=>{
+              waitingPopup.close()
             });
         }
       });

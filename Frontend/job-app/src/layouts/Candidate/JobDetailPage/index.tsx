@@ -7,6 +7,7 @@ import { ErrorBox, Spinner } from "../../../components";
 import { EmployerInfo, JobDetail, JobInfo } from "./components";
 import { TopEmployers } from "../HomePage/components";
 import { jobsAPI } from "../../../services";
+import { useParams } from "react-router-dom";
 
 const JobProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,24 +15,26 @@ const JobProfilePage = () => {
 
   const [job, setJob] = useState<JobModel>();
 
-  const jobId = window.location.pathname.split("/")[3];
+  const { id } = useParams();
 
   useEffect(() => {
-    const getJob = () => {
-      jobsAPI
-        .getJobById(jobId)
-        .then((res) => {
-          setJob(res.data);
-        })
-        .catch((error: any) => {
-          setHttpError(error.message);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    };
-    getJob();
-  }, [jobId]);
+    if (id) {
+      const getJob = () => {
+        jobsAPI
+          .getJobById(id)
+          .then((res) => {
+            setJob(res.data);
+          })
+          .catch((error: any) => {
+            setHttpError(error.message);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      };
+      getJob();
+    }
+  }, [id]);
 
   if (isLoading) {
     return (

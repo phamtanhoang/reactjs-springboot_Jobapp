@@ -25,8 +25,8 @@ public class BlogService {
     @Autowired
     FileUploader fileUploader;
 
-    public Optional<Blog> findByAccountId(String accountId){
-        return blogRepository.findByAccountId(accountId);
+    public Page<Blog> findByAccountId(String accountId, Pageable pageable){
+        return blogRepository.findByAccountId(accountId,pageable);
 
     }
     public Page<Blog> findAllByOrderByCreatedAtDesc(Pageable pageable){
@@ -62,6 +62,9 @@ public class BlogService {
 
     public Page<Blog> findAllByTitleContainingAndStateOrderByCreatedAtDesc(String title,String state,Pageable pageable){return  blogRepository.findAllByTitleContainingAndStateContainingOrderByCreatedAtDesc(title,state,pageable);}
 
+    public Page<Blog>findAllByTitleContainingAndActive(String title,String state, Pageable pageable){
+        return  blogRepository.findAllByTitleContainingAndStateOrderByCreatedAtDesc(title, state,pageable);
+    }
     public Page<Blog> findAllByTitleContainingAndAccountIdAndStateOrderByCreatedAtDesc(String title,String accountId,String state,Pageable pageable){return  blogRepository.findAllByTitleContainingAndAccountIdAndStateOrderByCreatedAtDesc(title,accountId,state,pageable);}
 
     public void deleteByIdAndAccountId(String id,String accountId){blogRepository.deleteByIdAndAccountId(id,accountId);}

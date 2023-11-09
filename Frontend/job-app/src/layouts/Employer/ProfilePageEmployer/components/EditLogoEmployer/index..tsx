@@ -71,7 +71,13 @@ const EditLogoEmployer: React.FC<{
           confirmButtonText: "Accept",
         }).then((result) => {
           if (result.isConfirmed) {
-            setIsLoading(true);
+            const waitingPopup: any = Swal.fire({
+              title: "Waiting...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
             employersAPI
               .updateLogo(selectedFile, token)
               .then(() => {
@@ -87,7 +93,7 @@ const EditLogoEmployer: React.FC<{
                 Swal.fire("Fail!", "Change logo fail!", "error");
               })
               .finally(() => {
-                setIsLoading(false);
+                waitingPopup.close();
               });
           }
         });

@@ -6,7 +6,7 @@ const BlogItem: React.FC<{
 }> = (props) => {
   return (
     <div className="mt-6">
-      <div className="max-w-4xl px-10 py-6 bg-white rounded-lg shadow-md">
+      <div className="max-w-4xl py-3 px-5 md:px-10 md:py-6 bg-white rounded-lg shadow-md">
         <div className="flex justify-between items-center">
           <span className="font-light text-gray-600">
             {props.blog?.createdAt &&

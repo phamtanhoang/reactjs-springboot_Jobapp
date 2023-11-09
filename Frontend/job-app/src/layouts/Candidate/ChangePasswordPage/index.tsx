@@ -27,12 +27,17 @@ const ChangePasswordPage: React.FC<{ showBox: any; setShowBox: any }> = (
         .then((res) => {
           props.setShowBox(false);
           localStorage.removeItem("candidateToken");
-          navigate("/home/login");
-          Swal.fire(
-            "Thành công",
-            `${res.data}!!! Vui lòng đăng nhập lại`,
-            "success"
-          );
+          
+          Swal.fire({
+            title: `${res.data}!!! Vui lòng đăng nhập lại`,
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Yes",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
         })
         .catch((error: any) => {
           Swal.fire("Thất bại!", error.response.data, "error");

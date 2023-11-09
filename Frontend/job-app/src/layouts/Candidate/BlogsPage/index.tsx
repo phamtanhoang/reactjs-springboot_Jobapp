@@ -148,8 +148,8 @@ const BlogsPage = () => {
                   {totalAmountOfEmployers > 0 ? (
                     <>
                       <ul className="">
-                        {employers.map((employer) => (
-                          <li className="flex items-center p-4">
+                        {employers.map((employer, i) => (
+                          <li className="flex items-center p-4" key={i}>
                             <div className="w-1/5 items-center mr-2">
                               <img
                                 src={

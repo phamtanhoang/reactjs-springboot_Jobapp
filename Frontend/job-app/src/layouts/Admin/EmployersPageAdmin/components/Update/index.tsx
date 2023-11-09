@@ -31,6 +31,13 @@ const UpdateEmployer: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           employersAPI
             .updateEmployerByAdminToken(
               props.employer?.employerId || "",
@@ -56,6 +63,9 @@ const UpdateEmployer: React.FC<{
             })
             .catch(() => {
               Swal.fire("Error!", "Update eployer fail!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });

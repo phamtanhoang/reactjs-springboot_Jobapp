@@ -1,5 +1,5 @@
-import calculateDaysRemaining from "./FormattedDate";
+import calculateDaysRemaining from "./CalculateDaysRemaining";
 import formattedDate from "./FormattedDate";
 import openCV from "./OpenCV";
 
-export { formattedDate, openCV , calculateDaysRemaining};
+export { formattedDate, openCV, calculateDaysRemaining };

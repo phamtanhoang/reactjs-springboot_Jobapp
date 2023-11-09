@@ -8,6 +8,7 @@ import { categoriesAPI, employersAPI, jobsAPI } from "../../../services";
 import { CategoryItem, EmployerItem, JobItem } from "./components";
 import { EmployerModel } from "../../../models/EmployerModel";
 import { JobModel } from "../../../models/JobModel";
+import { Link } from "react-router-dom";
 
 const JobsPage = () => {
   
@@ -210,16 +211,15 @@ const JobsPage = () => {
                 <div className="flex flex-col bg-white px-6 py-4 mx-auto rounded-lg shadow-lg">
                   <ul>
                     <li className="flex items-center py-2">
-                      <a
-                        href="#"
+                      <Link
+                        to="/home/jobs"
                         className="font-semibold mx-1 hover:text-orangetext text-sm"
-                        onClick={() => categoryField("All")}
                       >
                         - Tất cả
                         <span className="text-gray-700 text-xs font-light inline-block pl-1">
                           ({allJob.length} công việc)
                         </span>
-                      </a>
+                      </Link>
                     </li>
                     {categories.map((category) => (
                       <li key={category.id} className="flex items-center py-2">
@@ -276,7 +276,7 @@ const JobsPage = () => {
                     className="lg:hidden block px-1 rounded-lg w-full py-1 border-2 mb-2"
                     onChange={(e) => categoryField(e.target.value)}
                   >
-                    <option value={"All"}>Tất cả</option>
+                    {/* <option key="all"><Link to="/home/jobs">Tất cả</Link></option> */}
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.name}

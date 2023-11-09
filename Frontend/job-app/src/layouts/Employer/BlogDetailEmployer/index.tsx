@@ -9,44 +9,47 @@ import { ErrorBox, Spinner } from "../../../components";
 import { blogsAPI } from "../../../services";
 import { CommentResponseModel } from "../../../models/CommentResponseModel";
 import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 
 const BlogDetailEmployer = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const blogId = window.location.pathname.split("/")[3];
+  const { id } = useParams();
   const [blog, setBlog] = useState<BlogResponseModel>();
   const [comments, setComments] = useState<CommentResponseModel[]>([]);
 
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    const fetchBlog = () =>
-      blogsAPI
-        .getBlogByIdAndEmployerToken(
-          blogId,
-          localStorage.getItem("employerToken") || ""
-        )
-        .then((res) => setBlog(res.data))
-        .catch((error: any) => {
-          setHttpError(error.message);
-        })
-        .finally(() => setIsLoading(false));
-    fetchBlog();
+    if (id) {
+      const fetchBlog = () =>
+        blogsAPI
+          .getBlogByIdAndEmployerToken(
+            id,
+            localStorage.getItem("employerToken") || ""
+          )
+          .then((res) => setBlog(res.data))
+          .catch((error: any) => {
+            setHttpError(error.message);
+          })
+          .finally(() => setIsLoading(false));
+      fetchBlog();
 
-    const fetchComment = () => {
-      setIsLoading(true);
-      blogsAPI
-        .getAllComments(blogId)
-        .then((res) => {
-          console.log(res.data.content);
-          setComments(res.data.content);
-        })
-        .catch((error: any) => setHttpError(error.message))
-        .finally(() => setIsLoading(false));
-    };
-    fetchComment();
-  }, [blogId]);
+      const fetchComment = () => {
+        setIsLoading(true);
+        blogsAPI
+          .getAllComments(id)
+          .then((res) => {
+            console.log(res.data.content);
+            setComments(res.data.content);
+          })
+          .catch((error: any) => setHttpError(error.message))
+          .finally(() => setIsLoading(false));
+      };
+      fetchComment();
+    }
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -70,7 +73,7 @@ const BlogDetailEmployer = () => {
       blogsAPI
         .addComment(
           comment,
-          blogId,
+          id || "",
           localStorage.getItem("employerToken") || ""
         )
         .then(() => {

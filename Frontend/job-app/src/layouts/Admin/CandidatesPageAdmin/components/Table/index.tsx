@@ -97,6 +97,13 @@ const TableCandidateAdmin: React.FC<{ name: string }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        const waitingPopup: any = Swal.fire({
+          title: "Waiting...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         candidatesAPI
           .deleteCandidateByAdminToken(
             candidate.candidateId,
@@ -108,14 +115,17 @@ const TableCandidateAdmin: React.FC<{ name: string }> = (props) => {
               icon: "success",
               confirmButtonColor: "#3085d6",
               confirmButtonText: "Yes",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
+            })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              })
           })
           .catch(() => {
             Swal.fire("Error!", "Delete candidate fail!", "error");
+          }).finally(() => {
+            waitingPopup.close();
           });
       }
     });

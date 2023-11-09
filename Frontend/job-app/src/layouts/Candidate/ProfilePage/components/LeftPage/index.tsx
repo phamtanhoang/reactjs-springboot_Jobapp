@@ -50,7 +50,13 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
           confirmButtonText: "Đồng ý",
         }).then((result) => {
           if (result.isConfirmed) {
-            setIsLoading(true);
+            const waitingPopup: any = Swal.fire({
+              title: "Vui lòng chờ...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
             candidatesAPI
               .updateAvatar(selectedFile, token)
               .then(() => {
@@ -72,7 +78,7 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
                 );
               })
               .finally(() => {
-                setIsLoading(false);
+                waitingPopup.close();
               });
           }
         });
@@ -95,6 +101,13 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
           confirmButtonText: "Đồng ý",
         }).then((result) => {
           if (result.isConfirmed) {
+            const waitingPopup: any = Swal.fire({
+              title: "Vui lòng chờ...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
             candidatesAPI
               .updateCandidate(firstName, lastName, dateOfBirth, sex, token)
               .then(() => {
@@ -103,6 +116,9 @@ const LeftPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
               })
               .catch(() => {
                 Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
+              })
+              .finally(() => {
+                waitingPopup.close();
               });
           }
         });

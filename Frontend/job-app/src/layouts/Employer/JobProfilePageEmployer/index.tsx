@@ -11,7 +11,7 @@ import { EditJobPage } from "../JobsPageEmployer/components";
 import { JobModel } from "../../../models/JobModel";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { categoriesAPI, jobsAPI } from "../../../services";
 import { ErrorBox, Spinner } from "../../../components";
 import authsAPI from "../../../services/Auths";
@@ -22,7 +22,7 @@ import { TableApplicationsOfJobPage } from "./components";
 const JobDetailPageEmployer = () => {
   const [showBoxEditJob, setShowBoxEditJob] = useState(false);
 
-  const jobId = window.location.pathname.split("/")[3];
+  const { id } = useParams();
 
   const [job, setJob] = useState<JobModel>();
   const [employer, setEmployer] = useState<EmployerModel>();
@@ -34,24 +34,26 @@ const JobDetailPageEmployer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchJob = () => {
-      setIsLoading(true);
-      jobsAPI
-        .getJobByEmployerToken(
-          jobId,
-          localStorage.getItem("employerToken") || ""
-        )
-        .then((res) => {
-          setJob(res.data);
-        })
-        .catch((error: any) => {
-          setHttpError(error.message);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    };
-    fetchJob();
+    if (id) {
+      const fetchJob = () => {
+        setIsLoading(true);
+        jobsAPI
+          .getJobByEmployerToken(
+            id,
+            localStorage.getItem("employerToken") || ""
+          )
+          .then((res) => {
+            setJob(res.data);
+          })
+          .catch((error: any) => {
+            setHttpError(error.message);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      };
+      fetchJob();
+    }
 
     const fetchEmployer = () => {
       setIsLoading(true);
@@ -84,7 +86,7 @@ const JobDetailPageEmployer = () => {
         });
     };
     fetchCategory();
-  }, [job?.categoryId, jobId]);
+  }, [job?.categoryId, id]);
 
   if (isLoading) {
     return (

@@ -72,9 +72,9 @@ public class AdminController {
     @PostMapping("/login")
     public ResponseEntity<String> adminAuthentication(@RequestBody AuthRequest authRequest) {
         try {
+            System.out.println(passwordEncoder.encode(authRequest.getPassword()));
 
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-
             if (authentication.isAuthenticated()) {
                 Account account = accountService.findByUsername(authentication.getName());
 

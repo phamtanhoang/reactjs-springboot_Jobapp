@@ -8,7 +8,6 @@ import { blogsAPI } from "../../../../../services";
 const AddJob: React.FC<{
   setShowBoxAdd: any;
 }> = (props) => {
-  console.log("object");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [title, setTitle] = useState("");
@@ -30,6 +29,13 @@ const AddJob: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           blogsAPI
             .addBlog(
               title.trim(),
@@ -51,6 +57,9 @@ const AddJob: React.FC<{
             })
             .catch(() => {
               Swal.fire("Error!", "Add new blog error!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });

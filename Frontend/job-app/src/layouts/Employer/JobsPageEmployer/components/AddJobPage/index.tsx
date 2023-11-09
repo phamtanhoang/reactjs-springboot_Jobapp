@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AiOutlineClose } from "react-icons/ai";
 import { CategoryModel } from "../../../../../models/CategoryModel";
@@ -93,6 +94,13 @@ const AddJobPage: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           jobsAPI
             .addJobByEmployerToken(
               title.trim(),
@@ -117,6 +125,9 @@ const AddJobPage: React.FC<{
             })
             .catch(() => {
               Swal.fire("Error!", "Add new job error!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });

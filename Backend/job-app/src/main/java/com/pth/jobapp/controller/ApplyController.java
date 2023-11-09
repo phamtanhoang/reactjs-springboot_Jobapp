@@ -1,6 +1,7 @@
 package com.pth.jobapp.controller;
 
 import com.pth.jobapp.ResponseModels.ApplicationResponse;
+import com.pth.jobapp.dao.JobRepository;
 import com.pth.jobapp.entity.*;
 import com.pth.jobapp.requestmodels.*;
 import com.pth.jobapp.service.*;
@@ -36,6 +37,12 @@ public class ApplyController {
     private ApplicationService  applicationService;
     @Autowired
     private JobService jobService;
+
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @Autowired
     FileUploader fileUploader;
@@ -278,6 +285,9 @@ public class ApplyController {
                     if (existingApplication.getState().equals("pending")) {
                         existingApplication.setState(updateRequest.getNewState());
                         applicationService.save(existingApplication);
+                        Job optionalJob = jobRepository.getById(existingApplication.getJobId());
+                        emailSenderService.sendEmail( existingApplication.getEmail(), existingApplication.getName(),
+                                optionalJob.getTitle(), existingApplication.getJobId(), updateRequest.getNewState(), "MailForm");
                         return ResponseEntity.ok("Cập nhật thành công");
                     } else {
                         return ResponseEntity.badRequest().body("Không thể cập nhật với trạng thái 'refused'");
@@ -310,4 +320,31 @@ public class ApplyController {
         }
     }
 
+    @GetMapping("/candidateApplicationDetails")
+    public ResponseEntity<?> getCandidateApplicationDetails(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String applicationId
+    ) {
+        try {
+            String candidateEmail = jwtService.extractUsername(token.substring(7));
+            Candidate candidate = candidateService.findCandidateByAccountUsername(candidateEmail).get();
+            if (candidate != null) {
+
+                Optional<Application> applicationOptional = applicationService.findByIdAndCandidateId(applicationId,candidate.getId());
+
+                if (applicationOptional.isEmpty())
+                    return ResponseEntity.badRequest().body("Không tìm thấy application tương ứng");
+
+                Application application = applicationOptional.get();
+
+                return ResponseEntity.ok(application);
+            }
+
+            else
+                return ResponseEntity.badRequest().body("Không tìm thấy employer");
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

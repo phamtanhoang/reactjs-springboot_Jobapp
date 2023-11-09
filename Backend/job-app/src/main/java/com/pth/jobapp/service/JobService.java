@@ -27,6 +27,11 @@ public class JobService {
     public Job save(Job job) {
         return jobRepository.save(job);
     }
+
+//    public Job getById(String id) {
+//        Optional<Job> optionalJob = jobRepository.findById(id);
+//        return optionalJob.orElse(null);
+//    }
     public Optional<Job> findById(String id){return jobRepository.findById(id);}
     public void delete(Job job){ jobRepository.delete(job);}
     public Page<Job> findByEmployerId(String employerId,Pageable pageable){

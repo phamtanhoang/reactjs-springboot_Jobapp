@@ -44,6 +44,7 @@ const Comment: React.FC<{ comment?: CommentResponseModel }> = (props) => {
               window.location.reload();
             }
           });
+
         })
         .catch(() => {
           Swal.fire("Error!", "Somee thing went wrong!", "error");

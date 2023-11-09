@@ -7,6 +7,7 @@ import { ErrorBox, Spinner } from "../../../components";
 import { employersAPI } from "../../../services";
 import { LeftPage, RightPage } from "./components";
 import { TopEmployers } from "../HomePage/components";
+import { useParams } from "react-router-dom";
 
 const EmployerProfilePage = () => {
   const [employer, setEmPloyer] = useState<EmployerModel>();
@@ -14,25 +15,27 @@ const EmployerProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const employerId = window.location.pathname.split("/")[3];
+  const { id } = useParams();
 
   //get Employer by id
   useEffect(() => {
-    const getEmployerById = () => {
-      employersAPI
-        .getEmployerById(employerId)
-        .then((res) => {
-          setEmPloyer(res.data);
-        })
-        .catch((error: any) => {
-          setHttpError(error.message);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    };
-    getEmployerById();
-  }, [employerId]);
+    if (id) {
+      const getEmployerById = () => {
+        employersAPI
+          .getEmployerById(id)
+          .then((res) => {
+            setEmPloyer(res.data);
+          })
+          .catch((error: any) => {
+            setHttpError(error.message);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      };
+      getEmployerById();
+    }
+  }, [id]);
 
   if (isLoading) {
     return (

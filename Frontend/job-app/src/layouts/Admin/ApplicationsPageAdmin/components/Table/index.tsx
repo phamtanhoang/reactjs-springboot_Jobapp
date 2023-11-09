@@ -94,6 +94,13 @@ const TableApplicationAdmin: React.FC<{ name: string }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        const waitingPopup: any = Swal.fire({
+          title: "Waiting...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         applicationsAPI
           .deleteApplicationByAdminToken(
             application.id,
@@ -113,6 +120,8 @@ const TableApplicationAdmin: React.FC<{ name: string }> = (props) => {
           })
           .catch(() => {
             Swal.fire("Error!", "Delete application fail!", "error");
+          }).finally(()=>{
+            waitingPopup.close()
           });
       }
     });

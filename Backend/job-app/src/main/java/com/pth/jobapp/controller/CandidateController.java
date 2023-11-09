@@ -1,10 +1,9 @@
 package com.pth.jobapp.controller;
-import com.pth.jobapp.entity.Account;
-import com.pth.jobapp.entity.Employer;
+import com.pth.jobapp.ResponseModels.EmailMessageResponse;
+import com.pth.jobapp.dao.JobRepository;
+import com.pth.jobapp.entity.*;
 import com.pth.jobapp.service.*;
 import com.pth.jobapp.ResponseModels.CandidateProfileResponse;
-import com.pth.jobapp.entity.Application;
-import com.pth.jobapp.entity.Candidate;
 import com.pth.jobapp.requestmodels.ExperienceUpdateRequest;
 import com.pth.jobapp.requestmodels.SkillUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,29 +12,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
+import javax.mail.MessagingException;
 import java.util.Optional;
 import java.util.UUID;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/candidates")
-    public class CandidateController {
-        @Autowired
-        private CandidateService candidateService;
-        @Autowired
-        private ApplicationService applicationService;
-        @Autowired
-        private  JwtService jwtService;
+public class CandidateController {
+    @Autowired
+    private CandidateService candidateService;
+    @Autowired
+    private ApplicationService applicationService;
+    @Autowired
+    private  JwtService jwtService;
     @Autowired
     private EmployerService employerService;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @Autowired
+    private JobRepository jobRepository;
+
     @PostMapping("/apply")
     public ResponseEntity<String> applyJob(
             @RequestHeader("Authorization") String tokenHeader,
@@ -56,6 +57,10 @@ import java.util.UUID;
                     Application savedApplication = applicationService.saveWithCV(application, cVFile);
 
                     if (savedApplication != null) {
+
+                        Job optionalJob = jobRepository.getById(application.getJobId());
+                        emailSenderService.sendEmail(application.getEmail(), application.getName(),
+                                optionalJob.getTitle(), application.getJobId(),"pending", "MailForm");
                         return ResponseEntity.status(HttpStatus.OK).body("Applied for the job successfully");
                     } else {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to apply for the job");

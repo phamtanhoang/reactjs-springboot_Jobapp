@@ -42,7 +42,7 @@ public class BlogController {
     public ResponseEntity<?>getBlogs(@RequestParam String title,
                                      @PageableDefault(page = 0, size = 10) Pageable pageable){
         try{
-            Page<Blog> blogs= blogService.findAllByTitleContainingAndStateOrderByCreatedAtDesc(title,"active",pageable);
+            Page<Blog> blogs= blogService.findAllByTitleContainingAndActive(title,"active",pageable);
             Page<BlogResponse> blogResponses = blogs.map(blog -> {
                 BlogResponse dto = new BlogResponse();
                 dto.setBlogId(blog.getId());
@@ -56,7 +56,7 @@ public class BlogController {
                     dto.setName(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getName());
                     dto.setUserImage(employerService.findByAccountUsername(accountService.findById(blog.getAccountId()).get().getUsername()).getImage());
                 }
-               dto.setCreatedAt(blog.getCreatedAt());
+                dto.setCreatedAt(blog.getCreatedAt());
                 dto.setState(blog.getState());
                 dto.setAccountUserName(accountService.findById(blog.getAccountId()).get().getUsername());
                 return dto;
@@ -165,7 +165,7 @@ public class BlogController {
     }
     @GetMapping("/employerBlogsById")
     public ResponseEntity<?>getemployerBlogsById( @RequestParam String employerId,
-                                     @PageableDefault(page = 0, size = 10) Pageable pageable){
+                                                  @PageableDefault(page = 0, size = 10) Pageable pageable){
         try{
             Account account = accountService.findById(employerService.findById(employerId).get().getAccountId()).get();
 

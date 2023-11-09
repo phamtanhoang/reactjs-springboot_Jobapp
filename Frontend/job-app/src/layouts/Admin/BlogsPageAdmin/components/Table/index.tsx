@@ -84,6 +84,13 @@ const TablePage: React.FC<{ title: any }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        const waitingPopup: any = Swal.fire({
+          title: "Waiting...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         blogsAPI
           .deleteBlogByAdminToken(
             x.blogId,
@@ -103,6 +110,9 @@ const TablePage: React.FC<{ title: any }> = (props) => {
           })
           .catch(() => {
             Swal.fire("Error!", "Delete fail!", "error");
+          })
+          .finally(() => {
+            waitingPopup.close();
           });
       }
     });
@@ -216,7 +226,7 @@ const TablePage: React.FC<{ title: any }> = (props) => {
                       <tr>
                         <td colSpan={6}>
                           <div className="w-full p-5">
-                            <ErrorBox text="There are no jobs!!!" />
+                            <ErrorBox text="There are no blog!!!" />
                           </div>
                         </td>
                       </tr>

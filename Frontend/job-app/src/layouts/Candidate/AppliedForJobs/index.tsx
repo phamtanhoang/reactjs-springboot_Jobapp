@@ -48,7 +48,6 @@ const AppliedForJob = () => {
     };
     getEmployers();
   }, [currentEmployerPage, employersPerPage]);
-  console.log(applications);
   // Get Job in local
   useEffect(() => {
     const getApplications = () => {

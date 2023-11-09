@@ -108,6 +108,8 @@ export const urlAPI = {
 
   candidateApply: "/candidates/apply",
 
+  getApplicationByApplicatonIDAndCandidateToken: (id: string) => `/applies/candidateApplicationDetails?applicationId=${id}`,
+
   getCV: (fileName: string) => `/applies/download?fileName=${fileName}`,
 
   loginEmployer: "/auth/employer/login",

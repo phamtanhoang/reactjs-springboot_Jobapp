@@ -84,6 +84,13 @@ const TablePage: React.FC<{ title: any }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        const waitingPopup: any = Swal.fire({
+          title: "Waiting...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         blogsAPI
           .deleteBlogByEmployerToken(
             x.blogId,
@@ -103,6 +110,9 @@ const TablePage: React.FC<{ title: any }> = (props) => {
           })
           .catch(() => {
             Swal.fire("Error!", "Delete fail!", "error");
+          })
+          .finally(() => {
+            waitingPopup.close();
           });
       }
     });

@@ -91,7 +91,13 @@ const TableApplicationsOfJobPage: React.FC<{ job?: JobModel }> = (props) => {
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
-          setIsLoading(true);
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           applicationsAPI
             .updateState(
               state,
@@ -114,7 +120,7 @@ const TableApplicationsOfJobPage: React.FC<{ job?: JobModel }> = (props) => {
                   Swal.fire("Error!", `${state} application fail`, "error");
                 })
                 .finally(() => {
-                  setIsLoading(false);
+                  waitingPopup.close();
                 });
             });
         }

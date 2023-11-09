@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        a {
+            font-weight: bold;
+        }
+</style>
+    </style>
+</head>
+<body>
+    <h2 th:text="${'Xin chào, ' + name}"></h2>
+    <h4>
+        <span th:text="${'Đơn ứng tuyển của bạn cho vị trí '}"></span>
+        <a th:href="'http://127.0.0.1:5173/home/job/' + ${jobId}"><span th:text="${jobName}"></span></a>
+        <span th:if="${state == 'pending'}" th:text="${'đã được gửi tới nhà tuyển dụng.'}"></span>
+        <span th:if="${state == 'approved'}" th:text="${'phù hợp.'}"></span>
+        <span th:if="${state != 'pending' && state != 'approved'}" th:text="${'không phù hợp.'}"></span>
+<!--        <a th:href="${state}"><span th:text="${jobName}"></span></a>-->
+    </h4>
+    <br/>
+    <div>
+        <span th:text="${'Ứng tuyển thêm 1 số công việc khác '}"></span>
+        <a th:href="'http://127.0.0.1:5173/home/jobs'">tại đây</a>
+    </div>
+    <hr/>
+    <p th:text="${'Chúc bạn ngày tốt lành!!!'}"></p>
+</body>
+</html>

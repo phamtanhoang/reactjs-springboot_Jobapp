@@ -5,6 +5,7 @@ import { applicationsAPI } from "../../../../../services";
 import { ErrorBox, Spinner } from "../../../../../components";
 import { AiOutlineClose } from "react-icons/ai";
 import { openCV } from "../../../../../utils";
+import { Link } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const DetailApplication: React.FC<{
@@ -19,9 +20,9 @@ const DetailApplication: React.FC<{
   useEffect(() => {
     const fetchApplication = () => {
       applicationsAPI
-        .getApplicationByIDAndAdminToken(
+        .getApplicationByApplicatonIDAndCandidateToken(
           props.application?.id || "",
-          localStorage.getItem("adminToken") || ""
+          localStorage.getItem("candidateToken") || ""
         )
         .then((res) => {
           setApplication(res.data);
@@ -56,8 +57,8 @@ const DetailApplication: React.FC<{
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow relative w-[90%] sm:w-[70%] md:w-[60%] lg:w-[53%] xl:w-[45%]">
         <div className="flex items-start justify-between p-2 sm:p-5 pl-5 border-b rounded-t">
-          <h3 className="text-lg sm:text-xl font-semibold">
-            Application details
+          <h3 className="text-lg sm:text-xl font-semibold text-center">
+            Ứng tuyển vị trí  <Link to={`/home/job/${props.application?.jobId}`} className="hover:text-orangetext">{props.application?.title}</Link>
           </h3>
           <button
             type="button"
@@ -72,12 +73,12 @@ const DetailApplication: React.FC<{
           <div className="pb-2 px-5 text-xs sm:text-sm">
             <div className="min-[450px]:flex gap-5 mt-2">
               <label className="block min-[450px]:w-[60%] mb-5">
-                <span className="font-semibold">Candidate Name: </span>
+                <span className="font-semibold">Họ và tên: </span>
                 <p className="mt-2">{application?.name}</p>
               </label>
 
               <label className="block min-[450px]:w-[40%] mb-5">
-                <span className="font-semibold">Apply Date: </span>
+                <span className="font-semibold">Ngày ứng tuyển: </span>
                 <p className="mt-2">
                   {application?.applyDate &&
                     new Date(application?.applyDate).toLocaleDateString()}
@@ -92,20 +93,10 @@ const DetailApplication: React.FC<{
               </label>
 
               <label className="block min-[450px]:w-[40%] mb-5">
-                <span className="font-semibold">Phone Number: </span>
+                <span className="font-semibold">Số điện thoại: </span>
                 <p className="mt-2">{application?.phoneNumber}</p>
               </label>
             </div>
-
-            <label className="block w-full mb-5">
-              <span className="font-semibold">Job: </span>
-              <p className="mt-2">{props.application?.title}</p>
-            </label>
-
-            <label className="block w-full mb-5">
-              <span className="font-semibold">Employer:</span>
-              <p className="mt-2">{props.application?.employerName}</p>
-            </label>
 
             <label className="block mb-5">
               <span className="font-semibold">Thư giới thiệu:</span>

@@ -110,6 +110,13 @@ const UpdateJob: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           jobsAPI
             .updateJobByAdminToken(
               props.job?.id || "",
@@ -138,6 +145,9 @@ const UpdateJob: React.FC<{
             })
             .catch(() => {
               Swal.fire("Error!", "Update job fail!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });
@@ -154,9 +164,6 @@ const UpdateJob: React.FC<{
   const selectedEmployer = employers.find(
     (emp) => emp.id == props.job?.employerId
   );
-
-  console.log(fromDate, toDate);
-  console.log(formattedDate(fromDate), formattedDate(toDate));
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50 text-black">

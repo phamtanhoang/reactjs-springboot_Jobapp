@@ -18,6 +18,13 @@ const AddCategory: React.FC<{ setShowBoxAddCategory: any }> = (props) => {
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           categoriesAPI
             .addCategoryByAdminToken(
               name,
@@ -37,6 +44,8 @@ const AddCategory: React.FC<{ setShowBoxAddCategory: any }> = (props) => {
             })
             .catch(() => {
               Swal.fire("Error!", "Add new category fail!", "error");
+            }).finally(()=>{
+              waitingPopup.close()
             });
         }
       });

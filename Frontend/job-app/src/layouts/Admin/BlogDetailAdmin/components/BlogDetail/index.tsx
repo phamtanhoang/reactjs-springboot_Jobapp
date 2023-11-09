@@ -51,7 +51,7 @@ const BlogDetail: React.FC<{ blog?: BlogResponseModel }> = (props) => {
   return (
     <>
       <header className="mb-4 lg:mb-6 flex justify-between">
-        <h1 className="text-3xl font-extrabold leading-tight text-gray-800 lg:text-4xl ">
+        <h1 className="text-3xl font-bold leading-tight text-gray-800 lg:text-4xl ">
           {props.blog?.title}{" "}
           {props.blog?.state == "active" ? (
             <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 text-xl">

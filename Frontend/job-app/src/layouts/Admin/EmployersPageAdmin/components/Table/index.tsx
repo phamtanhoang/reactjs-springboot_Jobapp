@@ -99,6 +99,13 @@ const TablePage: React.FC<{ name: string }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        const waitingPopup: any = Swal.fire({
+          title: "Waiting...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         employersAPI
           .deleteEmployerByAdminToken(
             employer.employerId,
@@ -118,6 +125,9 @@ const TablePage: React.FC<{ name: string }> = (props) => {
           })
           .catch(() => {
             Swal.fire("Error!", "Delete employer error!", "error");
+          })
+          .finally(() => {
+            waitingPopup.close();
           });
       }
     });

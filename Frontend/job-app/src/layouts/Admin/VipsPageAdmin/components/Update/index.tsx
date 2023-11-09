@@ -39,6 +39,13 @@ const UpdateVipAdmin: React.FC<{ setShowBoxUpdate: any; vip?: VipModel }> = (
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           vipsAPI
             .updateVipByAdminToken(
               props.vip?.id || "",
@@ -62,6 +69,9 @@ const UpdateVipAdmin: React.FC<{ setShowBoxUpdate: any; vip?: VipModel }> = (
             })
             .catch(() => {
               Swal.fire("Error!", "Update vip fail!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });

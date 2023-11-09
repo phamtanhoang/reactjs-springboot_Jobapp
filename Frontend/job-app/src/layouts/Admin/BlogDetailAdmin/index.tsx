@@ -9,45 +9,48 @@ import { ErrorBox, Spinner } from "../../../components";
 import { blogsAPI } from "../../../services";
 import { CommentResponseModel } from "../../../models/CommentResponseModel";
 import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 
 const BlogDetailAdmin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const blogId = window.location.pathname.split("/")[3];
+  const { id } = useParams();
   const [blog, setBlog] = useState<BlogResponseModel>();
   const [comments, setComments] = useState<CommentResponseModel[]>([]);
 
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    const fetchBlog = () =>
-      blogsAPI
-        .getBlogByIdAndAdminToken(
-          blogId,
-          localStorage.getItem("adminToken") || ""
-        )
-        .then((res) =>{
-          setBlog(res.data)
-        })
-        .catch((error: any) => {
-          setHttpError(error.message);
-        })
-        .finally(() => setIsLoading(false));
-    fetchBlog();
+    if (id) {
+      const fetchBlog = () =>
+        blogsAPI
+          .getBlogByIdAndAdminToken(
+            id,
+            localStorage.getItem("adminToken") || ""
+          )
+          .then((res) => {
+            setBlog(res.data);
+          })
+          .catch((error: any) => {
+            setHttpError(error.message);
+          })
+          .finally(() => setIsLoading(false));
+      fetchBlog();
 
-    const fetchComment = () => {
-      setIsLoading(true);
-      blogsAPI
-        .getAllComments(blogId)
-        .then((res) => {
-          setComments(res.data.content);
-        })
-        .catch((error: any) => setHttpError(error.message))
-        .finally(() => setIsLoading(false));
-    };
-    fetchComment();
-  }, [blogId]);
+      const fetchComment = () => {
+        setIsLoading(true);
+        blogsAPI
+          .getAllComments(id)
+          .then((res) => {
+            setComments(res.data.content);
+          })
+          .catch((error: any) => setHttpError(error.message))
+          .finally(() => setIsLoading(false));
+      };
+      fetchComment();
+    }
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -69,7 +72,7 @@ const BlogDetailAdmin = () => {
     e.preventDefault();
     if (comment.trim()) {
       blogsAPI
-        .addComment(comment, blogId, localStorage.getItem("adminToken") || "")
+        .addComment(comment, id || "", localStorage.getItem("adminToken") || "")
         .then(() => {
           Swal.fire({
             title: "Add comment success",

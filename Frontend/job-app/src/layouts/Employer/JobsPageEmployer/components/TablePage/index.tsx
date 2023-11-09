@@ -85,6 +85,13 @@ const TablePage: React.FC<{ title: any }> = (props) => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        const waitingPopup: any = Swal.fire({
+          title: "Waiting...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         jobsAPI
           .deleteJobByEmployerToken(
             job.id,
@@ -104,6 +111,9 @@ const TablePage: React.FC<{ title: any }> = (props) => {
           })
           .catch(() => {
             Swal.fire("Error!", "Delete job error!", "error");
+          })
+          .finally(() => {
+            waitingPopup.close();
           });
       }
     });

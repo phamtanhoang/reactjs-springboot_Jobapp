@@ -12,13 +12,14 @@ import java.util.Optional;
 
 @Repository
 public interface BlogRepository extends JpaRepository<Blog,String> {
-    Optional<Blog> findByAccountId(String accountId);
+    Page<Blog> findByAccountId(String accountId,Pageable pageable);
 
     Page<Blog> findAllByOrderByCreatedAtDesc(Pageable pageable);
     Page<Blog> findAllByTitleContainingOrderByCreatedAtDesc(String title, Pageable pageable);
 
     Page<Blog> findAllByTitleContainingAndStateContainingOrderByCreatedAtDesc(String title,String state, Pageable pageable);
 
+    Page<Blog>findAllByTitleContainingAndStateOrderByCreatedAtDesc(String title,String state, Pageable pageable);
     Page<Blog>findAllByTitleContainingAndAccountIdAndStateOrderByCreatedAtDesc(String title,String accountId,String state,Pageable pageable);
     void deleteByIdAndAccountId(String id, String accountId);
 

@@ -45,11 +45,7 @@ public class AccountController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
+    
 
     @PostMapping("/employer/register")
     public String addNewEmployer(@RequestBody EmployerRegistrationRequest employerRegistrationRequest) {

@@ -7,43 +7,45 @@ import { blogsAPI } from "../../../services";
 import { ErrorBox, Spinner } from "../../../components";
 import Swal from "sweetalert2";
 import { Author, BlogDetail, ReplyComment, Comment } from "./components";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const BlogDetailPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
-  const blogId = window.location.pathname.split("/")[3];
+  const { id } = useParams();
   const [blog, setBlog] = useState<BlogResponseModel>();
   const [comments, setComments] = useState<CommentResponseModel[]>([]);
 
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    const fetchBlog = () =>
-      blogsAPI
-        .getBlogById(blogId)
-        .then((res) => {
-          setBlog(res.data);
-        })
-        .catch((error: any) => {
-          setHttpError(error.message);
-        })
-        .finally(() => setIsLoading(false));
-    fetchBlog();
+    if (id) {
+      const fetchBlog = () =>
+        blogsAPI
+          .getBlogById(id)
+          .then((res) => {
+            setBlog(res.data);
+          })
+          .catch((error: any) => {
+            setHttpError(error.message);
+          })
+          .finally(() => setIsLoading(false));
+      fetchBlog();
 
-    const fetchComment = () => {
-      setIsLoading(true);
-      blogsAPI
-        .getAllComments(blogId)
-        .then((res) => {
-          setComments(res.data.content);
-        })
-        .catch((error: any) => setHttpError(error.message))
-        .finally(() => setIsLoading(false));
-    };
-    fetchComment();
-  }, [blogId]);
+      const fetchComment = () => {
+        setIsLoading(true);
+        blogsAPI
+          .getAllComments(id)
+          .then((res) => {
+            setComments(res.data.content);
+          })
+          .catch((error: any) => setHttpError(error.message))
+          .finally(() => setIsLoading(false));
+      };
+      fetchComment();
+    }
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -67,7 +69,7 @@ const BlogDetailPage = () => {
       blogsAPI
         .addComment(
           comment,
-          blogId,
+          id || "",
           localStorage.getItem("candidateToken") || ""
         )
         .then(() => {

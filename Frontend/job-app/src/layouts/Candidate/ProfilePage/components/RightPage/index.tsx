@@ -59,6 +59,13 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
         confirmButtonText: "Đồng ý",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Vui lòng chờ...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           candidatesAPI
             .updateCandidateSkill(skill, token)
             .then(() => {
@@ -67,6 +74,9 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             })
             .catch(() => {
               Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });
@@ -85,6 +95,13 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
         confirmButtonText: "Đồng ý",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Vui lòng chờ...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           candidatesAPI
             .updateCandidateExp(exp, token)
             .then(() => {
@@ -93,6 +110,9 @@ const RightPage: React.FC<{ candidateRes?: CandidateResponseModel }> = (
             })
             .catch(() => {
               Swal.fire("Thất bại!", "Chỉnh sửa thất bại!", "error");
+            })
+            .finally(() => {
+              waitingPopup.close();
             });
         }
       });

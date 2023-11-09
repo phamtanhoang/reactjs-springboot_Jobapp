@@ -127,6 +127,15 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
           confirmButtonText: "Đồng ý",
         }).then((result) => {
           if (result.isConfirmed) {
+            const waitingPopup: any = Swal.fire({
+              title: "Đang gửi...",
+              html: "Đơn ứng tuyển đang được gửi tới nhà tuyển dụng!<br>",
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
+
             candidatesAPI
               .candidateApply(
                 props.job?.id,
@@ -138,14 +147,21 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
                 token
               )
               .then(() => {
-                Swal.fire(
-                  "Thành công!",
-                  "Gửi đơn ứng tuyển thành công",
-                  "success"
-                );
-                window.location.reload();
+                waitingPopup.close();
+                Swal.fire({
+                  title: "Thành công!",
+                  text: "Gửi đơn ứng tuyển thành công",
+                  icon: "success",
+                  showCancelButton: false,
+                  showConfirmButton: true,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.reload();
+                  }
+                });
               })
               .catch(() => {
+                waitingPopup.close();
                 Swal.fire("Thất bại!", "Gửi đơn ứng tuyển thất bại", "error");
               });
           }
@@ -224,7 +240,7 @@ export const JobInfo: React.FC<{ job?: JobModel }> = (props) => {
               className="flex bg-red-100 rounded-lg p-3 md:p-4 mt-2 lg:mt-5 text-sm lg:text-base text-red-700"
               role="alert"
             >
-              <AiFillWarning className="text-lg lg:text-xl md:mr-3 mr-2"/>
+              <AiFillWarning className="text-lg lg:text-xl md:mr-3 mr-2" />
               <p>
                 Đã <span className="font-medium">hết hạn</span> ứng tuyển!!!
               </p>

@@ -41,6 +41,13 @@ const UpdateCandidateAdmin: React.FC<{
         confirmButtonText: "Yes",
       }).then((result) => {
         if (result.isConfirmed) {
+          const waitingPopup: any = Swal.fire({
+            title: "Waiting...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           candidatesAPI
             .updateCandidateByAdminToken(
               props.candidate?.candidateId || "",
@@ -68,6 +75,8 @@ const UpdateCandidateAdmin: React.FC<{
             })
             .catch((error: any) => {
               Swal.fire("Error!", error.response.data, "error");
+            }).finally(() => {
+              waitingPopup.close();
             });
         }
       });

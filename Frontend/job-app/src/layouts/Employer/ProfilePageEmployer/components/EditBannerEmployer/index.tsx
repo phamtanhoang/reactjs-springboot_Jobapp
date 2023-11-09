@@ -71,7 +71,13 @@ const EditBannerEmployer: React.FC<{
           confirmButtonText: "Accept",
         }).then((result) => {
           if (result.isConfirmed) {
-            setIsLoading(true);
+            const waitingPopup: any = Swal.fire({
+              title: "Waiting...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
             employersAPI
               .updateBanner(selectedFile, token)
               .then(() => {
@@ -89,7 +95,7 @@ const EditBannerEmployer: React.FC<{
                 Swal.fire("Fail!", "Change banner fail!", "error");
               })
               .finally(() => {
-                setIsLoading(false);
+                waitingPopup.close();
               });
           }
         });
@@ -150,7 +156,6 @@ const EditBannerEmployer: React.FC<{
                       />
                     </label>
                   </div>
-                  
                 </>
               ) : (
                 <>
