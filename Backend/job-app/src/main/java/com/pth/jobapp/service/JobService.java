@@ -86,6 +86,6 @@ public class JobService {
         return jobRepository.findByState(state,pageable);
     }
 
-
     public Long countAll(){return jobRepository.countAll();}
+
 }

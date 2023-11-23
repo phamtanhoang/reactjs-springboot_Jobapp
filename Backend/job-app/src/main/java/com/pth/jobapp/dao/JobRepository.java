@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface JobRepository extends JpaRepository<Job, String> {
+
     @Query("SELECT j FROM Job j WHERE" +
             " (:title IS NULL OR j.title LIKE %:title%)" +
             " AND (:address IS NULL OR :address = '' OR j.address = :address)"+

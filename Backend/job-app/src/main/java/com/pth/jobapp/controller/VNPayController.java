@@ -24,6 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.pth.jobapp.config.Config;
+import org.springframework.web.servlet.view.RedirectView;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/VNPay")
@@ -121,9 +123,9 @@ public class VNPayController {
     }
 
     @GetMapping("/paymentResult")
-    public ResponseEntity<String> paymentResult(@RequestParam("vnp_TransactionNo") String vnpTransactionNo,
-                                                @RequestParam("vnp_ResponseCode") String vnpResponseCode,
-                                                @RequestParam("vnp_OrderInfo") String vnpOrderInfo) {
+    public RedirectView paymentResult(@RequestParam("vnp_TransactionNo") String vnpTransactionNo,
+                                      @RequestParam("vnp_ResponseCode") String vnpResponseCode,
+                                      @RequestParam("vnp_OrderInfo") String vnpOrderInfo) {
         try {
             if (vnpResponseCode.equals("00")) {
                 String[] parts = vnpOrderInfo.split("EMPLOYER");
@@ -151,7 +153,7 @@ public class VNPayController {
                         Date toDate = calendar.getTime();
                         employerVip.setToDate(toDate);
                         employerVipService.save(employerVip);
-                        return ResponseEntity.ok("Thanh toán thành công");
+                        return new RedirectView("http://localhost:5173/employer/vipHistories", true);
                     } else {
 
                         EmployerVip employerVip = new EmployerVip();
@@ -166,19 +168,18 @@ public class VNPayController {
                         employerVip.setToDate(toDate);
                         employerVip.setPrice(vip.getPrice());
                         employerVipService.save(employerVip);
-                        return ResponseEntity.ok("Thanh toán thành công");
+                        return new RedirectView("http://localhost:5173/employer/vipHistories", true);
                     }
 
 
                 } else {
-                    return ResponseEntity.badRequest().body("Dữ liệu không hợp lệ");
+                    return new RedirectView("/errorPage", true);
                 }
             } else {
-                return ResponseEntity.badRequest().body("Thanh toán thất bại");
-            }
+                return new RedirectView("/errorPage", true);            }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi xảy ra trong quá trình xử lý thanh toán");
+            return new RedirectView("/errorPage", true);
         }
     }
 
