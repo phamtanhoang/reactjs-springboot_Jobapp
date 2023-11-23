@@ -10,7 +10,6 @@ import { JobItem } from "./components";
 const AppliedForJob = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
-
   const [state, setState] = useState("");
 
   const [employers, setEmployers] = useState<EmployerModel[]>([]);
